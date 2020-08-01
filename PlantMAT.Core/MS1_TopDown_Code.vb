@@ -1,7 +1,7 @@
 ﻿Module MS1_TopDown_Code
-    
 
-Attribute VB_Name = "MS1_TopDown_Code"
+
+    ' Attribute VB_Name = "MS1_TopDown_Code"
     'This module performs combinatorial enumeration
 
     Sub Button_MS1()

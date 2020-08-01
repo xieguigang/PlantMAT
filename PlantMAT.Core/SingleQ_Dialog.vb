@@ -1,14 +1,14 @@
 ﻿Module SingleQ_Dialog
-    
 
-Attribute VB_Name = "SingleQ_Dialog"
-Attribute VB_Base = "0{F7FDB3D4-9318-45DB-B934-5D5DDEC837BA}{384E67FB-16E7-4966-BAE3-45E74A92352C}"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Attribute VB_TemplateDerived = False
-Attribute VB_Customizable = False
+
+    'Attribute VB_Name = "SingleQ_Dialog"
+    'Attribute VB_Base = "0{F7FDB3D4-9318-45DB-B934-5D5DDEC837BA}{384E67FB-16E7-4966-BAE3-45E74A92352C}"
+    'Attribute VB_GlobalNameSpace = False
+    'Attribute VB_Creatable = False
+    'Attribute VB_PredeclaredId = True
+    'Attribute VB_Exposed = False
+    'Attribute VB_TemplateDerived = False
+    'Attribute VB_Customizable = False
     Private Sub bt_Cancel_Click()
 
         Unload SingleQ_Dialog

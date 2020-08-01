@@ -1,6 +1,6 @@
 ﻿Module Import_Code
-    
-Attribute VB_Name = "Import_Code"
+
+    ' Attribute VB_Name = "Import_Code"
     'This module imports the peak list into Query Interface
 
     Sub Button_Import()

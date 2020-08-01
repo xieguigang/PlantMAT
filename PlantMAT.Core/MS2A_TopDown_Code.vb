@@ -1,7 +1,7 @@
 ﻿Module MS2A_TopDown_Code
-    
 
-Attribute VB_Name = "MS2A_TopDown_Code"
+
+    ' Attribute VB_Name = "MS2A_TopDown_Code"
     'This module performs MS2 annotation
 
     Sub Button_MS2Annotation()

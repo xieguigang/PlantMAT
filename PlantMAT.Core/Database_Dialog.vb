@@ -1,13 +1,13 @@
 ﻿Module Database_Dialog
-    
-Attribute VB_Name = "Database_Dialog"
-Attribute VB_Base = "0{AD5148FF-1199-476B-92B3-A258F724E907}{778D62AA-BC1C-4728-BE7B-C76FB436C57A}"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = False
-Attribute VB_TemplateDerived = False
-Attribute VB_Customizable = False
+
+    'Attribute VB_Name = "Database_Dialog"
+    'Attribute VB_Base = "0{AD5148FF-1199-476B-92B3-A258F724E907}{778D62AA-BC1C-4728-BE7B-C76FB436C57A}"
+    'Attribute VB_GlobalNameSpace = False
+    'Attribute VB_Creatable = False
+    'Attribute VB_PredeclaredId = True
+    'Attribute VB_Exposed = False
+    'Attribute VB_TemplateDerived = False
+    'Attribute VB_Customizable = False
     Private Sub Add_Click()
 
         On Error GoTo ErrorHandler

@@ -19,9 +19,9 @@ Module ErrorHandler
             For i = 8 To 16
                 Query.Columns(i).Hidden = True
             Next i
-            .Shapes("bt_MS1").OnAction = Empty
+            .Shapes("bt_MS1").OnAction = Empty()
             .Shapes("bt_MS1").DrawingObject.Font.ColorIndex = 16
-            .Shapes("bt_MS2A").OnAction = Empty
+            .Shapes("bt_MS2A").OnAction = Empty()
             .Shapes("bt_MS2A").DrawingObject.Font.ColorIndex = 16
             Application.Goto.Range("A1"), True
         .ScrollArea = "A4:Z4"
