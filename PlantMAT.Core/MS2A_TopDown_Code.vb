@@ -42,8 +42,8 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
 
     Sub MS2A_TopDown()
 
-        Application.ScreenUpdating = False
-        Application.EnableEvents = False
+        'Application.ScreenUpdating = False
+        'Application.EnableEvents = False
 
         Dim dd As Object
 
@@ -68,7 +68,7 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
 
         'Loop through all compounds and do MS2 annotation for each
         Do While Query.Cells(i, 4) <> ""
-            DoEvents
+            ' DoEvents
 
             'Skip the compound if there are no hits from combinatorial enumeration
             Do While Query.Cells(i, 7) = "No hits"
@@ -126,8 +126,8 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
             .Protect
         End With
 
-        Application.EnableEvents = True
-        Application.ScreenUpdating = True
+        'Application.EnableEvents = True
+        'Application.ScreenUpdating = True
 
     End Sub
 
@@ -146,7 +146,7 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
 
         'Find MS2 data for each compound and read into data array eIonList()
         While (File <> "")
-            DoEvents
+            ' DoEvents
 
             If InStr(File, MS2FileName) = 1 Then
                 FileCheck = True
@@ -156,7 +156,7 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
                 Open MS2FilePath + MS2FileName For Input As #1
 
         While Not EOF(1)
-                    DoEvents
+                    '  DoEvents
 
                     Line Input #1, LineText
             eIon = Split(CStr(LineText), Chr(9))
@@ -177,21 +177,13 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
             File = Dir()
 Wend
 
-Exit Sub
-
-        'If error is found, go to ErrorHandler
-ErrorHandler:
-        FileCheck = False
-        ErrorCheck = True
-        Close #1
-
-End Sub
+    End Sub
 
     Sub MS2A_TopDown_MS2Annotation()
 
         'Loop through all candidates for each compound
         Do While True
-            DoEvents
+            ' DoEvents
 
             'Read the results from combinatorial enumeration
             With Query
@@ -216,8 +208,8 @@ End Sub
 
             'Third, add a dropdown list for each candidate and show the annotation results in the list
             With Query.Cells(i, 23)
-        Set comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-        comb.Name = "dd_MS2A_TopDown_" & CStr(i)
+                comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+                comb.Name = "dd_MS2A_TopDown_" & CStr(i)
             End With
 
             'Fourth, save the annotation results in the cell
@@ -262,7 +254,7 @@ End Sub
     Sub MS2A_TopDown_MS2Annotation_IonPrediction()
 
         'Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
-        Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max
+        Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max
 
         'Calculate the the mass of precursor ion
         MIonMZ = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
@@ -340,15 +332,15 @@ End Sub
     Sub MS2A_TopDown_MS2Annotation_IonPrediction_LossCombination()
 
         'Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
-        Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
+        Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
         'Calculate the mass of the predicte neutral loss
-        Loss_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w +
+        Dim Loss_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w +
                  Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w -
                  Total_n * H2O_w + H2O_n * H2O_w + CO2_n * CO2_w
 
         'Calculate the precuror ion mz based on the calcualted loss mass
-        pIonMZ = MIonMZ - Loss_w
+        Dim pIonMZ = MIonMZ - Loss_w
 
         'Find if the ion is related to the H2O/CO2 loss from aglycone
         If Hex_n = Hex_max And HexA_n = HexA_max And dHex_n = dHex_max And Pen_n = Pen_max And
@@ -388,7 +380,7 @@ End Sub
             For t = 1 To pIon_n
                 pIonMZ = pIonList(1, t)
                 pIonNM = pIonList(2, t)
-                If Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
+                If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
                     aIonAbu = eIonInt / TotalIonInt
                     If aIonAbu * 100 >= NoiseFilter Then
                         aIon_n = aIon_n + 1

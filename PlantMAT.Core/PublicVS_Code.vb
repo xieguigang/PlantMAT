@@ -11,7 +11,7 @@
     Public fs As Object, BatchFile As Object
     Public MS2FilePath As String
     Public i As Long, i_prev As Long, j As Long, k As Long, m As Long, CmpdTag As Integer
-    Public Candidate() As Variant, Candidate_n As Long, Pattern_n As Long
+    Public Candidate As String(,), Candidate_n As Long, Pattern_n As Long
     Public IonType As String, IonMZ_crc As Double, Rsyb As String, GlycN As String, SugComb As String
     Public DHIonMZ As Double, MIonMZ As Double, DaughterIonMZ As Double, DaughterIonInt As Double, TotalIonInt As Double
     Public eIonList() As Double, eIon_n As Long, pIonList() As Variant, pIon_n As Long, aIonList() As Variant, aIon_n As Long

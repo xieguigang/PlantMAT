@@ -6,16 +6,16 @@
 
     Sub Button_MS1()
 
-'Click to run combintorial enumeration; first check if any MS1 data has been imported
-Set Query = ThisWorkbook.Sheets("Query")
-If IsNumeric(Query.Range("D4")) = False Or Query.Range("D4") = "" Then
+        'Click to run combintorial enumeration; first check if any MS1 data has been imported
+        Query = ThisWorkbook.Sheets("Query")
+        If IsNumeric(Query.Range("D4")) = False Or Query.Range("D4") = "" Then
             MsgBox "MS1 data incorrect", vbCritical, "PlantMAT"
    Exit Sub
         End If
 
         'Read the parameters in Settings (module: PublicVS_Code)
-        Call PublicVS_Code.Settings_Check
-        Call PublicVS_Code.Settings_Reading
+        Call PublicVS_Code.Settings_Check()
+        Call PublicVS_Code.Settings_Reading()
 
         'Check the aglycone library is available for use
         If InternalAglyconeDatabase = False And Dir(ExternalAglyconeDatabase, vbDirectory) = "" Then
@@ -35,8 +35,8 @@ End Sub
 
     Sub MS1CP()
 
-        Application.ScreenUpdating = False
-        Application.EnableEvents = False
+        'Application.ScreenUpdating = False
+        'Application.EnableEvents = False
 
         'Intialize the Query Interface and clear all previous data and results if any
         With Query
@@ -57,9 +57,9 @@ End Sub
             i = i + 1
         Loop
 
-Set Database = ThisWorkbook.Sheets("Library")
-Set SMILES = ThisWorkbook.Sheets("SMILES")
-With SMILES
+        Database = ThisWorkbook.Sheets("Library")
+        SMILES = ThisWorkbook.Sheets("SMILES")
+        With SMILES
             .Unprotect
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
             If LastRow >= 3 Then .Range("B3:" & "E" & LastRow) = ""
@@ -76,7 +76,7 @@ With SMILES
         Next j
 
         For j = 2 To 10
-            NameSA = AddedSugarAcid(j, 0)
+            Dim NameSA = AddedSugarAcid(j, 0)
             If NameSA = "" Then Exit For
             Query.Columns(Query.Range(NameSA).Column).Hidden = False
         Next j
@@ -95,12 +95,13 @@ With SMILES
             .Protect
         End With
 
-        Application.EnableEvents = True
-        Application.ScreenUpdating = True
+        'Application.EnableEvents = True
+        'Application.ScreenUpdating = True
 
     End Sub
 
     Sub MS1_CombinatorialPrediction()
+        Dim AllSMILES As String
 
         Pattern_n = 0
 
@@ -152,8 +153,8 @@ ResultDisplay:
 
     Sub MS1_CombinatorialPrediction_RestrictionCheck()
 
-        Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
-        Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
+        Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
+        Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
         If Sugar_n >= NumSugarMin And Sugar_n <= NumSugarMax And
    Acid_n >= NumAcidMin And Acid_n <= NumAcidMax Then
@@ -167,7 +168,7 @@ ResultDisplay:
                 If InternalAglyconeDatabase = True Then
                     Call MS1_CombinatorialPrediciton_InternalDatabase()
                 Else
-                    Call MS1_CombinatorialPrediciton_ExternalDatabase()
+                    Call MS1_CombinatorialPrediciton_ExternalDatabase(ExternalAglyconeDatabase)
                 End If
             End If
 
@@ -193,15 +194,12 @@ ResultDisplay:
 
     End Sub
 
-    Sub MS1_CombinatorialPrediciton_ExternalDatabase()
+    Sub MS1_CombinatorialPrediciton_ExternalDatabase(ExternalAglyconeDatabase As String)
 
         Dim EachAgly() As String
-        '  Open ExternalAglyconeDatabase For Input As #1
 
-        Do Until EOF(1)
-            '  DoEvents
-            Line Input #1, textLine
-   EachAgly = Split(textLine, ",")
+        For Each textLine As String In ExternalAglyconeDatabase.IterateAllLines
+            EachAgly = Strings.Split(textLine, ",")
             AglyN = EachAgly(0)
             AglyT = EachAgly(1)
             AglyO = EachAgly(2)
@@ -209,10 +207,7 @@ ResultDisplay:
             AglyS = EachAgly(5)
 
             Call MS1_CombinatorialPrediciton_DatabaseSearch()
-
-        Loop
-
-        '   Close #1
+        Next
 
     End Sub
 
@@ -221,7 +216,7 @@ ResultDisplay:
         If AglyT = AglyconeType Or AglyconeType = "All" Then
             If AglyO = AglyconeSource Or AglyconeSource = "All" Then
 
-                Err1 = Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
+                Dim Err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
 
                 If Err1 <= SearchPPM Then
                     RT_P = 0
@@ -261,11 +256,11 @@ ResultDisplay:
         Else
             For m = 1 To Candidate_n
                 '   DoEvents
-                max_temp = 100
+                Dim max_temp = 100
                 For n = 1 To Candidate_n
                     '  DoEvents
-                    If Right(Candidate(14, n), 1) <> "*" And Abs(Val(Candidate(14, n))) < max_temp Then
-                        max_temp = Abs(Val(Candidate(14, n)))
+                    If Right(Candidate(14, n), 1) <> "*" And Math.Abs(Val(Candidate(14, n))) < max_temp Then
+                        max_temp = Math.Abs(Val(Candidate(14, n)))
                         k = n
                     End If
                 Next n
@@ -286,7 +281,7 @@ ResultDisplay:
                     If max_temp <> RT_E Then
                         .Cells(i, 19) = Candidate(13, k)
                         .Cells(i, 20) = Candidate(14, k)
-                        RT_Diff = Abs(Val(Candidate(14, k)))
+                        RT_Diff = Math.Abs(Val(Candidate(14, k)))
                         If RT_Diff <= 0.5 Then .Cells(i, 20).Font.Color = RGB(118, 147, 60)
                         If RT_Diff > 0.5 And RT_Diff <= 1 Then .Cells(i, 20).Font.Color = RGB(255, 192, 0)
                         If RT_Diff > 1 Then .Cells(i, 20).Font.Color = RGB(192, 80, 77)
@@ -317,8 +312,8 @@ ResultDisplay:
 
         AglyN = Candidate(2, k)
         AglyS1 = Candidate(1, k)
-        AglyS2 = Replace(AglyS1, "O)", ".)")
-        AglyS2 = Replace(AglyS2, "=.", "=O")
+        AglyS2 = Strings.Replace(AglyS1, "O)", ".)")
+        AglyS2 = Strings.Replace(AglyS2, "=.", "=O")
         If Right(AglyS2, 1) = "O" Then AglyS2 = Left(AglyS2, Len(AglyS2) - 1) & "."
 
         OH_n = 0
@@ -539,15 +534,15 @@ AllSugarConnected:
             For g = 1 To OH_n
                 If u(e, g) <> "" Then
                     SugComb1 = u(e, g)
-                    If InStr(SugComb1, Hex) <> 0 Then SugComb1 = Replace(SugComb1, Hex, "-Hex")
-                    If InStr(SugComb1, HexA) <> 0 Then SugComb1 = Replace(SugComb1, HexA, "-HexA")
-                    If InStr(SugComb1, dHex) <> 0 Then SugComb1 = Replace(SugComb1, dHex, "-dHex")
-                    If InStr(SugComb1, Mal) <> 0 Then SugComb1 = Replace(SugComb1, Mal, "-Mal")
-                    If InStr(SugComb1, Pen) <> 0 Then SugComb1 = Replace(SugComb1, Pen, "-Pen")
-                    If InStr(SugComb1, Cou) <> 0 Then SugComb1 = Replace(SugComb1, Cou, "-Cou")
-                    If InStr(SugComb1, Fer) <> 0 Then SugComb1 = Replace(SugComb1, Fer, "-Fer")
-                    If InStr(SugComb1, Sin) <> 0 Then SugComb1 = Replace(SugComb1, Sin, "-Sin")
-                    If InStr(SugComb1, DDMP) <> 0 Then SugComb1 = Replace(SugComb1, DDMP, "-DDMP")
+                    If InStr(SugComb1, Hex) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Hex, "-Hex")
+                    If InStr(SugComb1, HexA) <> 0 Then SugComb1 = Strings.Replace(SugComb1, HexA, "-HexA")
+                    If InStr(SugComb1, dHex) <> 0 Then SugComb1 = Strings.Replace(SugComb1, dHex, "-dHex")
+                    If InStr(SugComb1, Mal) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Mal, "-Mal")
+                    If InStr(SugComb1, Pen) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Pen, "-Pen")
+                    If InStr(SugComb1, Cou) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Cou, "-Cou")
+                    If InStr(SugComb1, Fer) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Fer, "-Fer")
+                    If InStr(SugComb1, Sin) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Sin, "-Sin")
+                    If InStr(SugComb1, DDMP) <> 0 Then SugComb1 = Strings.Replace(SugComb1, DDMP, "-DDMP")
                     SugComb = SugComb + ", " + SugComb1
                 Else
                     Exit For

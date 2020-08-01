@@ -4,8 +4,8 @@
     ' Attribute VB_Name = "MS2P_Code"
     Sub MS2P()
 
-        Application.ScreenUpdating = False
-        Application.EnableEvents = False
+        'Application.ScreenUpdating = False
+        'Application.EnableEvents = False
 
         Dim dd As Object
 
@@ -27,7 +27,7 @@
         i = 4
 
         Do While Query.Cells(i, 4) <> ""
-            DoEvents
+            'DoEvents
 
             Do While Query.Cells(i, 7) = "No hits"
                 i = i + 1
@@ -84,15 +84,15 @@
             .Protect
         End With
 
-        Application.EnableEvents = True
-        Application.ScreenUpdating = True
+        'Application.EnableEvents = True
+        'Application.ScreenUpdating = True
 
     End Sub
 
     Sub MS2P_MS2Prediction()
 
         'Find how many structural possibilites for each peak in 'SMILES' sheet
-        r = 3
+        Dim r = 3
 
         Do While True
             PeakNo = SMILES.Cells(r, 2)
@@ -102,14 +102,14 @@
 
         'Predict MS2
         Do While True
-            DoEvents
+            'DoEvents
 
             AglyMass = Val(Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
             With Query.Cells(i, 26)
-        Set comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-        comb.Name = "dd_MS2P_" & CStr(i)
+                comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+                comb.Name = "dd_MS2P_" & CStr(i)
             End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
@@ -121,7 +121,7 @@
 
             With SMILES
                 Do While PeakNo = CmpdTag And PredNo = k
-                    DoEvents
+                    ' DoEvents
 
                     Pred_n = Pred_n + 1
                     GlycN = .Cells(r, 4)
@@ -385,9 +385,9 @@ NextOne:
                 pIonMZ = pIonList(e, h)
                 For s = 1 To eIon_n
                     eIonMZ = eIonList(1, s)
-                    If Abs(pIonMZ - eIonMZ) / pIonMZ * 1000000 < mzPPM Then
+                    If Math.Abs(pIonMZ - eIonMZ) / pIonMZ * 1000000 < mzPPM Then
                         eIonInt = eIonList(2, s)
-                        RawScore = RawScore + WorksheetFunction.Log10(100000 * eIonInt / TotalIonInt)
+                        RawScore = RawScore + Math.Log10(100000 * eIonInt / TotalIonInt)
                         GoTo NextPriIon
                     End If
                 Next s
