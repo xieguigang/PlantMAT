@@ -45,6 +45,15 @@
     Public SearchPPM As Double, NoiseFilter As Double, mzPPM As Double
     Public PatternPrediction As Boolean
 
+    Public Property lb_AddedSugarAcid As List(Of lb_AddedSugarAcid)
+
+    Public Property db_PrecursorIonListIndex As Integer
+
+    Public Property db_SugarAcid As db_SugarAcid()
+    Public Property db_AglyconeType As String()
+    Public Property db_AglyconeSource As String()
+    Public Property db_PrecursorIon As db_PrecursorIon()
+
     Sub Settings_Check()
 
         On Error GoTo ErrorHandler
