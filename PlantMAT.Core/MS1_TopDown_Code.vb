@@ -106,7 +106,7 @@ With SMILES
 
         i = 4
         Do While Query.Cells(i, 4) <> ""
-            DoEvents
+            '  DoEvents
             ErrorCheck = False
             RT_E = Query.Cells(i, 3)
             M_w = (Query.Cells(i, 4) - PrecursorIonMZ) / PrecursorIonN
@@ -180,7 +180,7 @@ ResultDisplay:
         LastRow = Database.Range("B" & Rows.Count).End(xlUp).Row
 
         For j = 3 To LastRow
-            DoEvents
+            '     DoEvents
             AglyN = Database.Cells(j, 2)
             AglyT = Database.Cells(j, 3)
             AglyO = Database.Cells(j, 7)
@@ -196,10 +196,10 @@ ResultDisplay:
     Sub MS1_CombinatorialPrediciton_ExternalDatabase()
 
         Dim EachAgly() As String
-        Open ExternalAglyconeDatabase For Input As #1
+        '  Open ExternalAglyconeDatabase For Input As #1
 
-Do Until EOF(1)
-            DoEvents
+        Do Until EOF(1)
+            '  DoEvents
             Line Input #1, textLine
    EachAgly = Split(textLine, ",")
             AglyN = EachAgly(0)
@@ -212,9 +212,9 @@ Do Until EOF(1)
 
         Loop
 
-        Close #1
+        '   Close #1
 
-End Sub
+    End Sub
 
     Sub MS1_CombinatorialPrediciton_DatabaseSearch()
 
@@ -260,10 +260,10 @@ End Sub
             End With
         Else
             For m = 1 To Candidate_n
-                DoEvents
+                '   DoEvents
                 max_temp = 100
                 For n = 1 To Candidate_n
-                    DoEvents
+                    '  DoEvents
                     If Right(Candidate(14, n), 1) <> "*" And Abs(Val(Candidate(14, n))) < max_temp Then
                         max_temp = Abs(Val(Candidate(14, n)))
                         k = n
