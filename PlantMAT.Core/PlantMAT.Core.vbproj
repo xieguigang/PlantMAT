@@ -67,6 +67,7 @@
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
     <Compile Include="Models\db_SugarAcid.vb" />
+    <Compile Include="PlantMAT.vb" />
     <Compile Include="PlantMATException.vb" />
     <Compile Include="Database_Dialog.vb" />
     <Compile Include="Edit_Code.vb" />
@@ -76,12 +77,12 @@
     <Compile Include="SingleQ_Code.vb" />
     <Compile Include="Options_Code.vb" />
     <Compile Include="PublicVS_Code.vb" />
-    <Compile Include="MS2P_Code.vb" />
-    <Compile Include="MS2A_TopDown_Code.vb" />
+    <Compile Include="Algorithm\MS2P_Code.vb" />
+    <Compile Include="Algorithm\MS2A_TopDown_Code.vb" />
     <Compile Include="SingleQ_Dialog.vb" />
     <Compile Include="Processing_Dialog.vb" />
     <Compile Include="Sheet2.vb" />
-    <Compile Include="MS1_TopDown_Code.vb" />
+    <Compile Include="Algorithm\MS1_TopDown_Code.vb" />
     <Compile Include="Settings_Dialog.vb" />
     <Compile Include="ThisWorkbook.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
