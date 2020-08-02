@@ -64,6 +64,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
     <Compile Include="Models\db_SugarAcid.vb" />
     <Compile Include="PlantMATException.vb" />

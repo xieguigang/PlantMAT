@@ -58,18 +58,18 @@
 
         ' Unload SingleQ_Dialog
 
-        Query = ThisWorkbook.Sheets("Query")
-        With Query
-            .Unprotect
-            .Cells.ClearComments
+        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
+        With PublicVS_Code.Query
+            Call .Unprotect
+            Call .Cells.ClearComments
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
             If LastRow >= 4 Then .Range("B4:" & "Z" & LastRow) = ""
-            .DropDowns().Delete
+            Call .DropDowns().Delete
             .Cells(4, 2) = 1
             .Cells(4, 3) = RT
             .Cells(4, 4) = MZ
             .Cells(4, 5) = Formula
-            .Protect
+            Call .Protect
         End With
 
         If IDApproach = "TopDown" Then
@@ -86,13 +86,13 @@
             PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2P_Code.MS2P")
         End If
 
-        With Query
-            .Unprotect
+        With PublicVS_Code.Query
+            Call .Unprotect
             .Shapes("bt_MS1").OnAction = Empty()
             .Shapes("bt_MS1").DrawingObject.Font.ColorIndex = 16
             .Shapes("bt_MS2A").OnAction = Empty()
             .Shapes("bt_MS2A").DrawingObject.Font.ColorIndex = 16
-            .Protect
+            Call .Protect
         End With
 
         ' ThisWorkbook.Save

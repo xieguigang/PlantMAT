@@ -9,11 +9,11 @@
 
         Dim dd As Object
 
-        With Query
-            .Unprotect
+        With PublicVS_Code.Query
+            Call .Unprotect
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
             If LastRow >= 4 Then
-                .Range("Y4:" & "Z" & LastRow).ClearContents
+                Call .Range("Y4:" & "Z" & LastRow).ClearContents
                 For Each dd In .DropDowns()
                     If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
                 Next dd
@@ -26,19 +26,19 @@
 
         i = 4
 
-        Do While Query.Cells(i, 4) <> ""
+        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
             'DoEvents
 
-            Do While Query.Cells(i, 7) = "No hits"
+            Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
                 i = i + 1
                 k = k + 1
             Loop
 
-            If Query.Cells(i, 4) = "" Then Exit Do
+            If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
 
             k = 1
 
-            With Query
+            With PublicVS_Code.Query
                 CmpdTag = .Cells(i, 2)
                 DHIonMZ = .Cells(i, 4)
             End With
@@ -56,8 +56,8 @@
             Else
                 Call MS2File_Searching()
 
-                If FileCheck = False And Query.Cells(i, 4) <> "" Then
-                    With Query
+                If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
+                    With PublicVS_Code.Query
                         If ErrorCheck = True Then
                             .Cells(i, 22) = "Data error"
                         Else
@@ -68,7 +68,7 @@
                     End With
                     i = i + 1
                     k = k + 1
-                    Do While Query.Cells(i, 4) = "..."
+                    Do While PublicVS_Code.Query.Cells(i, 4) = "..."
                         i = i + 1
                         k = k + 1
                     Loop
@@ -78,10 +78,10 @@
             End If
         Loop
 
-        With Query
+        With PublicVS_Code.Query
             Application.Goto.Range("A1"), True
      .ScrollArea = "A4:Z" & CStr(i + 1)
-            .Protect
+            Call .Protect
         End With
 
         'Application.EnableEvents = True
@@ -105,11 +105,11 @@
         Do While True
             'DoEvents
 
-            AglyMass = Val(Query.Cells(i, 7).Comment.Text)
+            AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
-            With Query.Cells(i, 26)
-                comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+            With PublicVS_Code.Query.Cells(i, 26)
+                comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
                 comb.Name = "dd_MS2P_" & CStr(i)
             End With
 
@@ -172,7 +172,7 @@
 
             comb.Text = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
 
-            With Query
+            With PublicVS_Code.Query
                 If .Cells(i, 22) = "*" Then
                     .Cells(i, 25) = "*"
                     .Cells(i, 25).HorizontalAlignment = xlCenter
@@ -189,7 +189,7 @@
             i = i + 1
             k = k + 1
 
-            If Query.Cells(i, 4) <> "..." Then Exit Sub
+            If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
         Loop
 
     End Sub

@@ -18,9 +18,9 @@
 
         'Peform MS2 annotation and show the calculation progress (MS2A)
         'After finished, ask whether to continue MS2 prediction for glycosyl sequencing (MS2P)
-        Query = ThisWorkbook.Sheets("Query")
+        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
         SMILES = ThisWorkbook.Sheets("SMILES")
-        If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
+        If PublicVS_Code.Query.Cells(4, 7) <> "" Or PublicVS_Code.Query.Cells(4, 22) <> "" Then
             PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2A_TopDown")
             If SMILES.Cells(4, 2) <> "" Then
                 a = MsgBox("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing?", vbYesNo, "PlantMAT")
@@ -48,11 +48,11 @@
         Dim dd As Object
 
         'Clear all previous results in the output display
-        With Query
-            .Unprotect
+        With PublicVS_Code.Query
+            Call .Unprotect
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
             If LastRow >= 4 Then
-                .Range("V4:" & "W" & LastRow).ClearContents
+                Call .Range("V4:" & "W" & LastRow).ClearContents
                 For Each dd In .DropDowns()
                     If Left(dd.Name, 7) = "dd_MS2A" Then dd.Delete
                 Next dd
@@ -67,19 +67,19 @@
         i = 4
 
         'Loop through all compounds and do MS2 annotation for each
-        Do While Query.Cells(i, 4) <> ""
+        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
             ' DoEvents
 
             'Skip the compound if there are no hits from combinatorial enumeration
-            Do While Query.Cells(i, 7) = "No hits"
+            Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
                 i = i + 1
             Loop
 
             'If this is the last + 1 cell, then exit the loop
-            If Query.Cells(i, 4) = "" Then Exit Do
+            If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
 
             'Read compound serial number and precuror ion mz
-            With Query
+            With PublicVS_Code.Query
                 CmpdTag = .Cells(i, 2)
                 DHIonMZ = .Cells(i, 4)
             End With
@@ -99,8 +99,8 @@
             Else
                 Call MS2File_Searching()
 
-                If FileCheck = False And Query.Cells(i, 4) <> "" Then
-                    With Query
+                If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
+                    With PublicVS_Code.Query
                         If ErrorCheck = True Then
                             .Cells(i, 22) = "Data error"
                         Else
@@ -110,7 +110,7 @@
                         .Cells(i, 22).Font.Color = RGB(217, 217, 217)
                     End With
                     i = i + 1
-                    Do While Query.Cells(i, 4) = "..."
+                    Do While PublicVS_Code.Query.Cells(i, 4) = "..."
                         i = i + 1
                     Loop
                 Else
@@ -120,10 +120,10 @@
         Loop
 
         'Go to the top of spreadsheet and lock (protect) the spreadsheet
-        With Query
+        With PublicVS_Code.Query
             Application.Goto.Range("A1"), True
      .ScrollArea = "A4:Z" & CStr(i + 1)
-            .Protect
+            Call .Protect
         End With
 
         'Application.EnableEvents = True
@@ -186,7 +186,7 @@ Wend
             ' DoEvents
 
             'Read the results from combinatorial enumeration
-            With Query
+            With PublicVS_Code.Query
                 AglyN = .Cells(i, 7)
                 Agly_w = Val(.Cells(i, 7).Comment.Text)
                 Hex_max = .Cells(i, 8)
@@ -207,8 +207,8 @@ Wend
             Call MS2A_TopDown_MS2Annotation_IonMatching()
 
             'Third, add a dropdown list for each candidate and show the annotation results in the list
-            With Query.Cells(i, 23)
-                comb = Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+            With PublicVS_Code.Query.Cells(i, 23)
+                comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
                 comb.Name = "dd_MS2A_TopDown_" & CStr(i)
             End With
 
@@ -230,7 +230,7 @@ Wend
             comb.Text = CStr(aIon_n) & " ions annotated"
 
             'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
-            With Query
+            With PublicVS_Code.Query
                 If AglyCheck = True Then
                     .Cells(i, 22) = "*"
                     .Cells(i, 22).HorizontalAlignment = xlCenter
@@ -246,7 +246,7 @@ Wend
             i = i + 1
 
             'If the last candidate has been analyzed, then exit the loop and go to the next compound
-            If Query.Cells(i, 4) <> "..." Then Exit Sub
+            If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
         Loop
 
     End Sub

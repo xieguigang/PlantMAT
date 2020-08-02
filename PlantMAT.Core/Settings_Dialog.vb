@@ -52,7 +52,7 @@
             Throw New PlantMATException("Incorrect min and/or max values")
         End If
 
-        Query = ThisWorkbook.Sheets("Query")
+        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
 
         Dim PlantMATfolderPath = "C:\Users\" & Environ$("Username") & "\Documents\PlantMAT"
 

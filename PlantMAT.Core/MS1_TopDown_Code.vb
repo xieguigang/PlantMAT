@@ -7,8 +7,8 @@
     Sub Button_MS1()
 
         'Click to run combintorial enumeration; first check if any MS1 data has been imported
-        Query = ThisWorkbook.Sheets("Query")
-        If IsNumeric(Query.Range("D4")) = False Or Query.Range("D4") = "" Then
+        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
+        If IsNumeric(PublicVS_Code.Query.Range("D4")) = False Or PublicVS_Code.Query.Range("D4") = "" Then
             Throw New PlantMATException("MS1 data incorrect")
         End If
 
@@ -37,19 +37,19 @@
         'Application.EnableEvents = False
 
         'Intialize the Query Interface and clear all previous data and results if any
-        With Query
-            .Unprotect
+        With PublicVS_Code.Query
+            Call .Unprotect
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
             If LastRow >= 4 Then .Range("G4:" & "Z" & LastRow) = ""
-            .Cells.ClearComments
-            .DropDowns().Delete
+            Call .Cells.ClearComments
+            Call .DropDowns().Delete
             .ScrollArea = ""
         End With
 
         i = 4
-        Do While Query.Cells(i, 4) <> ""
-            If Query.Cells(i, 4) = "..." Then
-                Query.Cells(i, 4).EntireRow.Delete
+        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+            If PublicVS_Code.Query.Cells(i, 4) = "..." Then
+                PublicVS_Code.Query.Cells(i, 4).EntireRow.Delete
                 i = i - 1
             End If
             i = i + 1
@@ -70,22 +70,22 @@
 
         'Show columns of sugar/acid if any >=1
         For j = 8 To 16
-            Query.Columns(j).Hidden = True
+            PublicVS_Code.Query.Columns(j).Hidden = True
         Next j
 
         For j = 2 To 10
             Dim NameSA = AddedSugarAcid(j, 0)
             If NameSA = "" Then Exit For
-            Query.Columns(Query.Range(NameSA).Column).Hidden = False
+            PublicVS_Code.Query.Columns(PublicVS_Code.Query.Range(NameSA).Column).Hidden = False
         Next j
 
         'Enable the button for MS2 analysis and lock (protect) all spreadsheets
-        With Query
+        With PublicVS_Code.Query
             .Shapes("bt_MS2A").OnAction = "Button_MS2Annotation"
             .Shapes("bt_MS2A").DrawingObject.Font.ColorIndex = 1
             Application.Goto.Range("A1"), True
      .ScrollArea = "A4:Z" & CStr(i + 1)
-            .Protect
+            Call .Protect
         End With
 
         With SMILES
@@ -104,11 +104,11 @@
         Pattern_n = 0
 
         i = 4
-        Do While Query.Cells(i, 4) <> ""
+        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
             '  DoEvents
             ErrorCheck = False
-            RT_E = Query.Cells(i, 3)
-            M_w = (Query.Cells(i, 4) - PrecursorIonMZ) / PrecursorIonN
+            RT_E = PublicVS_Code.Query.Cells(i, 3)
+            M_w = (PublicVS_Code.Query.Cells(i, 4) - PrecursorIonMZ) / PrecursorIonN
             i_prev = i
             AllSMILES = ""
             Candidate_n = 0
@@ -246,7 +246,7 @@ ResultDisplay:
     Sub MS1_CombinatorialPrediciton_ResultDisplay()
 
         If Candidate_n = 0 Then
-            With Query.Cells(i, 7)
+            With PublicVS_Code.Query.Cells(i, 7)
                 .Value = "No hits"
                 .Font.Color = RGB(217, 217, 217)
                 .HorizontalAlignment = xlLeft
@@ -263,13 +263,13 @@ ResultDisplay:
                     End If
                 Next n
 
-                With Query
+                With PublicVS_Code.Query
                     If m > 1 Then
-                        .Cells(i, 4).Offset(1).EntireRow.Insert
+                        Call .Cells(i, 4).Offset(1).EntireRow.Insert
                         i = i + 1
                         .Cells(i, 4) = "..."
                     End If
-                    .Cells(i, 7).AddComment(CStr(Candidate(0, k)))
+                    Call .Cells(i, 7).AddComment(CStr(Candidate(0, k)))
                     .Cells(i, 7).Comment.Shape.TextFrame.AutoSize = True
                     For q = 2 To 12
                         .Cells(i, q + 5) = Candidate(q, k)
@@ -550,7 +550,7 @@ AllSugarConnected:
             GlycN = AglyN + SugComb
 
             With SMILES
-                .Cells(Pattern_n + 3, 2) = Query.Cells(i_prev, 2)
+                .Cells(Pattern_n + 3, 2) = PublicVS_Code.Query.Cells(i_prev, 2)
                 .Cells(Pattern_n + 3, 3) = CStr(m) + "-" + CStr(e)
                 .Cells(Pattern_n + 3, 4) = GlycN
             End With
