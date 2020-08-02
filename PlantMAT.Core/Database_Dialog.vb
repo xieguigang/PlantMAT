@@ -8,36 +8,36 @@
     'Attribute VB_Exposed = False
     'Attribute VB_TemplateDerived = False
     'Attribute VB_Customizable = False
-    Private Sub Add_Click()
+    Private Sub Add_Click(add As Library)
 
-        On Error GoTo ErrorHandler
+        'On Error GoTo ErrorHandler
 
-        Dim Database As Worksheet
-        Dim DatabaseDialog As UserForm
-        Database = ThisWorkbook.Worksheets("Library")
-        DatabaseDialog = Database_Dialog
-        LastRow = Database.Range("B" & Rows.Count).End(xlUp).Row
-        NewRow = LastRow + 1
+        '  Dim Database As Worksheet
+        '  Dim DatabaseDialog As UserForm
+        '   Database = ThisWorkbook.Worksheets("Library")
+        '   DatabaseDialog = Database_Dialog
+        '  LastRow = Database.Range("B" & Rows.Count).End(xlUp).Row
+        '   NewRow = LastRow + 1
 
-        With DatabaseDialog
-            CommonName = .TextBox_CommonName.Text
-            [Class] = .ComboBox_Class.Text
-            SubClass = .ComboBox_Type.Text
-            Genus = .ComboBox_Genus.Text
-            Formula = .TextBox_Formula.Text
-            SMILESt = .TextBox_SMILES.Text
-            Editor = .TextBox_Editor.Text
-            DMY = .TextBox_Date.Text
-        End With
+        'With DatabaseDialog
+        '    CommonName = .TextBox_CommonName.Text
+        '    [Class] = .ComboBox_Class.Text
+        '    SubClass = .ComboBox_Type.Text
+        '    Genus = .ComboBox_Genus.Text
+        '    Formula = .TextBox_Formula.Text
+        '    SMILESt = .TextBox_SMILES.Text
+        '    Editor = .TextBox_Editor.Text
+        '    DMY = .TextBox_Date.Text
+        'End With
 
-        If CommonName = "" Or [Class] = "" Or SubClass = "" Or
-   Genus = "" Or Formula = "" Or SMILESt = "" Or
-   Editor = "" Or DMY = "" Then
-            MsgBox("All fields are required", vbInformation, "PlantMAT")
-            Exit Sub
+        If add.CommonName = "" Or add.[Class] = "" Or add.SubClass = "" Or
+   add.Genus = "" Or add.Formula = "" Or add.SMILESt = "" Then
+            Throw New PlantMATException("All fields are required")
         End If
 
+        ' 根据化学式计算出exact mass
         Dim pos(1 To 6) As Integer, num(1 To 6) As Integer
+        Dim formula As String = add.Formula
 
         pos(1) = InStr(Formula, "C")
         pos(2) = InStr(Formula, "H")
@@ -59,44 +59,48 @@
             End If
         Next i
 
-        ExactMass = num(1) * 12 + num(2) * 1.007825 + num(3) * 15.99491 +
+        add.ExactMass = num(1) * 12 + num(2) * 1.007825 + num(3) * 15.99491 +
                     num(4) * 14.00307 + num(5) * 30.97376 + num(6) * 31.97207
 
-        With Database
-            .Unprotect
-            .Range("B" & NewRow) = CommonName
-            .Range("C" & NewRow) = Class
-     .Range("D" & NewRow) = SubClass
-            .Range("E" & NewRow) = Formula
-            .Range("F" & NewRow) = ExactMass
-            .Range("G" & NewRow) = Genus
-            .Range("H" & NewRow) = SMILESt
-            .Range("I" & NewRow) = Editor
-            .Range("J" & NewRow) = DMY
-            .ScrollArea = "B3:B" & CStr(LastRow + 2)
-            .Protect
-        End With
+        PublicVS_Code.Database.Add(add)
 
-        ThisWorkbook.Save
+        ' 下面的代码为在excel表格中插入新的行数据
 
-        With DatabaseDialog
-            .TextBox_CommonName.Text = ""
-            .ComboBox_Class.Text = ""
-            .ComboBox_Type.Text = ""
-            .ComboBox_Genus.Text = ""
-            .TextBox_Formula.Text = ""
-            .TextBox_SMILES.Text = ""
-            .TextBox_Editor.Text = ""
-            .TextBox_Date.Text = Date
-        End With
+        '        With Database
+        '            .Unprotect
+        '            .Range("B" & NewRow) = CommonName
+        '            .Range("C" & NewRow) = Class
+        '     .Range("D" & NewRow) = SubClass
+        '            .Range("E" & NewRow) = Formula
+        '            .Range("F" & NewRow) = ExactMass
+        '            .Range("G" & NewRow) = Genus
+        '            .Range("H" & NewRow) = SMILESt
+        '            .Range("I" & NewRow) = Editor
+        '            .Range("J" & NewRow) = DMY
+        '            .ScrollArea = "B3:B" & CStr(LastRow + 2)
+        '            .Protect
+        '        End With
 
-        a = MsgBox("Success. Add next one?", vbYesNo, "PlantMAT")
-        If a = vbNo Then Database_Dialog.Hide
+        '        ThisWorkbook.Save
 
-        Exit Sub
+        '        With DatabaseDialog
+        '            .TextBox_CommonName.Text = ""
+        '            .ComboBox_Class.Text = ""
+        '            .ComboBox_Type.Text = ""
+        '            .ComboBox_Genus.Text = ""
+        '            .TextBox_Formula.Text = ""
+        '            .TextBox_SMILES.Text = ""
+        '            .TextBox_Editor.Text = ""
+        '            .TextBox_Date.Text = Date
+        '        End With
 
-ErrorHandler:
-        MsgBox("Data incorrect", vbCritical, "PlantMAT")
+        '        a = MsgBox("Success. Add next one?", vbYesNo, "PlantMAT")
+        '        If a = vbNo Then Database_Dialog.Hide
+
+        '        Exit Sub
+
+        'ErrorHandler:
+        '        MsgBox("Data incorrect", vbCritical, "PlantMAT")
 
     End Sub
 
