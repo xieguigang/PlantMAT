@@ -9,8 +9,7 @@
         'Click to run combintorial enumeration; first check if any MS1 data has been imported
         Query = ThisWorkbook.Sheets("Query")
         If IsNumeric(Query.Range("D4")) = False Or Query.Range("D4") = "" Then
-            MsgBox "MS1 data incorrect", vbCritical, "PlantMAT"
-   Exit Sub
+            Throw New PlantMATException("MS1 data incorrect")
         End If
 
         'Read the parameters in Settings (module: PublicVS_Code)
@@ -19,19 +18,18 @@
 
         'Check the aglycone library is available for use
         If InternalAglyconeDatabase = False And Dir(ExternalAglyconeDatabase, vbDirectory) = "" Then
-            MsgBox "Can't find external aglycone database", vbCritical, "PlantMAT"
-   Exit Sub
+            Throw New PlantMATException("Can't find external aglycone database")
         End If
 
         'Peform combinatorial enumeration and show the calculation progress (MS1CP)
-        PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS1CP"
+        PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS1CP")
 
-ThisWorkbook.Save
+        ThisWorkbook.Save
 
         'Show the message box after the calculation is finished
-        MsgBox "Substructure prediction finished", vbInformation, "PlantMAT"
+        Console.WriteLine("Substructure prediction finished")
 
-End Sub
+    End Sub
 
     Sub MS1CP()
 
@@ -281,7 +279,7 @@ ResultDisplay:
                     If max_temp <> RT_E Then
                         .Cells(i, 19) = Candidate(13, k)
                         .Cells(i, 20) = Candidate(14, k)
-                        RT_Diff = Math.Abs(Val(Candidate(14, k)))
+                        Dim RT_Diff = Math.Abs(Val(Candidate(14, k)))
                         If RT_Diff <= 0.5 Then .Cells(i, 20).Font.Color = RGB(118, 147, 60)
                         If RT_Diff > 0.5 And RT_Diff <= 1 Then .Cells(i, 20).Font.Color = RGB(255, 192, 0)
                         If RT_Diff > 1 Then .Cells(i, 20).Font.Color = RGB(192, 80, 77)

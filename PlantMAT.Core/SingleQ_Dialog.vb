@@ -9,18 +9,18 @@
     'Attribute VB_Exposed = False
     'Attribute VB_TemplateDerived = False
     'Attribute VB_Customizable = False
-    Private Sub bt_Cancel_Click()
+    '    Private Sub bt_Cancel_Click()
 
-        Unload SingleQ_Dialog
+    '        Unload SingleQ_Dialog
 
-End Sub
+    'End Sub
 
     Private Sub bt_OK_Click()
 
-        On Error GoTo ErrorHandler
+        'On Error GoTo ErrorHandler
 
-        Application.ScreenUpdating = False
-        Application.EnableEvents = False
+        'Application.ScreenUpdating = False
+        'Application.EnableEvents = False
 
         With SingleQ_Dialog
             MZ = .tb_MZ.Value
@@ -31,14 +31,12 @@ End Sub
         End With
 
         If IsNumeric(MZ) = False Or MZ = "" Or IsNumeric(MZ) = False Or Val(MZ) <= 0 Then
-            MsgBox "Data incorrect", vbCritical, "PlantMAT"
-   Exit Sub
+            Throw New PlantMATException("Data incorrect")
         End If
 
         If MS2Data = "" Then
             If IDApproach = "BottomUp" Or MS2Annotation = True Or MS2Prediction = True Then
-                MsgBox "MS/MS data empty", vbCritical, "PlantMAT"
-      Exit Sub
+                Throw New PlantMATException("MS/MS data empty")
             End If
         End If
 
@@ -58,10 +56,10 @@ End Sub
             Next i
         End If
 
-        Unload SingleQ_Dialog
+        ' Unload SingleQ_Dialog
 
-Set Query = ThisWorkbook.Sheets("Query")
-With Query
+        Query = ThisWorkbook.Sheets("Query")
+        With Query
             .Unprotect
             .Cells.ClearComments
             LastRow = .Range("D" & Rows.Count).End(xlUp).Row
@@ -75,18 +73,18 @@ With Query
         End With
 
         If IDApproach = "TopDown" Then
-            PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS1_TopDown_Code.MS1CP"
-Else
-            PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS2A_BottomUp_Code.MS2A_BottomUp"
-End If
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS1_TopDown_Code.MS1CP")
+        Else
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2A_BottomUp_Code.MS2A_BottomUp")
+        End If
 
         If MS2Annotation = True Then
-            PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS2A_TopDown_Code.MS2A_TopDown"
-End If
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2A_TopDown_Code.MS2A_TopDown")
+        End If
 
         If MS2Prediction = True Then
-            PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS2P_Code.MS2P"
-End If
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2P_Code.MS2P")
+        End If
 
         With Query
             .Unprotect
@@ -97,14 +95,8 @@ End If
             .Protect
         End With
 
-        ThisWorkbook.Save
+        ' ThisWorkbook.Save
 
-        MsgBox "Annotation finished", vbInformation, "PlantMAT"
-
-Exit Sub
-
-ErrorHandler:
-        MsgBox "Data incorrect", vbCritical, "PlantMAT"
-
-End Sub
+        Console.WriteLine("Annotation finished")
+    End Sub
 End Module

@@ -93,6 +93,7 @@
 
         'Find how many structural possibilites for each peak in 'SMILES' sheet
         Dim r = 3
+        Dim peakNo As Integer
 
         Do While True
             PeakNo = SMILES.Cells(r, 2)
@@ -113,8 +114,8 @@
             End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
-            PredNo = k
-            Pred_n = 0
+            Dim PredNo = k
+            Dim Pred_n = 0
             Match_n = 0
             Match_m = 0
             ReDim RS(2, 1)
@@ -204,8 +205,8 @@
         ReDim f1(1, 100), f2(1, 100), w(5, 100)
 
         '2. Read aglyone/sugar/acid combination and store each component to u()
-        Comma_n = 0
-        g = 1
+        Dim Comma_n = 0
+        Dim g = 1
         For e = 1 To Len(GlycN)
             Lt = Mid(GlycN, e, 1)
             If Lt = "," And Comma_n = 0 Then
@@ -220,7 +221,9 @@
             End If
         Next e
 
-        NumComponent = g
+        Dim NumComponent = g
+        Dim NameComponent As String
+        Dim NumDash As Double
 
         '3. Identify each component, calculate mass, and store value to w()
         Lt = ""
@@ -248,7 +251,7 @@
 
         '4. Fragment each sugar chain forward (NL = sugar portions);
         'calualte mass of each fragment (loss), and store value to f1()
-        h = 0
+        Dim h = 0
         For c1 = 1 To 5
             For c1f = 1 To 100
                 If w(c1, c1f) = 0 Then Exit For
@@ -291,7 +294,11 @@
 
         '5. Fragment each sugar chain backward (ion = sugar portions);
         'calualte mass of each fragment (loss), and store value to f1()
-        h1 = h + 1
+        Dim h1 = h + 1
+
+        Dim NameSugar As String
+        Dim mass As Double
+
         For e = 2 To NumComponent
             NameComponent = u(1, e)
             NumDash = 0

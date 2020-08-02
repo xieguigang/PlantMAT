@@ -8,35 +8,35 @@
 
         'Click to run MS2 annotation; first browse to folder where stores MS2 data
         Dim SelectedFolder As FileDialog
-Set SelectedFolder = Application.FileDialog(msoFileDialogFolderPicker)
-SelectedFolder.Title = "Select MS2 Folder"
+        SelectedFolder = Application.FileDialog(msoFileDialogFolderPicker)
+        SelectedFolder.Title = "Select MS2 Folder"
         SelectedFolder.AllowMultiSelect = False
         SelectedFolder.Show
         If SelectedFolder.SelectedItems.Count = 0 Then Exit Sub
         MS2FilePath = SelectedFolder.SelectedItems(1) + "\"
         SingleQ = False
 
-'Peform MS2 annotation and show the calculation progress (MS2A)
-'After finished, ask whether to continue MS2 prediction for glycosyl sequencing (MS2P)
-Set Query = ThisWorkbook.Sheets("Query")
-Set SMILES = ThisWorkbook.Sheets("SMILES")
-If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
-            PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS2A_TopDown"
-   If SMILES.Cells(4, 2) <> "" Then
+        'Peform MS2 annotation and show the calculation progress (MS2A)
+        'After finished, ask whether to continue MS2 prediction for glycosyl sequencing (MS2P)
+        Query = ThisWorkbook.Sheets("Query")
+        SMILES = ThisWorkbook.Sheets("SMILES")
+        If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2A_TopDown")
+            If SMILES.Cells(4, 2) <> "" Then
                 a = MsgBox("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing?", vbYesNo, "PlantMAT")
                 If a = vbYes Then
-                    PublicVS_Code.StartProcessing "Now analyzing, please wait...", "MS2P_Code.MS2P"
-         MsgBox "Glycosyl sequencing finished", vbInformation, "PlantMAT"
-      End If
+                    PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2P_Code.MS2P")
+                    Console.WriteLine("Glycosyl sequencing finished")
+                End If
             Else
-                MsgBox "MS2 annotation finished", vbInformation, "PlantMAT"
-   End If
+                Console.WriteLine("MS2 annotation finished")
+            End If
         Else
             a = MsgBox("Please run combinatorial enumeration (MS1) first", vbInformation, "PlantMAT")
             Exit Sub
         End If
 
-        ThisWorkbook.Save
+        ' ThisWorkbook.Save
 
     End Sub
 
@@ -133,7 +133,7 @@ If Query.Cells(4, 7) <> "" Or Query.Cells(4, 22) <> "" Then
 
     Sub MS2File_Searching()
 
-        On Error GoTo ErrorHandler
+        'On Error GoTo ErrorHandler
 
         Dim File As Variant
         Dim MS2FileName As String
@@ -341,6 +341,7 @@ Wend
 
         'Calculate the precuror ion mz based on the calcualted loss mass
         Dim pIonMZ = MIonMZ - Loss_w
+        Dim pIonNM As String
 
         'Find if the ion is related to the H2O/CO2 loss from aglycone
         If Hex_n = Hex_max And HexA_n = HexA_max And dHex_n = dHex_max And Pen_n = Pen_max And
@@ -375,13 +376,13 @@ Wend
         'If the mz error is less than the defined ppm and intensity is above the noise filter, then
         'save the predicted ions in the annotation ion list aIonList()
         For s = 1 To eIon_n
-            eIonMZ = eIonList(1, s)
-            eIonInt = eIonList(2, s)
+            Dim eIonMZ = eIonList(1, s)
+            Dim eIonInt = eIonList(2, s)
             For t = 1 To pIon_n
-                pIonMZ = pIonList(1, t)
-                pIonNM = pIonList(2, t)
+                Dim pIonMZ = pIonList(1, t)
+                Dim pIonNM = pIonList(2, t)
                 If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
-                    aIonAbu = eIonInt / TotalIonInt
+                    Dim aIonAbu = eIonInt / TotalIonInt
                     If aIonAbu * 100 >= NoiseFilter Then
                         aIon_n = aIon_n + 1
                         ReDim Preserve aIonList(1 To 3, 1 To aIon_n)

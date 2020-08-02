@@ -56,16 +56,13 @@
 
     Sub Settings_Check()
 
-        On Error GoTo ErrorHandler
+        '        On Error GoTo ErrorHandler
 
-        PlantMATfolder = "C:\Users\" & Environ$("Username") & "\Documents\PlantMAT"
-Set fs = CreateObject("Scripting.FileSystemObject")
-If Dir(PlantMATfolder, vbDirectory) = "" Then
-   Set PlantMATfolder = fs.CreateFolder(PlantMATfolder)
-End If
-        If Dir(PlantMATfolder & "\Settings.txt", vbDirectory) = "" Then
-   Set Settingsfile = fs.CreateTextFile(PlantMATfolder & "\Settings.txt", True)
-   With Settingsfile
+        Dim PlantMATfolder = "C:\Users\" & Environ$("Username") & "\Documents\PlantMAT"
+
+
+        Using Settingsfile = (PlantMATfolder & "\Settings.txt").OpenWriter
+            With Settingsfile
                 .WriteLine("Internal Aglycone Database: True")
                 .WriteLine("External Aglycone Database: [Select external database]")
                 .WriteLine("Aglycone Type: Triterpene")
@@ -86,14 +83,7 @@ End If
                 .WriteLine("m/z PPM: 15")
                 .WriteLine("Pattern Prediction: False")
             End With
-            Settingsfile.Close
-        End If
-
-        Exit Sub
-
-ErrorHandler:
-        MsgBox "PlantMAT is incompatiable with the current Excel or OS", vbCritical, "PlantMAT"
-ThisWorkbook.Close
+        End Using
 
     End Sub
 
@@ -134,19 +124,20 @@ ThisWorkbook.Close
         NumDDMPMin = 0
         NumDDMPMax = 0
 
-        Settingsfile = "C:\Users\" & Environ$("Username") & "\Documents\PlantMAT\Settings.txt"
-        Open Settingsfile For Input As #1
+        Dim Settingsfile = "C:\Users\" & Environ$("Username") & "\Documents\PlantMAT\Settings.txt"
 
-i = 0
+        i = 0
         ReDim AddedSugarAcid(0 To 10, 0 To 3)
 
-        Do Until EOF(1)
-            Line Input #1, textLine
-   posColon = InStr(textLine, ":")
-            lenTextline = Len(textLine)
-            txtTitle = Left(textLine, posColon - 1)
-            txtValue = Right(textLine, lenTextline - posColon - 1)
-            posSpace = InStr(txtValue, " ")
+        For Each textLine As String In Settingsfile.IterateAllLines
+            Dim posColon = InStr(textLine, ":")
+            Dim lenTextline = Len(textLine)
+            Dim txtTitle = Left(textLine, posColon - 1)
+            Dim txtValue = Right(textLine, lenTextline - posColon - 1)
+            Dim posSpace = InStr(txtValue, " ")
+            Dim lenValue, minValue, maxValue As Integer
+            Dim typeSA, nameSA As String
+
             If posSpace <> 0 Then
                 lenValue = Len(txtValue)
                 minValue = Left(txtValue, posSpace - 1)
@@ -189,67 +180,38 @@ i = 0
             If txtTitle = "Noise Filter" Then NoiseFilter = txtValue
             If txtTitle = "m/z PPM" Then mzPPM = txtValue
             If txtTitle = "Pattern Prediction" Then PatternPrediction = txtValue
-        Loop
-
-        Close #1
-
-End Sub
+        Next
+    End Sub
 
     Sub StartProcessing(msg As String, code As String)
 
         Processing_Message = msg
         Macro_to_Process = code
-        Processing_Dialog.Show
+
 
     End Sub
 
     Sub Export(ExportRange As Worksheet, FirstRow As Long, LastRow As Long, FirstCol As Long, LastCol As Long)
-
-        On Error GoTo ErrorHandler
-
-        Dim ExportFile As String
-        ExportFile = Application.GetSaveAsFilename(fileFilter:="csv Files (*.csv), *.csv")
+        Dim ExportFile As String = Application.GetSaveAsFilename(fileFilter:="csv Files (*.csv), *.csv")
         If ExportFile = "False" Then Exit Sub
 
-        Open ExportFile For Output As #1
-For r = FirstRow To LastRow
-            For c = FirstCol To LastCol
-                Data = ExportRange.Cells(r, c).Value
-                If IsNumeric(Data) = True Then Data = CStr(Data)
-                If Data = "" Then Data = ""
-                If c <> LastCol Then
-                    Write #1, Data;
-        Else
-                    Write #1, Data
-        End If
-            Next c
-        Next r
-        Close #1
+        Using save = ExportFile.OpenWriter
+            For r = FirstRow To LastRow
+                For c = FirstCol To LastCol
+                    Dim Data As String = ExportRange.Cells(r, c).Value
+                    If IsNumeric(Data) = True Then Data = CStr(Data)
+                    If Data = "" Then Data = ""
+                    If c <> LastCol Then
+                        save.Write(Data)
+                    Else
+                        save.Write(Data)
+                    End If
+                Next c
+            Next r
+        End Using
 
-MsgBox "Data were exported to " & ExportFile, vbInformation, "PlantMAT"
+        Console.WriteLine("Data were exported to " & ExportFile)
 
-Exit Sub
-
-ErrorHandler:
-        MsgBox "Export failed", vbCritical, "PlantMAT"
-
-End Sub
-
-    Sub Printout(PrintRange As Worksheet, TableHeader As String, FirstCell As String, LastRow As Long, LastCol As Long)
-
-        PrintRange.DisplayAutomaticPageBreaks = False
-        With PrintRange.PageSetup
-            .PrintArea = PrintRange.Range(FirstCell & ":" & PrintRange.Cells(LastRow, LastCol).Address).Address
-            .PrintTitleRows = TableHeader
-            .Orientation = xlLandscape
-            .Zoom = False
-            .FitToPagesWide = 1
-            .FitToPagesTall = False
-        End With
-        PrintRange.Printout
-
-        MsgBox "Data were sent to printer", vbInformation, "PlantMAT"
-
-End Sub
+    End Sub
 
 End Module
