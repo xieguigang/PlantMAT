@@ -1,39 +1,38 @@
-﻿Module MS2A_TopDown_Code
+﻿
+''' <summary>
+''' This module performs MS2 annotation
+''' </summary>
+Module MS2A_TopDown_Code
 
-
-    ' Attribute VB_Name = "MS2A_TopDown_Code"
-    'This module performs MS2 annotation
-
-    Sub Button_MS2Annotation()
+    Sub Button_MS2Annotation(MS2FilePath As String)
 
         'Click to run MS2 annotation; first browse to folder where stores MS2 data
-        Dim SelectedFolder As FileDialog
-        SelectedFolder = Application.FileDialog(msoFileDialogFolderPicker)
-        SelectedFolder.Title = "Select MS2 Folder"
-        SelectedFolder.AllowMultiSelect = False
-        SelectedFolder.Show
-        If SelectedFolder.SelectedItems.Count = 0 Then Exit Sub
-        MS2FilePath = SelectedFolder.SelectedItems(1) + "\"
+        'Dim SelectedFolder As FileDialog
+        'SelectedFolder = Application.FileDialog(msoFileDialogFolderPicker)
+        'SelectedFolder.Title = "Select MS2 Folder"
+        'SelectedFolder.AllowMultiSelect = False
+        'SelectedFolder.Show
+        'If SelectedFolder.SelectedItems.Count = 0 Then Exit Sub
+        'MS2FilePath = SelectedFolder.SelectedItems(1) + "\"
         SingleQ = False
 
         'Peform MS2 annotation and show the calculation progress (MS2A)
         'After finished, ask whether to continue MS2 prediction for glycosyl sequencing (MS2P)
-        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
-        SMILES = ThisWorkbook.Sheets("SMILES")
+        '   PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
+        '  SMILES = ThisWorkbook.Sheets("SMILES")
         If PublicVS_Code.Query.Cells(4, 7) <> "" Or PublicVS_Code.Query.Cells(4, 22) <> "" Then
-            PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2A_TopDown")
+            PublicVS_Code.StartProcessing("Now analyzing, please wait...", AddressOf MS2A_TopDown)
             If SMILES.Cells(4, 2) <> "" Then
-                a = MsgBox("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing?", vbYesNo, "PlantMAT")
-                If a = vbYes Then
-                    PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS2P_Code.MS2P")
-                    Console.WriteLine("Glycosyl sequencing finished")
-                End If
+                Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
+
+                PublicVS_Code.StartProcessing("Now analyzing, please wait...", AddressOf MS2P_Code.MS2P)
+                Console.WriteLine("Glycosyl sequencing finished")
+
             Else
                 Console.WriteLine("MS2 annotation finished")
             End If
         Else
-            a = MsgBox("Please run combinatorial enumeration (MS1) first", vbInformation, "PlantMAT")
-            Exit Sub
+            Console.WriteLine("Please run combinatorial enumeration (MS1) first")
         End If
 
         ' ThisWorkbook.Save
@@ -61,8 +60,8 @@
         End With
 
         'Read the parameters in Settings (module: PublicVS_Code)
-        Call PublicVS_Code.Settings_Check
-        Call PublicVS_Code.Settings_Reading
+        Call PublicVS_Code.Settings_Check()
+        Call PublicVS_Code.Settings_Reading()
 
         i = 4
 
@@ -135,31 +134,27 @@
 
         'On Error GoTo ErrorHandler
 
-        Dim File As Variant
+
         Dim MS2FileName As String
 
         FileCheck = False
         ErrorCheck = False
 
-        File = Dir(MS2FilePath)
-        MS2FileName = CStr(CmpdTag) + ".txt"
+
+        MS2FileName = CStr(CmpdTag) & ".txt"
 
         'Find MS2 data for each compound and read into data array eIonList()
-        While (File <> "")
-            ' DoEvents
+        For Each file As String In MS2FilePath.ListDirectory
 
-            If InStr(File, MS2FileName) = 1 Then
+
+            If InStr(file, MS2FileName) = 1 Then
                 FileCheck = True
                 eIon_n = 0
                 TotalIonInt = 0
                 ReDim eIonList(1 To 2, 1 To 1)
-                Open MS2FilePath + MS2FileName For Input As #1
+                For Each lineText As String In (MS2FilePath & "/" & MS2FileName).IterateAllLines
 
-        While Not EOF(1)
-                    '  DoEvents
-
-                    Line Input #1, LineText
-            eIon = Split(CStr(LineText), Chr(9))
+                    Dim eIon = Strings.Split(CStr(lineText), Chr(9))
                     DaughterIonMZ = eIon(0)
                     DaughterIonInt = eIon(1)
                     TotalIonInt = TotalIonInt + DaughterIonInt
@@ -169,13 +164,10 @@
                     ReDim Preserve eIonList(1 To 2, 1 To eIon_n)
                     eIonList(1, eIon_n) = DaughterIonMZ
                     eIonList(2, eIon_n) = DaughterIonInt
-        Wend
+                Next
+            End If
 
-        Close #1
-    End If
-
-            File = Dir()
-Wend
+        Next
 
     End Sub
 
@@ -221,8 +213,8 @@ Wend
                     aIonMZ = aIonList(1, s)
                     aIonAbu = aIonList(2, s)
                     aIonNM = aIonList(3, s)
-                    comb.AddItem CStr(Format(aIonAbu, "0.000")) & " " & aIonNM
-          aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
+                    comb.AddItem(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
+                    aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
                     CStr(Format(aIonAbu * 100, "0.00")) & ", " & aIonNM & "; "
                 Next s
             End If

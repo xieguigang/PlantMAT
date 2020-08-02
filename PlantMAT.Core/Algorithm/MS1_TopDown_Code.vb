@@ -1,16 +1,15 @@
-﻿Module MS1_TopDown_Code
-
-
-    ' Attribute VB_Name = "MS1_TopDown_Code"
-    'This module performs combinatorial enumeration
+﻿''' <summary>
+''' This module performs combinatorial enumeration
+''' </summary>
+Module MS1_TopDown_Code
 
     Sub Button_MS1()
 
         'Click to run combintorial enumeration; first check if any MS1 data has been imported
-        PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
-        If IsNumeric(PublicVS_Code.Query.Range("D4")) = False Or PublicVS_Code.Query.Range("D4") = "" Then
-            Throw New PlantMATException("MS1 data incorrect")
-        End If
+        'PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
+        'If IsNumeric(PublicVS_Code.Query.Range("D4")) = False Or PublicVS_Code.Query.Range("D4") = "" Then
+        '    Throw New PlantMATException("MS1 data incorrect")
+        'End If
 
         'Read the parameters in Settings (module: PublicVS_Code)
         Call PublicVS_Code.Settings_Check()
@@ -22,9 +21,9 @@
         End If
 
         'Peform combinatorial enumeration and show the calculation progress (MS1CP)
-        PublicVS_Code.StartProcessing("Now analyzing, please wait...", "MS1CP")
+        PublicVS_Code.StartProcessing("Now analyzing, please wait...", AddressOf MS1CP)
 
-        ThisWorkbook.Save
+        ' ThisWorkbook.Save
 
         'Show the message box after the calculation is finished
         Console.WriteLine("Substructure prediction finished")
@@ -37,32 +36,32 @@
         'Application.EnableEvents = False
 
         'Intialize the Query Interface and clear all previous data and results if any
-        With PublicVS_Code.Query
-            Call .Unprotect
-            LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-            If LastRow >= 4 Then .Range("G4:" & "Z" & LastRow) = ""
-            Call .Cells.ClearComments
-            Call .DropDowns().Delete
-            .ScrollArea = ""
-        End With
+        'With PublicVS_Code.Query
+        '    Call .Unprotect
+        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
+        '    If LastRow >= 4 Then .Range("G4:" & "Z" & LastRow) = ""
+        '    Call .Cells.ClearComments
+        '    Call .DropDowns().Delete
+        '    .ScrollArea = ""
+        'End With
 
-        i = 4
-        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
-            If PublicVS_Code.Query.Cells(i, 4) = "..." Then
-                PublicVS_Code.Query.Cells(i, 4).EntireRow.Delete
-                i = i - 1
-            End If
-            i = i + 1
-        Loop
+        'i = 4
+        'Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+        '    If PublicVS_Code.Query.Cells(i, 4) = "..." Then
+        '        PublicVS_Code.Query.Cells(i, 4).EntireRow.Delete
+        '        i = i - 1
+        '    End If
+        '    i = i + 1
+        'Loop
 
-        Database = ThisWorkbook.Sheets("Library")
-        SMILES = ThisWorkbook.Sheets("SMILES")
-        With SMILES
-            .Unprotect
-            LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-            If LastRow >= 3 Then .Range("B3:" & "E" & LastRow) = ""
-            .ScrollArea = ""
-        End With
+        'Database = ThisWorkbook.Sheets("Library")
+        'SMILES = ThisWorkbook.Sheets("SMILES")
+        'With SMILES
+        '    .Unprotect
+        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
+        '    If LastRow >= 3 Then .Range("B3:" & "E" & LastRow) = ""
+        '    .ScrollArea = ""
+        'End With
 
         'Run combinatorial enumeration
         Pattern_n = 0
@@ -80,18 +79,18 @@
         Next j
 
         'Enable the button for MS2 analysis and lock (protect) all spreadsheets
-        With PublicVS_Code.Query
-            .Shapes("bt_MS2A").OnAction = "Button_MS2Annotation"
-            .Shapes("bt_MS2A").DrawingObject.Font.ColorIndex = 1
-            Application.Goto.Range("A1"), True
-     .ScrollArea = "A4:Z" & CStr(i + 1)
-            Call .Protect
-        End With
+        '   With PublicVS_Code.Query
+        '       .Shapes("bt_MS2A").OnAction = "Button_MS2Annotation"
+        '       .Shapes("bt_MS2A").DrawingObject.Font.ColorIndex = 1
+        '       Application.Goto.Range("A1"), True
+        '.ScrollArea = "A4:Z" & CStr(i + 1)
+        '       Call .Protect
+        '   End With
 
-        With SMILES
-            .ScrollArea = "E3:E" & CStr(Pattern_n + 1)
-            .Protect
-        End With
+        '   With SMILES
+        '       .ScrollArea = "E3:E" & CStr(Pattern_n + 1)
+        '       .Protect
+        '   End With
 
         'Application.EnableEvents = True
         'Application.ScreenUpdating = True
@@ -325,7 +324,7 @@ ResultDisplay:
         n1 = 0
         n2 = 0
         For e = 1 To Len(AglyS1)
-            If IsNumeric(Mid(AglyS1, e, 1)) Then
+            If Information.IsNumeric(Mid(AglyS1, e, 1)) Then
                 n2 = CInt(Mid(AglyS1, e, 1))
                 If n2 > n1 Then n1 = n2
             End If
@@ -333,7 +332,7 @@ ResultDisplay:
 
         '2. Find type and number of sugars/acids
         Dim Sug_n As Long
-        Dim Sug, Sug_p() As String
+        Dim Sug, Sug_p(,) As String
         Dim g As Long, h As Long, l As Long
 
         For e = 3 To 11

@@ -14,7 +14,7 @@
     Public Candidate As String(,), Candidate_n As Long, Pattern_n As Long
     Public IonType As String, IonMZ_crc As Double, Rsyb As String, GlycN As String, SugComb As String
     Public DHIonMZ As Double, MIonMZ As Double, DaughterIonMZ As Double, DaughterIonInt As Double, TotalIonInt As Double
-    Public eIonList() As Double, eIon_n As Long, pIonList() As Variant, pIon_n As Long, aIonList() As Variant, aIon_n As Long
+    Public eIonList(,) As Double, eIon_n As Long, pIonList() As Variant, pIon_n As Long, aIonList() As Variant, aIon_n As Long
     Public AglyN As String, AglyT As String, AglyO As String, AglyW As Double, AglyS As String
     Public Agly() As Variant, Agly_w As Double, Agly_n As Long, aAgly() As Variant, aAgly_n As Long
     Public M_w As Double, H_w As Double, e_w As Double, RT_E As Double, RT_P As Variant
@@ -183,12 +183,12 @@
         Next
     End Sub
 
-    Sub StartProcessing(msg As String, code As String)
+    Sub StartProcessing(msg As String, code As Action)
 
         Processing_Message = msg
-        Macro_to_Process = code
+        Macro_to_Process = code.Method.Name
 
-
+        Call code()
     End Sub
 
     Sub Export(ExportRange As Worksheet, FirstRow As Long, LastRow As Long, FirstCol As Long, LastCol As Long)
