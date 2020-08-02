@@ -1,0 +1,99 @@
+"Common Name","Class","Type","Formula","Exact Mass","Genus","Universal SMILES","Editor","Date"
+"Flavone","Polyphenol","Flavone","C15H10O2","222.06807965","NA","c1ccc(cc1)c1cc(=O)c2ccccc2o1","fqiu",#2013-08-23#
+"Flavanone","Polyphenol","Flavanone","C15H12O2","224.08372927","NA","c1ccc(cc1)C1CC(=O)c2ccccc2O1","fqiu",#2013-08-23#
+"Hispidol","Polyphenol","Aurone","C15H10O4","254.05790893","NA","c1cc(ccc1C=C1C(=O)c2ccc(cc2O1)O)O","fqiu",#2013-08-23#
+"7,4'-Dihydroxyflavone","Polyphenol","Flavone","C15H10O4","254.05790893","NA","c1ccc(cc1)c1cc(=O)c2ccc(c(c2o1)O)O","fqiu",#2013-08-23#
+"Daidzein","Polyphenol","Isoflavone","C15H10O4","254.05790893","NA","c1cc(ccc1c1coc2cc(ccc2c1=O)O)O","fqiu",#2013-08-23#
+"Isoliquiritigenin","Polyphenol","Chalcone","C15H12O4","256.073559","NA","c1cc(ccc1C=CC(=O)c1ccc(cc1O)O)O","fqiu",#2013-08-23#
+"Liquiritigenin","Polyphenol","Flavanone","C15H12O4","256.073559","NA","c1cc(ccc1C1CC(=O)c2ccc(cc2O1)O)O","fqiu",#2013-08-23#
+"Formononetin","Polyphenol","Isoflavone","C16H12O4","268.073559","NA","COc1ccc(cc1)c1coc2cc(ccc2c1=O)O","fqiu",#2013-08-23#
+"Apigenin","Polyphenol","Flavone","C15H10O5","270.05282357","NA","c1cc(ccc1c1cc(=O)c2c(cc(cc2o1)O)O)O","fqiu",#2013-08-23#
+"Galangin","Polyphenol","Flavonol","C15H10O5","270.05282357","NA","c1ccc(cc1)c1c(c(=O)c2c(cc(cc2o1)O)O)O","fqiu",#2013-08-23#
+"Genistein","Polyphenol","Isoflavone","C15H10O5","270.05282357","NA","c1cc(ccc1c1coc2cc(cc(c2c1=O)O)O)O","fqiu",#2013-08-23#
+"Medicarpin","Polyphenol","Isoflavan","C16H14O4","270.08920908","NA","COc1ccc2C3COc4cc(ccc4C3Oc2c1)O","fqiu",#2013-08-23#
+"Naringenin","Polyphenol","Flavanone","C15H12O5","272.06847364","NA","c1cc(ccc1C1CC(=O)c2c(cc(cc2O1)O)O)O","fqiu",#2013-08-23#
+"Vestitol","Polyphenol","Isoflavan","C16H16O4","272.10485915","NA","COc1ccc(C2Cc3ccc(cc3OC2)O)c(c1)O","fqiu",#2013-08-23#
+"Genkwanin","Polyphenol","Flavone","C16H12O5","284.06847364","NA","COc1cc(c2c(=O)cc(c3ccc(cc3)O)oc2c1)O","fqiu",#2013-08-23#
+"2'-Hydroxyformononetin","Polyphenol","Isoflavone","C16H12O5","284.06847364","NA","COc1ccc(c2coc3cc(ccc3c2=O)O)c(c1)O","fqiu",#2013-08-23#
+"Biochanin A","Polyphenol","Isoflavone","C16H12O5","284.06847364","NA","COc1ccc(cc1)c1coc2cc(cc(c2c1=O)O)O","fqiu",#2013-08-23#
+"Luteolin","Polyphenol","Flavone","C15H10O6","286.04773821","NA","c1cc(c(cc1c1cc(=O)c2c(cc(cc2o1)O)O)O)O","fqiu",#2013-08-23#
+"Fisetin","Polyphenol","Flavonol","C15H10O6","286.04773821","NA","c1cc(c(cc1c1c(c(=O)c2ccc(cc2o1)O)O)O)O","fqiu",#2013-08-23#
+"Kaempferol","Polyphenol","Flavonol","C15H10O6","286.04773821","NA","c1cc(ccc1c1c(c(=O)c2c(cc(cc2o1)O)O)O)O","fqiu",#2013-08-23#
+"Isosakuranetin","Polyphenol","Flavanone","C16H14O5","286.08412372","NA","COc1ccc(cc1)C1CC(=O)c2c(cc(cc2O1)O)O","fqiu",#2013-08-23#
+"Eriodictyol","Polyphenol","Flavanone","C15H12O6","288.06338828","NA","c1cc(c(cc1C1CC(=O)c2c(cc(cc2O1)O)O)O)O","fqiu",#2013-08-23#
+"Irilone","Polyphenol","Isoflavone","C16H10O6","298.04773821","NA","c1cc(ccc1c1coc2cc3c(c(c2c1=O)O)OCO3)O","fqiu",#2013-08-23#
+"Afrormosin","Polyphenol","Isoflavone","C17H14O5","298.08412372","NA","COc1ccc(cc1)c1coc2cc(c(cc2c1=O)OC)O","fqiu",#2013-08-23#
+"Chrysoeriol","Polyphenol","Flavone","C16H12O6","300.06338828","NA","COc1cc(ccc1O)c1cc(=O)c2c(cc(cc2o1)O)O","fqiu",#2013-08-23#
+"Kaempferid","Polyphenol","Flavonol","C16H12O6","300.06338828","NA","COc1ccc(cc1)c1c(c(=O)c2c(cc(cc2o1)O)O)O","fqiu",#2013-08-23#
+"Quercetin","Polyphenol","Flavonol","C15H10O7","302.04265285","NA","c1cc(c(cc1c1c(c(=O)c2c(cc(cc2o1)O)O)O)O)O","fqiu",#2013-08-23#
+"5,3'-Dimethoxyluteolin","Polyphenol","Flavone","C17H14O6","314.07903836","NA","COc1cc(ccc1O)c1cc(=O)c2c(cc(cc2o1)O)OC","fqiu",#2013-08-23#
+"Irisolidone","Polyphenol","Isoflavone","C17H14O6","314.07903836","NA","COc1ccc(cc1)c1coc2cc(c(c(c2c1=O)O)OC)O","fqiu",#2013-08-23#
+"Tricin","Polyphenol","Flavone","C17H14O7","330.073953","NA","COc1cc(cc(c1O)OC)c1cc(=O)c2c(cc(cc2o1)O)O","fqiu",#2013-08-23#
+"Trinorlupeol","Triterpene","NA","C27H44O","384.33921627","Arabidopsis","CC1(C)C2CCC3(C)C(CCC4C5=CCCC5(C)CCC34C)C2(C)CCC1O","fqiu",#2013-08-26#
+"Cholesterol","Steroid","NA","C27H46O   ","386.35486634","Arabidopsis","CC(C)CCCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O","fqiu",#2013-08-26#
+"Campersterol","Steroid","NA","C28H48O","400.37051642","Arabidopsis","CC(C)C(C)CCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O","fqiu",#2013-08-26#
+"Stigmasterol","Steroid","NA","C29H48O","412.37051642","Arabidopsis","CCC(C=CC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O)C(C)C","fqiu",#2013-08-26#
+"ß-Sitosterol","Steroid","NA","C29H50O","414.38616649","Arabidopsis","CCC(CCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O)C(C)C","fqiu",#2013-08-26#
+"Bauerenol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1CCC2(C)CCC3(C)C4=CCC5C(C)(C)C(CCC5(C)C4CCC3(C)C2C1C)O","fqiu",#2013-08-26#
+"Butyrospermol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3=CCC4C(C)(C)C(CCC4(C)C3CCC12C)O)C","fqiu",#2013-08-26#
+"Cycloartenol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3CCC4C(C)(C)C(CCC54CC35CCC12C)O)C","fqiu",#2013-08-26#
+"Germanicol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1(C)CCC2(C)CCC3(C)C(CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2=C1","fqiu",#2013-08-26#
+"Lanosterol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3=C(CCC12C)C1(C)CCC(C(C)(C)C1CC3)O)C","fqiu",#2013-08-26#
+"Lupeol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","C=C(C)C1CCC2(C)CCC3(C)C(CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C12","fqiu",#2013-08-26#
+"Marneral","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(=CCCC(=CCCC1(C)C(C)CCC(=C(C)C)C1CCC=O)C)C)C","fqiu",#2013-08-26#
+"Multiflorenol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1(C)CCC2(C)CCC3(C)C4=CCC5C(C)(C)C(CCC5(C)C4CCC3(C)C2C1)O","fqiu",#2013-08-26#
+"Taraxasterol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","C=C1CCC2(C)CCC3(C)C(CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1C","fqiu",#2013-08-26#
+"Thalianol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(=CCCC(C)C1(C)CCC2=C1CCC1C(C)(C)C(CCC21C)O)C)C","fqiu",#2013-08-26#
+"Tirucalladienol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3=CCC4C(C)(C)C(CCC4(C)C3CCC12C)O)C","fqiu",#2013-08-26#
+"?-Taraxasterol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1=CCC2(C)CCC3(C)C(CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1C","fqiu",#2013-08-26#
+"ß-Amyrin","Triterpene","NA","C30H50O","426.38616649","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
+"24-Hydroxy-ß-amyrin","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(CO)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
+"Erythrodiol","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1)CO","fqiu",#2013-08-26#
+"Sophoradiol","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CC2C3=CCC4C5(C)CCC(C(C)(C)C5CCC4(C)C3(C)CCC2(C)C(C1)O)O","fqiu",#2013-08-26#
+"Oleanolic acid","Triterpene","NA","C30H48O3","456.3603457","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Soyasapogenol E","Triterpene","NA","C30H48O3","456.3603457","Medicago","CC1(C)CC2C3=CCC4C5(C)CCC(C(C)(CO)C5CCC4(C)C3(C)CCC2(C)C(=O)C1)O","fqiu",#2013-08-26#
+"Soyasapogenol B","Triterpene","NA","C30H50O3","458.37599577","Medicago","CC1(C)CC2C3=CCC4C5(C)CCC(C(C)(CO)C5CCC4(C)C3(C)CCC2(C)C(C1)O)O","fqiu",#2013-08-26#
+"Gypsogenin","Triterpene","NA","C30H46O4","470.33961026","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C=O)C5CCC34C)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"2-Hydroxyoleanolic acid","Triterpene","NA","C30H48O4","472.35526034","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CC(C(C(C)(C)C5CCC34C)O)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Hederagenin","Triterpene","NA","C30H48O4","472.35526034","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(CO)C5CCC34C)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Soyasapogenol A","Triterpene","NA","C30H50O4","474.37091041","Medicago","CC1(C)CC2C3=CCC4C5(C)CCC(C(C)(CO)C5CCC4(C)C3(C)CCC2(C)C(C1O)O)O","fqiu",#2013-08-26#
+"Gypsogenic acid","Triterpene","NA","C30H46O5","486.3345249","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C5CCC34C)C(=O)O)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Polygalagenin","Triterpene","NA","C30H46O5","486.3345249","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CC(C(C(C)(C=O)C5CCC34C)O)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Bayogenin","Triterpene","NA","C30H48O5","488.35017498","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CC(C(C(C)(CO)C5CCC34C)O)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Medicagenic acid","Triterpene","NA","C30H46O6","502.32943954","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CC(C(C(C)(C5CCC34C)C(=O)O)O)O)C2C1)C(=O)O","fqiu",#2013-08-26#
+"Zanhic acid","Triterpene","NA","C30H46O7","518.32435418","Medicago","CC1(C)CCC2(C(C1)C1=CCC3C4(C)CC(C(C(C)(C4CCC3(C)C1(C)CC2O)C(=O)O)O)O)C(=O)O","fqiu",#2013-08-26#
+"NAE-12:0","Lipid","Amine","C14H29NO2","243.219815","Arabidopsis","NA","fqiu",#2015-06-12#
+"Furost-20(22)-en-26-ol","Steroid","NA","C27H44O2","400.33412","Asparagus","NA","fqiu",#2016-07-26#
+"Diosgenin","Steroid","NA","C27H42O3","414.31338","Asparagus","NA","fqiu",#2016-07-26#
+"Yamogenin","Steroid","NA","C27H42O3","414.31338","Asparagus","NA","fqiu",#2016-07-26#
+"Spirost-25(27)-en-3-ol","Steroid","NA","C27H42O3","414.31338","Asparagus","NA","fqiu",#2016-07-26#
+"Spirost-5-en-3-ol","Steroid","NA","C27H42O3","414.31338","Asparagus","NA","fqiu",#2016-07-26#
+"Spirostan-3-ol","Steroid","NA","C27H44O3","416.32903","Asparagus","NA","fqiu",#2016-07-26#
+"Furost-20(22)-en-3,26-diol","Steroid","NA","C27H44O3","416.32903","Asparagus","NA","fqiu",#2016-07-26#
+"Sarsasapogenin","Steroid","NA","C27H44O3","416.32903","Asparagus","NA","fqiu",#2016-07-26#
+"Ruscogenin","Steroid","NA","C27H42O4","430.30829","Asparagus","NA","fqiu",#2016-07-26#
+"3-Hydroxy-spirostan-12-one","Steroid","NA","C27H42O4","430.30829","Asparagus","NA","fqiu",#2016-07-26#
+"Spirostan-3,6-diol","Steroid","NA","C27H44O4","432.32394","Asparagus","NA","fqiu",#2016-07-26#
+"Spirostan-3,17-diol","Steroid","NA","C27H44O4","432.32394","Asparagus","NA","fqiu",#2016-07-26#
+"Furost-5-en-3,22,26-triol","Steroid","NA","C27H44O4","432.32394","Asparagus","NA","fqiu",#2016-07-26#
+"Furostan-3,22,26-triol","Steroid","NA","C27H46O4","434.33959","Asparagus","NA","fqiu",#2016-07-26#
+"12,17-Dihydroxy-spirost-4-en-3-one","Steroid","NA","C27H40O5","444.28755","Asparagus","NA","fqiu",#2016-07-26#
+"22-Methoxy-furost-5-en-3,26-diol","Steroid","NA","C28H46O4","446.33959","Asparagus","NA","fqiu",#2016-07-26#
+"22-Methoxy-furostan-3,26-diol","Steroid","NA","C28H48O4","448.35524","Asparagus","NA","fqiu",#2016-07-26#
+"3,3-Dimethoxy-17-hydroxy-spirostan-3-al-12-one","Steroid","NA","C29H46O6","490.32941","Asparagus","NA","fqiu",#2016-07-26#
+"Soyasapogenol A","Triterpene","NA","C30H50O4","474.37089","Glycine","NA","fqiu",#2016-08-31#
+"Soyasapogenol B","Triterpene","NA","C30H50O3","458.37598","Glycine","NA","fqiu",#2016-08-31#
+"Soyasapogenol E","Triterpene","NA","C30H48O3","456.36033","Glycine","NA","fqiu",#2016-08-31#
+"24-Hydroxy glycyrrhizic acid","Triterpene","NA","C30H46O5","486.3345","Glycyrrhiza","NA","fqiu",#2016-08-31#
+"Glycyrrhetinic acid","Triterpene","NA","C30H46O4","470.33959","Glycyrrhiza","NA","fqiu",#2016-08-31#
+"11-Deoxyo glycyrrhizic acid","Triterpene","NA","C30H48O3","456.36033","Glycyrrhiza","NA","fqiu",#2016-08-31#
+"Solanidine","Alkaloid","NA","C27H43NO","397.334455","Solanum","NA","fqiu",#2016-08-31#
+"Demissidine","Alkaloid","NA","C27H45NO","399.350105","Solanum","NA","fqiu",#2016-08-31#
+"Leptinidine","Alkaloid","NA","C27H43NO2","413.329365","Solanum","NA","fqiu",#2016-08-31#
+"Solasodine","Alkaloid","NA","C27H43NO2","413.329365","Solanum","NA","fqiu",#2016-08-31#
+"Tomatidenol","Alkaloid","NA","C27H43NO2","413.329365","Solanum","NA","fqiu",#2016-08-31#
+"Dihydroleptinidine","Alkaloid","NA","C27H45NO2","415.345015","Solanum","NA","fqiu",#2016-08-31#
+"Soladulcidine","Alkaloid","NA","C27H45NO2","415.345015","Solanum","NA","fqiu",#2016-08-31#
+"Tomatidine","Alkaloid","NA","C27H45NO2","415.345015","Solanum","NA","fqiu",#2016-08-31#
+"Acetylleptinidine","Alkaloid","NA","C29H45NO3","455.339925","Solanum","NA","fqiu",#2016-08-31#
+"Acetyldihydroleptinidine","Alkaloid","NA","C29H47NO3","457.355575","Solanum","NA","fqiu",#2016-08-31#
