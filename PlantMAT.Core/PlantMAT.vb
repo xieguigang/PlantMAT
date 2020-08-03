@@ -1,7 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Scripting.MetaData
-Imports SMRUCC.Rsharp.Runtime.Interop
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -76,5 +76,8 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
-
+    <ExportAPI("query.ms1")>
+    Public Function Ms1Query(metabolite_list As String()) As Query()
+        Return Query.ParseMs1PeakList(file:=metabolite_list)
+    End Function
 End Module

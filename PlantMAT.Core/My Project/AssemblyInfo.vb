@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("Core")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("Core")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("Plant Metabolite Annotation Toolbox")>
+<Assembly: AssemblyDescription("PlantMAT: A Metabolomics Tool for Predicting the Specialized Metabolic Potential of a System and for Large-Scale Metabolite Identifications")>
+<Assembly: AssemblyCompany("PlantMAT")>
+<Assembly: AssemblyProduct("PlantMAT.Core")>
+<Assembly: AssemblyCopyright("Copyright © PlantMAT 2020")>
+<Assembly: AssemblyTrademark("PlantMAT")>
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 '通过使用 "*"，如下所示:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("2.145.*")>
+<Assembly: AssemblyFileVersion("1.33.*")>
