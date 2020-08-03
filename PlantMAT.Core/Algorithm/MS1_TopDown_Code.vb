@@ -142,7 +142,7 @@ Module MS1_TopDown_Code
             Next Hex_n
 
 ResultDisplay:
-            Call MS1_CombinatorialPrediciton_ResultDisplay()
+            Call MS1_CombinatorialPrediciton_ResultDisplay(query)
 
             i = i + 1
         Next
