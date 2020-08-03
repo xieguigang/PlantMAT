@@ -4,7 +4,7 @@ Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 ''' <summary>
 ''' This module performs combinatorial enumeration
 ''' </summary>
-Module MS1TopDown
+Public Class MS1TopDown
 
     'Sub Button_MS1()
 
@@ -33,9 +33,13 @@ Module MS1TopDown
 
     'End Sub
 
-    Dim Pattern_n As Integer
     Dim library As Library()
     Dim settings As Settings
+
+    Sub New(library As Library(), settings As Settings)
+        Me.library = library
+        Me.settings = settings
+    End Sub
 
     Sub MS1CP(query As IEnumerable(Of Query))
 
@@ -71,7 +75,7 @@ Module MS1TopDown
         'End With
 
         'Run combinatorial enumeration
-        Pattern_n = 0
+
         Call MS1_CombinatorialPrediction(query, settings.PrecursorIonMZ, settings.PrecursorIonN)
 
         'Show columns of sugar/acid if any >=1
@@ -115,7 +119,7 @@ Module MS1TopDown
     Sub MS1_CombinatorialPrediction(queries As IEnumerable(Of Query), PrecursorIonMZ As Double, PrecursorIonN As Integer)
         '   Dim AllSMILES As String
 
-        Pattern_n = 0
+
 
         '  i = 4
 
@@ -617,11 +621,9 @@ AllSugarConnected:
             GlycN = AglyN + SugComb
 
             candidate.SMILES.Add({CStr(m) + "-" + CStr(e), GlycN})
-
-            Pattern_n = Pattern_n + 1
         Next e
 
     End Sub
 
 
-End Module
+End Class

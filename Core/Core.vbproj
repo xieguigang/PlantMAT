@@ -69,7 +69,7 @@
     <Compile Include="Models\Models.vb" />
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
-    <Compile Include="Module1.vb" />
+    <Compile Include="PublicVSCode.vb" />
     <Compile Include="Settings.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
