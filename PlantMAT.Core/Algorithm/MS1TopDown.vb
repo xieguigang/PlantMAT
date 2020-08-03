@@ -43,7 +43,7 @@ Public Class MS1TopDown
         Call applySettings()
     End Sub
 
-    Public Function MS1CP(query As IEnumerable(Of Query)) As Query()
+    Public Function MS1CP(query As Query()) As Query()
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False

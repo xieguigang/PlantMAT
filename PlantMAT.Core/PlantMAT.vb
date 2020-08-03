@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -66,6 +67,11 @@ Module PlantMAT
         }
     End Function
 
+    <ExportAPI("read.library")>
+    Public Function readLibrary(file As String) As Library()
+        Return file.LoadCsv(Of Library).ToArray
+    End Function
+
     ''' <summary>
     ''' performs combinatorial enumeration
     ''' </summary>
@@ -77,7 +83,7 @@ Module PlantMAT
     End Function
 
     <ExportAPI("query.ms1")>
-    Public Function Ms1Query(metabolite_list As String()) As Query()
+    Public Function ms1Query(metabolite_list As String()) As Query()
         Return Query.ParseMs1PeakList(file:=metabolite_list)
     End Function
 End Module
