@@ -1,8 +1,22 @@
-﻿Module MS2P_Code
+﻿Public Class MS2P_Code
 
+    Dim PrecursorIonType$
+    Dim PrecursorIonMZ#
+    Dim PrecursorIonN%
+
+    Dim settings As Settings
+
+    Sub New(settings As Settings)
+        Me.settings = settings
+        Me.applySettings()
+    End Sub
+
+    Private Sub applySettings()
+
+    End Sub
 
     ' Attribute VB_Name = "MS2P_Code"
-    Public Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
+    Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
@@ -24,24 +38,31 @@
         '  Call PublicVS_Code.Settings_Check
         '  Call PublicVS_Code.Settings_Reading
 
-        i = 4
+        '  i = 4
 
-        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+        For Each query As Query In queries
+
+
+
+            '        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
             'DoEvents
 
-            Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
-                i = i + 1
-                k = k + 1
-            Loop
+            'Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
+            '    i = i + 1
+            '    k = k + 1
+            'Loop
 
-            If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
+            '  If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
 
-            k = 1
+            '   k = 1
 
-            With PublicVS_Code.Query
-                CmpdTag = .Cells(i, 2)
-                DHIonMZ = .Cells(i, 4)
-            End With
+            '   With PublicVS_Code.Query
+            Dim CmpdTag = query.PeakNO ' .Cells(i, 2)
+            Dim DHIonMZ = query.PrecursorIon ' .Cells(i, 4)
+            '   End With
+
+            Dim MIonMZ#
+            Dim Rsyb$
 
             If Right(PrecursorIonType, 1) = "-" Then
                 MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) - H_w + e_w
@@ -51,45 +72,47 @@
                 Rsyb = "+H]+"
             End If
 
-            If SingleQ = True Then
-                Call MS2P_MS2Prediction()
-            Else
-                Call MS2File_Searching()
+            ' If SingleQ = True Then
+            Call MS2P_MS2Prediction(query, CmpdTag)
+            'Else
+            '    Call MS2File_Searching()
 
-                If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
-                    With PublicVS_Code.Query
-                        If ErrorCheck = True Then
-                            .Cells(i, 22) = "Data error"
-                        Else
-                            .Cells(i, 22) = "Data not found"
-                        End If
-                        .Cells(i, 22).HorizontalAlignment = xlLeft
-                        .Cells(i, 22).Font.Color = RGB(217, 217, 217)
-                    End With
-                    i = i + 1
-                    k = k + 1
-                    Do While PublicVS_Code.Query.Cells(i, 4) = "..."
-                        i = i + 1
-                        k = k + 1
-                    Loop
-                Else
-                    Call MS2P_MS2Prediction()
-                End If
-            End If
-        Loop
+            '    If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
+            '        With PublicVS_Code.Query
+            '            If ErrorCheck = True Then
+            '                .Cells(i, 22) = "Data error"
+            '            Else
+            '                .Cells(i, 22) = "Data not found"
+            '            End If
+            '            .Cells(i, 22).HorizontalAlignment = xlLeft
+            '            .Cells(i, 22).Font.Color = RGB(217, 217, 217)
+            '        End With
+            '        i = i + 1
+            '        k = k + 1
+            '        Do While PublicVS_Code.Query.Cells(i, 4) = "..."
+            '            i = i + 1
+            '            k = k + 1
+            '        Loop
+            '    Else
+            '        Call MS2P_MS2Prediction()
+            '    End If
+            'End If
 
-        With PublicVS_Code.Query
-            Application.Goto.Range("A1"), True
-     .ScrollArea = "A4:Z" & CStr(i + 1)
-            Call .Protect
-        End With
+            Yield query
+        Next
+
+        '   With PublicVS_Code.Query
+        '       Application.Goto.Range("A1"), True
+        '.ScrollArea = "A4:Z" & CStr(i + 1)
+        '       Call .Protect
+        '   End With
 
         'Application.EnableEvents = True
         'Application.ScreenUpdating = True
 
     End Function
 
-    Sub MS2P_MS2Prediction()
+    Sub MS2P_MS2Prediction(query As Query, CmpdTag As Integer)
 
         'Find how many structural possibilites for each peak in 'SMILES' sheet
         Dim r = 3
@@ -105,19 +128,19 @@
         Do While True
             'DoEvents
 
-            AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
+            Dim AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
-            With PublicVS_Code.Query.Cells(i, 26)
-                comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-                comb.Name = "dd_MS2P_" & CStr(i)
-            End With
+            ' With PublicVS_Code.Query.Cells(i, 26)
+            ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+            Dim combName = "dd_MS2P_" & CStr(i)
+            ' End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
             Dim PredNo = k
             Dim Pred_n = 0
-            Match_n = 0
-            Match_m = 0
+            Dim Match_n = 0
+            Dim Match_m = 0
             ReDim RS(2, 1)
 
             With SMILES
@@ -186,10 +209,10 @@
                 End If
             End With
 
-            i = i + 1
-            k = k + 1
+            ' i = i + 1
+            ' k = k + 1
 
-            If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
+            ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
         Loop
 
     End Sub
@@ -409,4 +432,4 @@ NextPriIon:
         RS(2, Match_n) = SugComb
 
     End Sub
-End Module
+End Class
