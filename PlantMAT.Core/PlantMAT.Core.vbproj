@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\MS1TopDown.vb" />
+    <Compile Include="Algorithm\MS2ATopDown.vb" />
     <Compile Include="Models\Models.vb" />
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />

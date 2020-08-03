@@ -28,6 +28,10 @@
 
 End Class
 
+Public Class Ms2Peaks
+
+End Class
+
 Public Class CandidateResult
 
     ''' <summary>
