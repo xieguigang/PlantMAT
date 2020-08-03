@@ -1,68 +1,47 @@
-﻿Public Class MS2P_Code
+﻿Module MS2P_Code
 
-    Dim PrecursorIonType$
-    Dim PrecursorIonMZ#
-    Dim PrecursorIonN%
-
-    Dim settings As Settings
-
-    Sub New(settings As Settings)
-        Me.settings = settings
-        Me.applySettings()
-    End Sub
-
-    Private Sub applySettings()
-
-    End Sub
 
     ' Attribute VB_Name = "MS2P_Code"
-    Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
+    Sub MS2P()
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
 
-        'Dim dd As Object
+        Dim dd As Object
 
-        'With PublicVS_Code.Query
-        '    Call .Unprotect
-        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-        '    If LastRow >= 4 Then
-        '        Call .Range("Y4:" & "Z" & LastRow).ClearContents
-        '        For Each dd In .DropDowns()
-        '            If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
-        '        Next dd
-        '    End If
-        '    .ScrollArea = ""
-        'End With
+        With PublicVS_Code.Query
+            Call .Unprotect
+            LastRow = .Range("D" & Rows.Count).End(xlUp).Row
+            If LastRow >= 4 Then
+                Call .Range("Y4:" & "Z" & LastRow).ClearContents
+                For Each dd In .DropDowns()
+                    If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
+                Next dd
+            End If
+            .ScrollArea = ""
+        End With
 
-        '  Call PublicVS_Code.Settings_Check
-        '  Call PublicVS_Code.Settings_Reading
+        Call PublicVS_Code.Settings_Check
+        Call PublicVS_Code.Settings_Reading
 
-        '  i = 4
+        i = 4
 
-        For Each query As Query In queries
-
-
-
-            '        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
             'DoEvents
 
-            'Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
-            '    i = i + 1
-            '    k = k + 1
-            'Loop
+            Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
+                i = i + 1
+                k = k + 1
+            Loop
 
-            '  If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
+            If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
 
-            '   k = 1
+            k = 1
 
-            '   With PublicVS_Code.Query
-            Dim CmpdTag = query.PeakNO ' .Cells(i, 2)
-            Dim DHIonMZ = query.PrecursorIon ' .Cells(i, 4)
-            '   End With
-
-            Dim MIonMZ#
-            Dim Rsyb$
+            With PublicVS_Code.Query
+                CmpdTag = .Cells(i, 2)
+                DHIonMZ = .Cells(i, 4)
+            End With
 
             If Right(PrecursorIonType, 1) = "-" Then
                 MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) - H_w + e_w
@@ -72,55 +51,53 @@
                 Rsyb = "+H]+"
             End If
 
-            ' If SingleQ = True Then
-            Call MS2P_MS2Prediction(query, CmpdTag)
-            'Else
-            '    Call MS2File_Searching()
+            If SingleQ = True Then
+                Call MS2P_MS2Prediction()
+            Else
+                Call MS2File_Searching()
 
-            '    If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
-            '        With PublicVS_Code.Query
-            '            If ErrorCheck = True Then
-            '                .Cells(i, 22) = "Data error"
-            '            Else
-            '                .Cells(i, 22) = "Data not found"
-            '            End If
-            '            .Cells(i, 22).HorizontalAlignment = xlLeft
-            '            .Cells(i, 22).Font.Color = RGB(217, 217, 217)
-            '        End With
-            '        i = i + 1
-            '        k = k + 1
-            '        Do While PublicVS_Code.Query.Cells(i, 4) = "..."
-            '            i = i + 1
-            '            k = k + 1
-            '        Loop
-            '    Else
-            '        Call MS2P_MS2Prediction()
-            '    End If
-            'End If
+                If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
+                    With PublicVS_Code.Query
+                        If ErrorCheck = True Then
+                            .Cells(i, 22) = "Data error"
+                        Else
+                            .Cells(i, 22) = "Data not found"
+                        End If
+                        .Cells(i, 22).HorizontalAlignment = xlLeft
+                        .Cells(i, 22).Font.Color = RGB(217, 217, 217)
+                    End With
+                    i = i + 1
+                    k = k + 1
+                    Do While PublicVS_Code.Query.Cells(i, 4) = "..."
+                        i = i + 1
+                        k = k + 1
+                    Loop
+                Else
+                    Call MS2P_MS2Prediction()
+                End If
+            End If
+        Loop
 
-            Yield query
-        Next
-
-        '   With PublicVS_Code.Query
-        '       Application.Goto.Range("A1"), True
-        '.ScrollArea = "A4:Z" & CStr(i + 1)
-        '       Call .Protect
-        '   End With
+        With PublicVS_Code.Query
+            Application.Goto.Range("A1"), True
+     .ScrollArea = "A4:Z" & CStr(i + 1)
+            Call .Protect
+        End With
 
         'Application.EnableEvents = True
         'Application.ScreenUpdating = True
 
-    End Function
+    End Sub
 
-    Sub MS2P_MS2Prediction(query As Query, CmpdTag As Integer)
+    Sub MS2P_MS2Prediction()
 
         'Find how many structural possibilites for each peak in 'SMILES' sheet
         Dim r = 3
         Dim peakNo As Integer
 
         Do While True
-            peakNo = SMILES.Cells(r, 2)
-            If peakNo = 0 Or peakNo = CmpdTag Then Exit Do
+            PeakNo = SMILES.Cells(r, 2)
+            If PeakNo = 0 Or PeakNo = CmpdTag Then Exit Do
             r = r + 1
         Loop
 
@@ -128,23 +105,23 @@
         Do While True
             'DoEvents
 
-            Dim AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
+            AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
-            ' With PublicVS_Code.Query.Cells(i, 26)
-            ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-            Dim combName = "dd_MS2P_" & CStr(i)
-            ' End With
+            With PublicVS_Code.Query.Cells(i, 26)
+                comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+                comb.Name = "dd_MS2P_" & CStr(i)
+            End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
             Dim PredNo = k
             Dim Pred_n = 0
-            Dim Match_n = 0
-            Dim Match_m = 0
+            Match_n = 0
+            Match_m = 0
             ReDim RS(2, 1)
 
             With SMILES
-                Do While peakNo = CmpdTag And PredNo = k
+                Do While PeakNo = CmpdTag And PredNo = k
                     ' DoEvents
 
                     Pred_n = Pred_n + 1
@@ -159,7 +136,7 @@
                     Call MS2P_MS2Prediction_IonPredictionMatching()
 
                     r = r + 1
-                    peakNo = .Cells(r, 2)
+                    PeakNo = .Cells(r, 2)
                     temp = ""
 
                     For l = 1 To Len(.Cells(r, 3))
@@ -209,10 +186,10 @@
                 End If
             End With
 
-            ' i = i + 1
-            ' k = k + 1
+            i = i + 1
+            k = k + 1
 
-            ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
+            If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
         Loop
 
     End Sub
@@ -328,22 +305,22 @@
             For g = Len(NameComponent) To 1 Step -1
                 NameSugar = Mid(NameComponent, g, 1) + NameSugar
                 If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                If NameSugar = "-Hex" Then mass = Hex_w
-                If NameSugar = "-HexA" Then mass = HexA_w
-                If NameSugar = "-dHex" Then mass = dHex_w
-                If NameSugar = "-Pen" Then mass = Pen_w
-                If NameSugar = "-Mal" Then mass = Mal_w
-                If NameSugar = "-Cou" Then mass = Cou_w
-                If NameSugar = "-Fer" Then mass = Fer_w
-                If NameSugar = "-Sin" Then mass = Sin_w
-                If NameSugar = "-DDMP" Then mass = DDMP_w
-                If mass <> 0 Then
+                If NameSugar = "-Hex" Then Mass = Hex_w
+                If NameSugar = "-HexA" Then Mass = HexA_w
+                If NameSugar = "-dHex" Then Mass = dHex_w
+                If NameSugar = "-Pen" Then Mass = Pen_w
+                If NameSugar = "-Mal" Then Mass = Mal_w
+                If NameSugar = "-Cou" Then Mass = Cou_w
+                If NameSugar = "-Fer" Then Mass = Fer_w
+                If NameSugar = "-Sin" Then Mass = Sin_w
+                If NameSugar = "-DDMP" Then Mass = DDMP_w
+                If Mass <> 0 Then
                     h = h + 1
-                    If NumDash = 1 Then f1_temp = mass
-                    If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
-                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
+                    If NumDash = 1 Then f1_temp = Mass
+                    If NumDash = 2 Then f1(1, h) = f1_temp + Mass - H2O_w
+                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + Mass - H2O_w
                     NameSugar = ""
-                    mass = 0
+                    Mass = 0
                 End If
             Next g
         Next e
@@ -359,22 +336,22 @@
             For g = 1 To Len(NameComponent)
                 NameSugar = Mid(NameComponent, g, 1) + NameSugar
                 If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                If NameSugar = "Hex-" Then mass = Hex_w
-                If NameSugar = "HexA-" Then mass = HexA_w
-                If NameSugar = "dHex-" Then mass = dHex_w
-                If NameSugar = "Pen-" Then mass = Pen_w
-                If NameSugar = "Mal-" Then mass = Mal_w
-                If NameSugar = "Cou-" Then mass = Cou_w
-                If NameSugar = "Fer-" Then mass = Fer_w
-                If NameSugar = "Sin-" Then mass = Sin_w
-                If NameSugar = "DDMP-" Then mass = DDMP_w
-                If mass <> 0 Then
+                If NameSugar = "Hex-" Then Mass = Hex_w
+                If NameSugar = "HexA-" Then Mass = HexA_w
+                If NameSugar = "dHex-" Then Mass = dHex_w
+                If NameSugar = "Pen-" Then Mass = Pen_w
+                If NameSugar = "Mal-" Then Mass = Mal_w
+                If NameSugar = "Cou-" Then Mass = Cou_w
+                If NameSugar = "Fer-" Then Mass = Fer_w
+                If NameSugar = "Sin-" Then Mass = Sin_w
+                If NameSugar = "DDMP-" Then Mass = DDMP_w
+                If Mass <> 0 Then
                     h = h + 1
-                    If NumDash = 1 Then f1_temp = mass
-                    If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
-                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
+                    If NumDash = 1 Then f1_temp = Mass
+                    If NumDash = 2 Then f1(1, h) = f1_temp + Mass - H2O_w
+                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + Mass - H2O_w
                     NameSugar = ""
-                    mass = 0
+                    Mass = 0
                 End If
             Next g
         Next e
@@ -432,4 +409,4 @@ NextPriIon:
         RS(2, Match_n) = SugComb
 
     End Sub
-End Class
+End Module

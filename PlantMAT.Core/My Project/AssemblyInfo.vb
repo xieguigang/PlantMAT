@@ -2,34 +2,34 @@
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
-' General Information about an assembly is controlled through the following
-' set of attributes. Change these attribute values to modify the information
-' associated with an assembly.
+' 有关程序集的一般信息由以下
+' 控制。更改这些特性值可修改
+' 与程序集关联的信息。
 
-' Review the values of the assembly attributes
+'查看程序集特性的值
 
-<Assembly: AssemblyTitle("PlantMAT.Core")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
+<Assembly: AssemblyTitle("Plant Metabolite Annotation Toolbox")>
+<Assembly: AssemblyDescription("PlantMAT: A Metabolomics Tool for Predicting the Specialized Metabolic Potential of a System and for Large-Scale Metabolite Identifications")>
+<Assembly: AssemblyCompany("PlantMAT")>
 <Assembly: AssemblyProduct("PlantMAT.Core")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyCopyright("Copyright © PlantMAT 2020")>
+<Assembly: AssemblyTrademark("PlantMAT")>
 
 <Assembly: ComVisible(False)>
 
-'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("0ed3d7a9-63dc-45c1-84d7-1556eff5cbd5")>
+'如果此项目向 COM 公开，则下列 GUID 用于 typelib 的 ID
+<Assembly: Guid("2a2a432d-3269-4577-b590-ebcbc6ad00cc")>
 
-' Version information for an assembly consists of the following four values:
+' 程序集的版本信息由下列四个值组成: 
 '
-'      Major Version
-'      Minor Version
-'      Build Number
-'      Revision
+'      主版本
+'      次版本
+'      生成号
+'      修订号
 '
-' You can specify all the values or you can default the Build and Revision Numbers
-' by using the '*' as shown below:
+'可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
+'通过使用 "*"，如下所示:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("2.145.*")>
+<Assembly: AssemblyFileVersion("1.33.*")>

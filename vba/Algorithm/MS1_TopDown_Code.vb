@@ -16,7 +16,7 @@ Module MS1_TopDown_Code
         Call PublicVS_Code.Settings_Reading()
 
         'Check the aglycone library is available for use
-        If InternalAglyconeDatabase = False And Dir(ExternalAglyconeDatabase, vbDirectory) = "" Then
+        If InternalAglyconeDatabase = False And ExternalAglyconeDatabase.ListDirectory.Count = 0 Then
             Throw New PlantMATException("Can't find external aglycone database")
         End If
 
@@ -68,15 +68,15 @@ Module MS1_TopDown_Code
         Call MS1_CombinatorialPrediction()
 
         'Show columns of sugar/acid if any >=1
-        For j = 8 To 16
-            PublicVS_Code.Query.Columns(j).Hidden = True
-        Next j
+        'For j = 8 To 16
+        '    PublicVS_Code.Query.Columns(j).Hidden = True
+        'Next j
 
-        For j = 2 To 10
-            Dim NameSA = AddedSugarAcid(j, 0)
-            If NameSA = "" Then Exit For
-            PublicVS_Code.Query.Columns(PublicVS_Code.Query.Range(NameSA).Column).Hidden = False
-        Next j
+        'For j = 2 To 10
+        '    Dim NameSA = AddedSugarAcid(j, 0)
+        '    If NameSA = "" Then Exit For
+        '    PublicVS_Code.Query.Columns(PublicVS_Code.Query.Range(NameSA).Column).Hidden = False
+        'Next j
 
         'Enable the button for MS2 analysis and lock (protect) all spreadsheets
         '   With PublicVS_Code.Query
@@ -103,11 +103,12 @@ Module MS1_TopDown_Code
         Pattern_n = 0
 
         i = 4
-        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+
+        For Each query In PublicVS_Code.Query
             '  DoEvents
             ErrorCheck = False
-            RT_E = PublicVS_Code.Query.Cells(i, 3)
-            M_w = (PublicVS_Code.Query.Cells(i, 4) - PrecursorIonMZ) / PrecursorIonN
+            RT_E = query.id
+            M_w = (query.precursorMz - PrecursorIonMZ) / PrecursorIonN
             i_prev = i
             AllSMILES = ""
             Candidate_n = 0
@@ -141,10 +142,10 @@ Module MS1_TopDown_Code
             Next Hex_n
 
 ResultDisplay:
-            Call MS1_CombinatorialPrediciton_ResultDisplay()
+            Call MS1_CombinatorialPrediciton_ResultDisplay(query)
 
             i = i + 1
-        Loop
+        Next
 
     End Sub
 
@@ -242,14 +243,10 @@ ResultDisplay:
 
     End Sub
 
-    Sub MS1_CombinatorialPrediciton_ResultDisplay()
+    Sub MS1_CombinatorialPrediciton_ResultDisplay(query As Query)
 
         If Candidate_n = 0 Then
-            With PublicVS_Code.Query.Cells(i, 7)
-                .Value = "No hits"
-                .Font.Color = RGB(217, 217, 217)
-                .HorizontalAlignment = xlLeft
-            End With
+            query.no_hit = True
         Else
             For m = 1 To Candidate_n
                 '   DoEvents
@@ -264,29 +261,30 @@ ResultDisplay:
 
                 With PublicVS_Code.Query
                     If m > 1 Then
-                        Call .Cells(i, 4).Offset(1).EntireRow.Insert
+                        ' Call .Cells(i, 4).Offset(1).EntireRow.Insert
                         i = i + 1
-                        .Cells(i, 4) = "..."
+                        '  .Cells(i, 4) = "..."
                     End If
-                    Call .Cells(i, 7).AddComment(CStr(Candidate(0, k)))
-                    .Cells(i, 7).Comment.Shape.TextFrame.AutoSize = True
+                    query.comment = CStr(Candidate(0, k))
+                    ' .Cells(i, 7).Comment.Shape.TextFrame.AutoSize = True
                     For q = 2 To 12
-                        .Cells(i, q + 5) = Candidate(q, k)
+                        ' .Cells(i, q + 5) = Candidate(q, k)
+                        query.candidates.Add(Candidate(q, k))
                     Next q
-                    .Range(Cells(i, 7), Cells(i, 20)).Font.Color = RGB(0, 0, 0)
-                    .Cells(i, 7).HorizontalAlignment = xlLeft
+                    '  .Range(Cells(i, 7), Cells(i, 20)).Font.Color = RGB(0, 0, 0)
+                    '.Cells(i, 7).HorizontalAlignment = xlLeft
                     If max_temp <> RT_E Then
-                        .Cells(i, 19) = Candidate(13, k)
-                        .Cells(i, 20) = Candidate(14, k)
+                        ' .Cells(i, 19) = Candidate(13, k)
+                        '  .Cells(i, 20) = Candidate(14, k)
                         Dim RT_Diff = Math.Abs(Val(Candidate(14, k)))
-                        If RT_Diff <= 0.5 Then .Cells(i, 20).Font.Color = RGB(118, 147, 60)
-                        If RT_Diff > 0.5 And RT_Diff <= 1 Then .Cells(i, 20).Font.Color = RGB(255, 192, 0)
-                        If RT_Diff > 1 Then .Cells(i, 20).Font.Color = RGB(192, 80, 77)
+                        ' If RT_Diff <= 0.5 Then .Cells(i, 20).Font.Color = RGB(118, 147, 60)
+                        ' If RT_Diff > 0.5 And RT_Diff <= 1 Then .Cells(i, 20).Font.Color = RGB(255, 192, 0)
+                        ' If RT_Diff > 1 Then .Cells(i, 20).Font.Color = RGB(192, 80, 77)
                     Else
-                        If RetentionPrediction = True Then
-                            .Range(Cells(i, 19), Cells(i, 20)) = "n/a"
-                            .Range(Cells(i, 19), Cells(i, 20)).Font.Color = RGB(217, 217, 217)
-                        End If
+                        '  If RetentionPrediction = True Then
+                        '   .Range(Cells(i, 19), Cells(i, 20)) = "n/a"
+                        '  .Range(Cells(i, 19), Cells(i, 20)).Font.Color = RGB(217, 217, 217)
+                        'End If
                     End If
                 End With
 
@@ -351,7 +349,7 @@ ResultDisplay:
         Cou = "c?ccc(cc?)C=CC(=O)O"
         Fer = "COc?cc(ccc?O)C=CC(=O)O"
         Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
-        DDMP = "CC?=C(C(=O)CC(O)O?)O"
+        Dim DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
         For e = 3 To 11
             g = Candidate(e, k)

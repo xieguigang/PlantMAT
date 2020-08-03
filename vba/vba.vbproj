@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{00E0F2F9-AA49-4E00-98EC-F1D66615D225}</ProjectGuid>
+    <ProjectGuid>{22562408-0592-4B0F-9367-20AC0867023F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>PlantMAT.Core</RootNamespace>
     <AssemblyName>PlantMAT.Core</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,20 +76,17 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PlantMAT|x64'">
     <DefineTrace>true</DefineTrace>
-    <OutputPath>..\Apps\</OutputPath>
+    <OutputPath>bin\x64\PlantMAT\</OutputPath>
     <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -107,19 +105,22 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithm\MS1TopDown.vb" />
-    <Compile Include="Algorithm\MS2ATopDown.vb" />
-    <Compile Include="Algorithm\MS2P_Code.vb" />
-    <Compile Include="Models\Models.vb" />
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
-    <Compile Include="PublicVSCode.vb" />
-    <Compile Include="Settings.vb" />
+    <Compile Include="Models\db_SugarAcid.vb" />
+    <Compile Include="Database_Dialog.vb" />
+    <Compile Include="Edit_Code.vb" />
+    <Compile Include="Options_Code.vb" />
+    <Compile Include="PublicVS_Code.vb" />
+    <Compile Include="Algorithm\MS2P_Code.vb" />
+    <Compile Include="Algorithm\MS2A_TopDown_Code.vb" />
+    <Compile Include="SingleQ_Dialog.vb" />
+    <Compile Include="Algorithm\MS1_TopDown_Code.vb" />
+    <Compile Include="Settings_Dialog.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -131,8 +132,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="PlantMAT.vb" />
-    <Compile Include="PlantMATException.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -154,14 +153,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GCModeller\src\R-sharp\R#\R.vbproj">
-      <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
-      <Name>R</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data\DataFrame\47_dotnet_ms-vb_data.framework.vbproj">
-      <Project>{7283C179-F852-4EAD-8D8F-B82EF2CBD7DB}</Project>
-      <Name>47_dotnet_ms-vb_data.framework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>

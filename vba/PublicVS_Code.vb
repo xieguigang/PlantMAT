@@ -6,7 +6,7 @@
     Public Processing_Message As String
     Public Macro_to_Process As String
     Public ErrorCheck As Boolean
-    Public Database As List(Of Library), Query As Worksheet, SMILES As Worksheet
+    Public Database As List(Of Library), Query As Query(), SMILES As Worksheet
     Public ListFile As Variant
     Public fs As Object, BatchFile As Object
     Public MS2FilePath As String

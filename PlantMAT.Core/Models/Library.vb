@@ -1,21 +1,24 @@
-﻿Public Class Library
+﻿Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
+
+Public Class Library
+
+    <Column("Common Name")>
     Public Property CommonName As String
     Public Property [Class] As String
-    Public Property SubClass As String
+    Public Property Type As String
+    Public Property Formula As String
+
+    <Column("Exact Mass")>
+    Public Property ExactMass As Double
     Public Property Genus As String
 
-    Public Property ExactMass As Double
-    Public Property Formula As String
-    ''' <summary>
-    ''' Universal SMILES
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property SMILESt As String
+    <Column("Universal SMILES")>
+    Public Property Universal_SMILES As String
     Public Property Editor As String
+    Public Property [Date] As Date
 
-    ''' <summary>
-    ''' Date
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property DMY As Date
+    Public Overrides Function ToString() As String
+        Return CommonName
+    End Function
+
 End Class
