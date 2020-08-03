@@ -647,6 +647,4 @@ AllSugarConnected:
 
         Next e
     End Sub
-
-
 End Class
