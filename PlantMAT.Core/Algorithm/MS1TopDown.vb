@@ -394,17 +394,18 @@ Public Class MS1TopDown
         Dim AglyS1 As String, AglyS2 As String
         Dim Hex As String, HexA As String, dHex As String, Pen As String
         Dim Cou As String, Fer As String, Sin As String, Mal As String
-        Dim OH_n As Long
+        Dim e As Long, OH_n As Long
         Dim n1 As Long, n2 As Long
+        Dim AglyN As String
 
-        Dim AglyN = candidate.Name
+        AglyN = candidate.Name
         AglyS1 = candidate.SubstructureAgly
         AglyS2 = Strings.Replace(AglyS1, "O)", ".)")
         AglyS2 = Strings.Replace(AglyS2, "=.", "=O")
         If Right(AglyS2, 1) = "O" Then AglyS2 = Left(AglyS2, Len(AglyS2) - 1) & "."
 
         OH_n = 0
-        For e As Integer = 1 To Len(AglyS2)
+        For e = 1 To Len(AglyS2)
             If Mid(AglyS2, e, 1) = "." Then OH_n = OH_n + 1
         Next e
 
@@ -422,18 +423,17 @@ Public Class MS1TopDown
 
         '2. Find type and number of sugars/acids
         Dim Sug_n As Long
-        Dim Sug As String
-        Dim Sug_p(,) As String
+        Dim Sug, Sug_p(,) As String
         Dim g As Long, h As Long, l As Long
 
-        'For e = 3 To 11
-        ' Sug_n = Sug_n + candidate(e, k)
-        ' Next e
         Sug_n = candidate.GetSug_nStatic.Sum
 
+        'For e = 3 To 11
+        '    Sug_n = Sug_n + candidate(e, k)
+        'Next e
         If Sug_n = 0 Then Exit Sub
 
-        Sug_p = New String(0, 0 To Sug_n) {}
+        ReDim Sug_p(1, 0 To Sug_n)
         l = 1
 
         Hex = "C?C(C(C(C(CO)O?)O)O)O"
@@ -445,13 +445,11 @@ Public Class MS1TopDown
         Fer = "COc?cc(ccc?O)C=CC(=O)O"
         Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
         Dim DDMP = "CC?=C(C(=O)CC(O)O?)O"
+
         Dim candidateSug_nStatic = candidate.GetSug_nStatic.ToArray
 
-        For i As Integer = 3 To 11
-            Dim e As Integer = i - 3
-
-            g = candidateSug_nStatic(e)
-
+        For e = 3 To 11
+            g = candidateSug_nStatic(e - 3)
             If g > 0 Then
                 If e = 3 Then Sug = Hex
                 If e = 4 Then Sug = HexA
@@ -463,11 +461,11 @@ Public Class MS1TopDown
                 If e = 10 Then Sug = Sin
                 If e = 11 Then Sug = DDMP
                 For h = 1 To g
-                    Sug_p(0, l) = Sug
+                    Sug_p(1, l) = Sug
                     l = l + 1
                 Next h
             End If
-        Next
+        Next e
 
         '3. Permutate sugars/acids without repetition
         Dim c As Long, r As Long, p As Long
@@ -477,17 +475,17 @@ Public Class MS1TopDown
         p = WorksheetFunction.Permut(Sug_n, Sug_n)
 
         '3.1 Create array
-        ' Dim rng As New List(Of Long)
-        rng = New Long(0 To p - 1, 0 To Sug_n - 1) {}
+        ReDim rng(0 To p, 0 To Sug_n)
+
 
         '3.2 Create first row in array (1, 2, 3, ...)
-        For c = 0 To Sug_n - 1
-            rng(0, c) = c
+        For c = 1 To Sug_n
+            rng(1, c) = c
         Next c
-        For r = 1 To p
+        For r = 2 To p
 
             '3.3 Find the first smaller number rng(r-1,c-1)<rng(r-1,c)
-            For c = Sug_n - 1 To 0 Step -1
+            For c = Sug_n To 1 Step -1
                 If rng(r - 1, c - 1) < rng(r - 1, c) Then
                     temp = c - 1
                     Exit For
@@ -495,18 +493,18 @@ Public Class MS1TopDown
             Next c
 
             '3.4 Copy values from previous row
-            For c = Sug_n - 1 To 0 Step -1
+            For c = Sug_n To 1 Step -1
                 rng(r, c) = rng(r - 1, c)
             Next c
 
             '3.5 Find a larger number than rng(r-1,temp) as far to the right as possible
-            For c = Sug_n - 1 To 0 Step -1
+            For c = Sug_n To 1 Step -1
                 If rng(r - 1, c) > rng(r - 1, temp) Then
                     temp1 = rng(r - 1, temp)
                     rng(r, temp) = rng(r - 1, c)
                     rng(r, c) = temp1
                     ReDim y(Sug_n - temp)
-                    Dim e = 0
+                    e = 0
                     For d = temp + 1 To Sug_n
                         y(e) = rng(r, d)
                         e = e + 1
@@ -525,10 +523,9 @@ Public Class MS1TopDown
         Dim z As Long, q As Long, s As Long
         Dim v As Long, w As Long, n As Long
         Dim x(,) As String, t(,) As String, u(,) As String
-
-        x = New String(0 To Sug_n - 1, 0 To Sug_n - 1) {}
-        t = New String(100000 - 1, 0 To OH_n - 1) {}
-        u = New String(100000 - 1, 0 To OH_n - 1) {}
+        ReDim x(0 To Sug_n, 0 To Sug_n)
+        ReDim t(100000, 0 To OH_n)
+        ReDim u(100000, 0 To OH_n)
 
         w = 1
 
@@ -647,8 +644,8 @@ AllSugarConnected:
             GlycN = AglyN + SugComb
 
             candidate.SMILES.Add({CStr(m) + "-" + CStr(e), GlycN})
-        Next e
 
+        Next e
     End Sub
 
 
