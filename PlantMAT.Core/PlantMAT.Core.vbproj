@@ -67,8 +67,6 @@
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
     <Compile Include="Models\db_SugarAcid.vb" />
-    <Compile Include="PlantMAT.vb" />
-    <Compile Include="PlantMATException.vb" />
     <Compile Include="Database_Dialog.vb" />
     <Compile Include="Edit_Code.vb" />
     <Compile Include="Options_Code.vb" />

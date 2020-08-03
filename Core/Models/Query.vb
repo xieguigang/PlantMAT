@@ -3,8 +3,16 @@
     Public Property PeakNO As String
     Public Property PrecursorIon As Double
 
-    Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query
-
+    Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
+        Return file _
+            .Select(Function(line) line.StringSplit("\s+")) _
+            .Select(Function(tokens)
+                        Return New Query With {
+                            .PeakNO = tokens(Scan0),
+                            .PrecursorIon = Val(tokens(1))
+                        }
+                    End Function) _
+            .ToArray
     End Function
 
 End Class
