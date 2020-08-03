@@ -10,6 +10,10 @@
         End Get
     End Property
 
+    Public Overrides Function ToString() As String
+        Return $"[{PeakNO}] {PrecursorIon} {If(Candidates.Count = 0, "no hits", Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ")) & "..."}"
+    End Function
+
     Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
         Return file _
             .Select(Function(line) line.StringSplit("\s+")) _
