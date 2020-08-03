@@ -65,8 +65,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\MS1TopDown.vb" />
+    <Compile Include="Models\Module2.vb" />
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
+    <Compile Include="Module1.vb" />
+    <Compile Include="Settings.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
