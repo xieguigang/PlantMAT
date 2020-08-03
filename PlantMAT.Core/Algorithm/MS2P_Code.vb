@@ -2,27 +2,27 @@
 
 
     ' Attribute VB_Name = "MS2P_Code"
-    Sub MS2P()
+    Public Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
 
-        Dim dd As Object
+        'Dim dd As Object
 
-        With PublicVS_Code.Query
-            Call .Unprotect
-            LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-            If LastRow >= 4 Then
-                Call .Range("Y4:" & "Z" & LastRow).ClearContents
-                For Each dd In .DropDowns()
-                    If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
-                Next dd
-            End If
-            .ScrollArea = ""
-        End With
+        'With PublicVS_Code.Query
+        '    Call .Unprotect
+        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
+        '    If LastRow >= 4 Then
+        '        Call .Range("Y4:" & "Z" & LastRow).ClearContents
+        '        For Each dd In .DropDowns()
+        '            If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
+        '        Next dd
+        '    End If
+        '    .ScrollArea = ""
+        'End With
 
-        Call PublicVS_Code.Settings_Check
-        Call PublicVS_Code.Settings_Reading
+        '  Call PublicVS_Code.Settings_Check
+        '  Call PublicVS_Code.Settings_Reading
 
         i = 4
 
@@ -87,7 +87,7 @@
         'Application.EnableEvents = True
         'Application.ScreenUpdating = True
 
-    End Sub
+    End Function
 
     Sub MS2P_MS2Prediction()
 
@@ -96,8 +96,8 @@
         Dim peakNo As Integer
 
         Do While True
-            PeakNo = SMILES.Cells(r, 2)
-            If PeakNo = 0 Or PeakNo = CmpdTag Then Exit Do
+            peakNo = SMILES.Cells(r, 2)
+            If peakNo = 0 Or peakNo = CmpdTag Then Exit Do
             r = r + 1
         Loop
 
@@ -121,7 +121,7 @@
             ReDim RS(2, 1)
 
             With SMILES
-                Do While PeakNo = CmpdTag And PredNo = k
+                Do While peakNo = CmpdTag And PredNo = k
                     ' DoEvents
 
                     Pred_n = Pred_n + 1
@@ -136,7 +136,7 @@
                     Call MS2P_MS2Prediction_IonPredictionMatching()
 
                     r = r + 1
-                    PeakNo = .Cells(r, 2)
+                    peakNo = .Cells(r, 2)
                     temp = ""
 
                     For l = 1 To Len(.Cells(r, 3))
@@ -305,22 +305,22 @@
             For g = Len(NameComponent) To 1 Step -1
                 NameSugar = Mid(NameComponent, g, 1) + NameSugar
                 If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                If NameSugar = "-Hex" Then Mass = Hex_w
-                If NameSugar = "-HexA" Then Mass = HexA_w
-                If NameSugar = "-dHex" Then Mass = dHex_w
-                If NameSugar = "-Pen" Then Mass = Pen_w
-                If NameSugar = "-Mal" Then Mass = Mal_w
-                If NameSugar = "-Cou" Then Mass = Cou_w
-                If NameSugar = "-Fer" Then Mass = Fer_w
-                If NameSugar = "-Sin" Then Mass = Sin_w
-                If NameSugar = "-DDMP" Then Mass = DDMP_w
-                If Mass <> 0 Then
+                If NameSugar = "-Hex" Then mass = Hex_w
+                If NameSugar = "-HexA" Then mass = HexA_w
+                If NameSugar = "-dHex" Then mass = dHex_w
+                If NameSugar = "-Pen" Then mass = Pen_w
+                If NameSugar = "-Mal" Then mass = Mal_w
+                If NameSugar = "-Cou" Then mass = Cou_w
+                If NameSugar = "-Fer" Then mass = Fer_w
+                If NameSugar = "-Sin" Then mass = Sin_w
+                If NameSugar = "-DDMP" Then mass = DDMP_w
+                If mass <> 0 Then
                     h = h + 1
-                    If NumDash = 1 Then f1_temp = Mass
-                    If NumDash = 2 Then f1(1, h) = f1_temp + Mass - H2O_w
-                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + Mass - H2O_w
+                    If NumDash = 1 Then f1_temp = mass
+                    If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
+                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
                     NameSugar = ""
-                    Mass = 0
+                    mass = 0
                 End If
             Next g
         Next e
@@ -336,22 +336,22 @@
             For g = 1 To Len(NameComponent)
                 NameSugar = Mid(NameComponent, g, 1) + NameSugar
                 If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                If NameSugar = "Hex-" Then Mass = Hex_w
-                If NameSugar = "HexA-" Then Mass = HexA_w
-                If NameSugar = "dHex-" Then Mass = dHex_w
-                If NameSugar = "Pen-" Then Mass = Pen_w
-                If NameSugar = "Mal-" Then Mass = Mal_w
-                If NameSugar = "Cou-" Then Mass = Cou_w
-                If NameSugar = "Fer-" Then Mass = Fer_w
-                If NameSugar = "Sin-" Then Mass = Sin_w
-                If NameSugar = "DDMP-" Then Mass = DDMP_w
-                If Mass <> 0 Then
+                If NameSugar = "Hex-" Then mass = Hex_w
+                If NameSugar = "HexA-" Then mass = HexA_w
+                If NameSugar = "dHex-" Then mass = dHex_w
+                If NameSugar = "Pen-" Then mass = Pen_w
+                If NameSugar = "Mal-" Then mass = Mal_w
+                If NameSugar = "Cou-" Then mass = Cou_w
+                If NameSugar = "Fer-" Then mass = Fer_w
+                If NameSugar = "Sin-" Then mass = Sin_w
+                If NameSugar = "DDMP-" Then mass = DDMP_w
+                If mass <> 0 Then
                     h = h + 1
-                    If NumDash = 1 Then f1_temp = Mass
-                    If NumDash = 2 Then f1(1, h) = f1_temp + Mass - H2O_w
-                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + Mass - H2O_w
+                    If NumDash = 1 Then f1_temp = mass
+                    If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
+                    If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
                     NameSugar = ""
-                    Mass = 0
+                    mass = 0
                 End If
             Next g
         Next e
