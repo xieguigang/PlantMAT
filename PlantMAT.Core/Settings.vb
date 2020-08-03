@@ -7,7 +7,7 @@ Public Class Settings
     Public Property ExternalAglyconeDatabase As String
     Public Property AglyconeType As db_AglyconeType
     Public Property AglyconeSource As db_AglyconeSource
-    Public Property AglyconeMWRange As Integer()
+    Public Property AglyconeMWRange As Double()
     Public Property NumofSugarAll As Integer()
     Public Property NumofAcidAll As Integer()
 

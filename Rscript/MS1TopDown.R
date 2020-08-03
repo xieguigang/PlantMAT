@@ -9,7 +9,7 @@ library.csv
 :> read.library
 :> MS1TopDown(settings = config())
 :> as.object
-:> do.call(MS1CP, query = readLines(demo) :> query.ms1)
+:> do.call("MS1CP", query = readLines(demo) :> query.ms1)
 :> json
 :> writeLines("./A17_Root_MS1TopDown.json")
 ;
