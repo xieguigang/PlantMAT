@@ -1,8 +1,11 @@
-﻿Public Class Query
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+
+Public Class Query
 
     Public Property PeakNO As String
     Public Property PrecursorIon As Double
     Public Property Candidates As New List(Of CandidateResult)
+    Public Property Ms2Peaks As Ms2Peaks
 
     Default Public ReadOnly Property Candidate(i As Integer) As CandidateResult
         Get
@@ -29,6 +32,15 @@
 End Class
 
 Public Class Ms2Peaks
+
+    Public Property mz As Double()
+    Public Property into As Double()
+
+    Public ReadOnly Property TotalIonInt As Double
+        Get
+            Return into.Sum
+        End Get
+    End Property
 
 End Class
 
@@ -111,6 +123,8 @@ Public Class CandidateResult
     Public Property RTErr As Double
 
     Public Property SMILES As New List(Of String())
+
+    Public Property Ms2Anno As NamedCollection(Of String)
 
     Public Function GetSug_nStatic() As Double()
         ' 3 - 11

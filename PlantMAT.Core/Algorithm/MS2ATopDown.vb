@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
+Imports Microsoft.VisualBasic.Language
 
 ''' <summary>
 ''' This module performs MS2 annotation
@@ -6,10 +7,17 @@
 Public Class MS2ATopDown
 
     Dim settings As Settings
+    Dim mzPPM As Double
+    Dim NoiseFilter As Double
 
+    Sub New(settings As Settings)
+        Me.settings = settings
+        Me.applySettings()
+    End Sub
 
-    Sub New()
-
+    Private Sub applySettings()
+        mzPPM = settings.mzPPM
+        NoiseFilter = settings.NoiseFilter
     End Sub
 
     Public Function Button_MS2Annotation(queries As IEnumerable(Of Query), SingleQ As Boolean) As Query()
@@ -60,7 +68,7 @@ Public Class MS2ATopDown
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
 
-        Dim dd As Object
+        '  Dim dd As Object
 
         'Clear all previous results in the output display
         'With PublicVS_Code.Query
@@ -114,29 +122,29 @@ Public Class MS2ATopDown
             End If
 
             'Perform the MS2 annotation and display the results
-            If SingleQ = True Then
-                Call MS2A_TopDown_MS2Annotation(query, IonMZ_crc, Rsyb)
-            Else
-                Call MS2File_Searching()
+            ' If SingleQ = True Then
+            Call MS2A_TopDown_MS2Annotation(query, IonMZ_crc, Rsyb)
+            'Else
+            '    Call MS2File_Searching()
 
-                If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
-                    With PublicVS_Code.Query
-                        If ErrorCheck = True Then
-                            .Cells(i, 22) = "Data error"
-                        Else
-                            .Cells(i, 22) = "Data not found"
-                        End If
-                        .Cells(i, 22).HorizontalAlignment = xlLeft
-                        .Cells(i, 22).Font.Color = RGB(217, 217, 217)
-                    End With
-                    i = i + 1
-                    Do While PublicVS_Code.Query.Cells(i, 4) = "..."
-                        i = i + 1
-                    Loop
-                Else
-                    Call MS2A_TopDown_MS2Annotation()
-                End If
-            End If
+            '    If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
+            '        With PublicVS_Code.Query
+            '            If ErrorCheck = True Then
+            '                .Cells(i, 22) = "Data error"
+            '            Else
+            '                .Cells(i, 22) = "Data not found"
+            '            End If
+            '            .Cells(i, 22).HorizontalAlignment = xlLeft
+            '            .Cells(i, 22).Font.Color = RGB(217, 217, 217)
+            '        End With
+            '        i = i + 1
+            '        Do While PublicVS_Code.Query.Cells(i, 4) = "..."
+            '            i = i + 1
+            '        Loop
+            '    Else
+            '        Call MS2A_TopDown_MS2Annotation()
+            '    End If
+            'End If
 
             Yield query
         Next
@@ -153,46 +161,46 @@ Public Class MS2ATopDown
 
     End Function
 
-    Sub MS2File_Searching()
+    'Sub MS2File_Searching()
 
-        'On Error GoTo ErrorHandler
-
-
-        Dim MS2FileName As String
-
-        FileCheck = False
-        ErrorCheck = False
+    '    'On Error GoTo ErrorHandler
 
 
-        MS2FileName = CStr(CmpdTag) & ".txt"
+    '    Dim MS2FileName As String
 
-        'Find MS2 data for each compound and read into data array eIonList()
-        For Each file As String In MS2FilePath.ListDirectory
+    '    FileCheck = False
+    '    ErrorCheck = False
 
 
-            If InStr(file, MS2FileName) = 1 Then
-                FileCheck = True
-                eIon_n = 0
-                TotalIonInt = 0
-                ReDim eIonList(1 To 2, 1 To 1)
-                For Each lineText As String In (MS2FilePath & "/" & MS2FileName).IterateAllLines
+    '    MS2FileName = CStr(CmpdTag) & ".txt"
 
-                    Dim eIon = Strings.Split(CStr(lineText), Chr(9))
-                    DaughterIonMZ = eIon(0)
-                    DaughterIonInt = eIon(1)
-                    TotalIonInt = TotalIonInt + DaughterIonInt
-                    If DaughterIonMZ = 0 Then Exit Sub
+    '    'Find MS2 data for each compound and read into data array eIonList()
+    '    For Each file As String In MS2FilePath.ListDirectory
 
-                    eIon_n = eIon_n + 1
-                    ReDim Preserve eIonList(1 To 2, 1 To eIon_n)
-                    eIonList(1, eIon_n) = DaughterIonMZ
-                    eIonList(2, eIon_n) = DaughterIonInt
-                Next
-            End If
 
-        Next
+    '        If InStr(file, MS2FileName) = 1 Then
+    '            FileCheck = True
+    '            eIon_n = 0
+    '            TotalIonInt = 0
+    '            ReDim eIonList(1 To 2, 1 To 1)
+    '            For Each lineText As String In (MS2FilePath & "/" & MS2FileName).IterateAllLines
 
-    End Sub
+    '                Dim eIon = Strings.Split(CStr(lineText), Chr(9))
+    '                DaughterIonMZ = eIon(0)
+    '                DaughterIonInt = eIon(1)
+    '                TotalIonInt = TotalIonInt + DaughterIonInt
+    '                If DaughterIonMZ = 0 Then Exit Sub
+
+    '                eIon_n = eIon_n + 1
+    '                ReDim Preserve eIonList(1 To 2, 1 To eIon_n)
+    '                eIonList(1, eIon_n) = DaughterIonMZ
+    '                eIonList(2, eIon_n) = DaughterIonInt
+    '            Next
+    '        End If
+
+    '    Next
+
+    'End Sub
 
     Sub MS2A_TopDown_MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
         Dim i As i32 = 1
@@ -220,17 +228,23 @@ Public Class MS2ATopDown
             Dim prediction As New MS2A_TopDown_MS2Annotation_IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
                 .Hex_max = Hex_max,
             .HexA_max = HexA_max#, .dHex_max = dHex_max#, .Pen_max = Pen_max#, .Mal_max = Mal_max#, .Cou_max = Cou_max#, .Fer_max = Fer_max#, .Sin_max = Sin_max#, .DDMP_max = DDMP_max#}
+            Dim pIon_n As Integer
+            Dim pIonList As Double(,) = Nothing
 
             Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
+            Call prediction.getResult(pIon_n, pIonList)
 
             'Second, compare the predicted ions with the measured
-            Call MS2A_TopDown_MS2Annotation_IonMatching()
+            Dim aIon_n As Integer
+            Dim aIonList(0 To 3, 0 To 1) As Double
+            Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
             'Third, add a dropdown list for each candidate and show the annotation results in the list
             ' With PublicVS_Code.Query.Cells(i, 23)
             '  comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
             Dim combName = "dd_MS2A_TopDown_" & CStr(++i)
             '   End With
+            Dim comb As New List(Of String)
 
             'Fourth, save the annotation results in the cell
             Dim aResult As String
@@ -238,30 +252,36 @@ Public Class MS2ATopDown
 
             If aIon_n > 0 Then
                 For s = 1 To aIon_n
-                    aIonMZ = aIonList(1, s)
-                    aIonAbu = aIonList(2, s)
-                    aIonNM = aIonList(3, s)
-                    comb.AddItem(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
+                    Dim aIonMZ = aIonList(1, s)
+                    Dim aIonAbu = aIonList(2, s)
+                    Dim aIonNM = aIonList(3, s)
+                    comb.Add(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
                     aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
                     CStr(Format(aIonAbu * 100, "0.00")) & ", " & aIonNM & "; "
                 Next s
             End If
 
-            comb.Text = CStr(aIon_n) & " ions annotated"
+            Dim combText = CStr(aIon_n) & " ions annotated"
+
+            candidate.Ms2Anno = New NamedCollection(Of String) With {
+                .name = combText,
+                .value = comb.ToArray,
+                .description = aResult
+            }
 
             'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
-            With PublicVS_Code.Query
-                If AglyCheck = True Then
-                    .Cells(i, 22) = "*"
-                    .Cells(i, 22).HorizontalAlignment = xlCenter
-                    .Cells(i, 22).Font.Color = RGB(118, 147, 60)
-                End If
-                If aIon_n > 0 Then
-                    .Cells(i, 23) = CStr(aIon_n) & " ions annotated: " & Left(aResult, Len(aResult) - 2)
-                    .Cells(i, 23).Font.Color = RGB(255, 255, 255)
-                    .Cells(i, 23).HorizontalAlignment = xlFill
-                End If
-            End With
+            'With PublicVS_Code.Query
+            '    If AglyCheck = True Then
+            '        .Cells(i, 22) = "*"
+            '        .Cells(i, 22).HorizontalAlignment = xlCenter
+            '        .Cells(i, 22).Font.Color = RGB(118, 147, 60)
+            '    End If
+            '    If aIon_n > 0 Then
+            '        .Cells(i, 23) = CStr(aIon_n) & " ions annotated: " & Left(aResult, Len(aResult) - 2)
+            '        .Cells(i, 23).Font.Color = RGB(255, 255, 255)
+            '        .Cells(i, 23).HorizontalAlignment = xlFill
+            '    End If
+            'End With
 
             '  i = i + 1
 
@@ -271,22 +291,27 @@ Public Class MS2ATopDown
 
     End Sub
 
-
-
-    Sub MS2A_TopDown_MS2Annotation_IonMatching()
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <param name="pIon_n%"></param>
+    ''' <param name="pIonList"></param>
+    ''' <returns>AglyCheck</returns>
+    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As Double(,), ByRef aIon_n As Integer, ByRef aIonList As Double(,)) As Boolean
 
         'Initialize the annotated ion list aIonList() to none
-        Dim aIon_n = 0
         Dim AglyCheck = False
-
-        Dim aIonList(0 To 3, 0 To 1) As String
+        Dim eIonList = query.Ms2Peaks
+        Dim eIon_n = eIonList.mz.Length
+        Dim TotalIonInt As Double = eIonList.TotalIonInt
 
         'Compare the measured ions eIonList() with the predicted pIonList()
         'If the mz error is less than the defined ppm and intensity is above the noise filter, then
         'save the predicted ions in the annotation ion list aIonList()
-        For s = 1 To eIon_n
-            Dim eIonMZ = eIonList(1, s)
-            Dim eIonInt = eIonList(2, s)
+        For s As Integer = 0 To eIon_n - 1
+            Dim eIonMZ = eIonList.mz(s)
+            Dim eIonInt = eIonList.into(s)
             For t = 1 To pIon_n
                 Dim pIonMZ = pIonList(1, t)
                 Dim pIonNM = pIonList(2, t)
@@ -294,7 +319,7 @@ Public Class MS2ATopDown
                     Dim aIonAbu = eIonInt / TotalIonInt
                     If aIonAbu * 100 >= NoiseFilter Then
                         aIon_n = aIon_n + 1
-                        ReDim Preserve aIonList(1 To 3, 1 To aIon_n)
+                        ReDim Preserve aIonList(0 To 3, 0 To aIon_n)
                         aIonList(1, aIon_n) = eIonMZ
                         aIonList(2, aIon_n) = aIonAbu
                         aIonList(3, aIon_n) = pIonNM
@@ -304,7 +329,8 @@ Public Class MS2ATopDown
             Next t
         Next s
 
-    End Sub
+        Return AglyCheck
+    End Function
 End Class
 
 Public Class MS2A_TopDown_MS2Annotation_IonPrediction
@@ -312,7 +338,7 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
     Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
     ' Initilize all neutral losses and predicted ions pIonList() to none
-    Dim pIon_n = 0
+    Dim pIon_n% = 0
     Dim HexLoss$ = ""
     Dim HexALoss$ = ""
     Dim dHexLoss$ = ""
@@ -330,13 +356,18 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
     Dim Agly_w#
     Dim AglyN$
 
-    Dim pIonList(0 To 2, 0 To 1) As String
+    Dim pIonList(0 To 2, 0 To 1) As Double
 
     Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
         Me.IonMZ_crc = IonMZ_crc
         Me.Rsyb = Rsyb
         Me.Agly_w = Agly_w
         Me.AglyN = AglyN
+    End Sub
+
+    Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As Double(,))
+        pIon_n = Me.pIon_n
+        pIonList = Me.pIonList
     End Sub
 
     Sub MS2A_TopDown_MS2Annotation_IonPrediction()
