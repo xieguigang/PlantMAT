@@ -16,6 +16,32 @@ Module PlantMAT
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
     End Sub
 
+    ''' <summary>
+    ''' create plantMAT configuration
+    ''' </summary>
+    ''' <param name="ExternalAglyconeDatabase"></param>
+    ''' <param name="AglyconeType"></param>
+    ''' <param name="AglyconeSource"></param>
+    ''' <param name="AglyconeMWRange"></param>
+    ''' <param name="NumofSugarAll"></param>
+    ''' <param name="NumofAcidAll"></param>
+    ''' <param name="NumofSugarHex"></param>
+    ''' <param name="NumofSugarHexA"></param>
+    ''' <param name="NumofSugardHex"></param>
+    ''' <param name="NumofSugarPen"></param>
+    ''' <param name="NumofAcidMal"></param>
+    ''' <param name="NumofAcidCou"></param>
+    ''' <param name="NumofAcidFer"></param>
+    ''' <param name="NumofAcidSin"></param>
+    ''' <param name="NumofAcidDDMP"></param>
+    ''' <param name="PrecursorIonType"></param>
+    ''' <param name="PrecursorIonMZ"></param>
+    ''' <param name="PrecursorIonN"></param>
+    ''' <param name="SearchPPM"></param>
+    ''' <param name="NoiseFilter"></param>
+    ''' <param name="mzPPM"></param>
+    ''' <param name="PatternPrediction"></param>
+    ''' <returns></returns>
     <ExportAPI("config")>
     Public Function GetConfig(Optional ExternalAglyconeDatabase As String = Nothing,
                               Optional AglyconeType As db_AglyconeType = db_AglyconeType.All,
@@ -67,6 +93,11 @@ Module PlantMAT
         }
     End Function
 
+    ''' <summary>
+    ''' read ms1 library file
+    ''' </summary>
+    ''' <param name="file"></param>
+    ''' <returns></returns>
     <ExportAPI("read.library")>
     Public Function readLibrary(file As String) As Library()
         Return file.LoadCsv(Of Library).ToArray
@@ -82,6 +113,11 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
+    ''' <summary>
+    ''' parse ms1 query data
+    ''' </summary>
+    ''' <param name="metabolite_list">the input query file content.</param>
+    ''' <returns></returns>
     <ExportAPI("query.ms1")>
     Public Function ms1Query(metabolite_list As String()) As Query()
         Return Query.ParseMs1PeakList(file:=metabolite_list)
