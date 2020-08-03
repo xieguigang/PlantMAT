@@ -76,6 +76,14 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Code\Database_Code.vb" />
+    <Compile Include="Code\Enter_Code.vb" />
+    <Compile Include="Code\ErrorHandler.vb" />
+    <Compile Include="Code\Import_Code.vb" />
+    <Compile Include="Code\Processing_Dialog.vb" />
+    <Compile Include="Code\Sheet2.vb" />
+    <Compile Include="Code\SingleQ_Code.vb" />
+    <Compile Include="Code\ThisWorkbook.vb" />
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -16,7 +16,7 @@ Module MS1_TopDown_Code
         Call PublicVS_Code.Settings_Reading()
 
         'Check the aglycone library is available for use
-        If InternalAglyconeDatabase = False And Dir(ExternalAglyconeDatabase, vbDirectory) = "" Then
+        If InternalAglyconeDatabase = False And ExternalAglyconeDatabase.ListDirectory.Count = 0 Then
             Throw New PlantMATException("Can't find external aglycone database")
         End If
 
@@ -68,15 +68,15 @@ Module MS1_TopDown_Code
         Call MS1_CombinatorialPrediction()
 
         'Show columns of sugar/acid if any >=1
-        For j = 8 To 16
-            PublicVS_Code.Query.Columns(j).Hidden = True
-        Next j
+        'For j = 8 To 16
+        '    PublicVS_Code.Query.Columns(j).Hidden = True
+        'Next j
 
-        For j = 2 To 10
-            Dim NameSA = AddedSugarAcid(j, 0)
-            If NameSA = "" Then Exit For
-            PublicVS_Code.Query.Columns(PublicVS_Code.Query.Range(NameSA).Column).Hidden = False
-        Next j
+        'For j = 2 To 10
+        '    Dim NameSA = AddedSugarAcid(j, 0)
+        '    If NameSA = "" Then Exit For
+        '    PublicVS_Code.Query.Columns(PublicVS_Code.Query.Range(NameSA).Column).Hidden = False
+        'Next j
 
         'Enable the button for MS2 analysis and lock (protect) all spreadsheets
         '   With PublicVS_Code.Query
@@ -103,7 +103,8 @@ Module MS1_TopDown_Code
         Pattern_n = 0
 
         i = 4
-        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
+
+        For Each query In PublicVS_Code.Query
             '  DoEvents
             ErrorCheck = False
             RT_E = PublicVS_Code.Query.Cells(i, 3)
@@ -144,7 +145,7 @@ ResultDisplay:
             Call MS1_CombinatorialPrediciton_ResultDisplay()
 
             i = i + 1
-        Loop
+        Next
 
     End Sub
 

@@ -71,20 +71,13 @@
     <Compile Include="PlantMATException.vb" />
     <Compile Include="Database_Dialog.vb" />
     <Compile Include="Edit_Code.vb" />
-    <Compile Include="Database_Code.vb" />
-    <Compile Include="Import_Code.vb" />
-    <Compile Include="Enter_Code.vb" />
-    <Compile Include="SingleQ_Code.vb" />
     <Compile Include="Options_Code.vb" />
     <Compile Include="PublicVS_Code.vb" />
     <Compile Include="Algorithm\MS2P_Code.vb" />
     <Compile Include="Algorithm\MS2A_TopDown_Code.vb" />
     <Compile Include="SingleQ_Dialog.vb" />
-    <Compile Include="Processing_Dialog.vb" />
-    <Compile Include="Sheet2.vb" />
     <Compile Include="Algorithm\MS1_TopDown_Code.vb" />
     <Compile Include="Settings_Dialog.vb" />
-    <Compile Include="ThisWorkbook.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -100,7 +93,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ErrorHandler.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
