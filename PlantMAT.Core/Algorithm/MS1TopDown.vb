@@ -433,7 +433,7 @@ Public Class MS1TopDown
 
         If Sug_n = 0 Then Exit Sub
 
-        Sug_p = New String(0, 0 To Sug_n - 1) {}
+        Sug_p = New String(0, 0 To Sug_n) {}
         l = 1
 
         Hex = "C?C(C(C(C(CO)O?)O)O)O"
