@@ -15,7 +15,12 @@ Public Class Settings
     Public Property NumofSugarHexA As Integer()
     Public Property NumofSugardHex As Integer()
     Public Property NumofSugarPen As Integer()
+
     Public Property NumofAcidMal As Integer()
+    Public Property NumofAcidCou As Integer()
+    Public Property NumofAcidFer As Integer()
+    Public Property NumofAcidSin As Integer()
+    Public Property NumofAcidDDMP As Integer()
 
     Public Property PrecursorIonType As String
     Public Property PrecursorIonMZ As Double
@@ -42,7 +47,12 @@ Public Class Settings
                 .WriteLine("Num of Sugar HexA: " & NumofSugarHexA.JoinBy(" "))
                 .WriteLine("Num of Sugar dHex: " & NumofSugardHex.JoinBy(" "))
                 .WriteLine("Num of Sugar Pen: " & NumofSugarPen.JoinBy(" "))
+
                 .WriteLine("Num of Acid Mal: " & NumofAcidMal.JoinBy(" "))
+                .WriteLine("Num of Acid Cou: " & NumofAcidCou.JoinBy(" "))
+                .WriteLine("Num of Acid Fer: " & NumofAcidFer.JoinBy(" "))
+                .WriteLine("Num of Acid Sin: " & NumofAcidSin.JoinBy(" "))
+                .WriteLine("Num of Acid DDMP: " & NumofAcidDDMP.JoinBy(" "))
 
                 .WriteLine("Precursor Ion Type: " & PrecursorIonType)
                 .WriteLine("Precursor Ion MZ: " & PrecursorIonMZ)
@@ -73,6 +83,10 @@ Public Class Settings
             .NumofSugardHex = {0, 6},
             .NumofSugarPen = {0, 6},
             .NumofAcidMal = {0, 1},
+            .NumofAcidCou = {0, 1},
+            .NumofAcidFer = {0, 1},
+            .NumofAcidSin = {0, 1},
+            .NumofAcidDDMP = {0, 1},
             .PrecursorIonType = "[M-H]-",
             .PrecursorIonMZ = -1.007277,
             .PrecursorIonN = 1,

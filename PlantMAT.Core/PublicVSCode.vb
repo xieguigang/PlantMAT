@@ -15,6 +15,7 @@
         SugarAcidList(6, 0) = "Fer"
         SugarAcidList(7, 0) = "Sin"
         SugarAcidList(8, 0) = "DDMP"
+
         SugarAcidList(0, 1) = "Sugar"
         SugarAcidList(1, 1) = "Sugar"
         SugarAcidList(2, 1) = "Sugar"

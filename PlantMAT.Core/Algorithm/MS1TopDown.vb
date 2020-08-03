@@ -39,6 +39,8 @@ Public Class MS1TopDown
     Sub New(library As Library(), settings As Settings)
         Me.library = library
         Me.settings = settings
+
+        Call applySettings()
     End Sub
 
     Public Function MS1CP(query As IEnumerable(Of Query)) As Query()
@@ -109,6 +111,29 @@ Public Class MS1TopDown
     End Function
 
     Dim NumHexMin, NumHexMax, NumHexAMin, NumHexAMax, NumdHexMin, NumdHexMax, NumPenMin, NumPenMax, NumMalMin, NumMalMax, NumCouMin, NumCouMax, NumFerMin, NumFerMax, NumSinMin, NumSinMax, NumDDMPMin, NumDDMPMax As Integer
+
+    Private Sub applySettings()
+        Const min = 0
+        Const max = 1
+
+        NumHexMin = settings.NumofSugarHex(min) : NumHexMax = settings.NumofSugarHex(max)
+        NumHexAMin = settings.NumofSugarHexA(min) : NumHexAMax = settings.NumofSugarHexA(max)
+        NumdHexMin = settings.NumofSugardHex(min) : NumdHexMax = settings.NumofSugardHex(max)
+        NumPenMin = settings.NumofSugarPen(min) : NumPenMax = settings.NumofSugarPen(max)
+        NumMalMin = settings.NumofAcidMal(min) : NumMalMax = settings.NumofAcidMal(max)
+        NumCouMin = settings.NumofAcidCou(min) : NumCouMax = settings.NumofAcidCou(max)
+        NumFerMin = settings.NumofAcidFer(min) : NumFerMax = settings.NumofAcidFer(max)
+        NumSinMin = settings.NumofAcidSin(min) : NumSinMax = settings.NumofAcidSin(max)
+        NumDDMPMin = settings.NumofAcidDDMP(min) : NumDDMPMax = settings.NumofAcidDDMP(max)
+
+        NumSugarMin = settings.NumofSugarAll(min) : NumSugarMax = settings.NumofSugarAll(max)
+        NumAcidMin = settings.NumofAcidAll(min) : NumAcidMax = settings.NumofAcidAll(max)
+
+        AglyconeType = settings.AglyconeType
+        AglyconeSource = settings.AglyconeSource
+
+        SearchPPM = settings.SearchPPM
+    End Sub
 
     ''' <summary>
     ''' search for given precursor_type
