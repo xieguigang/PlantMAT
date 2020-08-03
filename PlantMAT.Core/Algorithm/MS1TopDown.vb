@@ -41,7 +41,7 @@ Public Class MS1TopDown
         Me.settings = settings
     End Sub
 
-    Sub MS1CP(query As IEnumerable(Of Query))
+    Public Function MS1CP(query As IEnumerable(Of Query)) As Query()
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
@@ -76,7 +76,7 @@ Public Class MS1TopDown
 
         'Run combinatorial enumeration
 
-        Call MS1_CombinatorialPrediction(query, settings.PrecursorIonMZ, settings.PrecursorIonN)
+        Return MS1_CombinatorialPrediction(query, settings.PrecursorIonMZ, settings.PrecursorIonN).ToArray
 
         'Show columns of sugar/acid if any >=1
         'For j = 8 To 16
@@ -106,7 +106,7 @@ Public Class MS1TopDown
         'Application.EnableEvents = True
         'Application.ScreenUpdating = True
 
-    End Sub
+    End Function
 
     Dim NumHexMin, NumHexMax, NumHexAMin, NumHexAMax, NumdHexMin, NumdHexMax, NumPenMin, NumPenMax, NumMalMin, NumMalMax, NumCouMin, NumCouMax, NumFerMin, NumFerMax, NumSinMin, NumSinMax, NumDDMPMin, NumDDMPMax As Integer
 
@@ -116,7 +116,7 @@ Public Class MS1TopDown
     ''' <param name="queries"></param>
     ''' <param name="PrecursorIonMZ">adducts</param>
     ''' <param name="PrecursorIonN">M</param>
-    Sub MS1_CombinatorialPrediction(queries As IEnumerable(Of Query), PrecursorIonMZ As Double, PrecursorIonN As Integer)
+    Iterator Function MS1_CombinatorialPrediction(queries As IEnumerable(Of Query), PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of Query)
         '   Dim AllSMILES As String
 
 
@@ -161,10 +161,11 @@ Public Class MS1TopDown
 
             query.Candidates = Candidate
 
-ResultDisplay:
             Call MS1_CombinatorialPrediciton_PatternPrediction(query)
+
+            Yield query
         Next
-    End Sub
+    End Function
 
     Dim NumSugarMin, NumSugarMax, NumAcidMin, NumAcidMax As Integer
     Dim AglyconeType As db_AglyconeType = db_AglyconeType.All
