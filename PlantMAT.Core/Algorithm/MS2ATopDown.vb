@@ -47,7 +47,7 @@ Public Class MS2ATopDown
         Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
 
         Console.WriteLine("Now analyzing, please wait...")
-        ' Call MS2P_Code.MS2P()
+        Call MS2P_Code.MS2P()
         Console.WriteLine("Glycosyl sequencing finished")
 
         '     Else

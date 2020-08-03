@@ -113,6 +113,11 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
+    <ExportAPI("MS2ATopDown")>
+    Public Function MS2ATopDown(settings As Settings) As MS2ATopDown
+        Return New MS2ATopDown(settings)
+    End Function
+
     ''' <summary>
     ''' parse ms1 query data
     ''' </summary>
