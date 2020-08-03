@@ -144,9 +144,9 @@
       <Project>{fecce1fd-e1d4-49e3-a668-60bb5e7aed99}</Project>
       <Name>47-dotnet_Microsoft.VisualBasic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PlantMAT.Core\PlantMAT.Core.vbproj">
+    <ProjectReference Include="..\PlantMAT.Core\test.vbproj">
       <Project>{22562408-0592-4b0f-9367-20ac0867023f}</Project>
-      <Name>PlantMAT.Core</Name>
+      <Name>test</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

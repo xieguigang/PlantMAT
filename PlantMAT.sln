@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PlantMAT.Core", "PlantMAT.Core\PlantMAT.Core.vbproj", "{22562408-0592-4B0F-9367-20AC0867023F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "test", "PlantMAT.Core\test.vbproj", "{22562408-0592-4B0F-9367-20AC0867023F}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "47-dotnet_Microsoft.VisualBasic", "..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj", "{FECCE1FD-E1D4-49E3-A668-60BB5E7AED99}"
 EndProject
@@ -15,7 +15,7 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "47_dotnet_ms-vb_data.framew
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "R", "..\GCModeller\src\R-sharp\R#\R.vbproj", "{0C2EB77C-39F2-460D-A3F8-CE905F867637}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Core", "Core\Core.vbproj", "{00E0F2F9-AA49-4E00-98EC-F1D66615D225}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PlantMAT.Core", "Core\PlantMAT.Core.vbproj", "{00E0F2F9-AA49-4E00-98EC-F1D66615D225}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
