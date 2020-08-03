@@ -104,7 +104,7 @@ Module PlantMAT
     End Function
 
     ''' <summary>
-    ''' performs combinatorial enumeration
+    ''' performs combinatorial enumeration, and show the calculation progress (MS1CP)
     ''' </summary>
     ''' <returns></returns>
     ''' 

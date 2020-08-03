@@ -3,6 +3,20 @@
     Public db_SugarAcid As db_SugarAcid()
     Public db_PrecursorIon As db_PrecursorIon()
 
+    Public Const Hex_w = 180.06338828,
+        HexA_w = 194.04265285,
+        dHex_w = 164.06847364,
+        Pen_w = 150.05282357,
+        Mal_w = 104.01095871,
+        Cou_w = 164.04734422,
+        Fer_w = 194.05790893,
+        Sin_w = 224.06847364,
+        DDMP_w = 144.04225873,
+        CO2_w = 43.98982928,
+        H2O_w = 18.01056471,
+        H_w = 1.00782504,
+        e_w = 0.00054858
+
     Sub New()
 
         Dim SugarAcidList(0 To 8, 0 To 2) As String
