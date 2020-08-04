@@ -3,7 +3,7 @@
     ' Author:
     ' 
     '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
     ' 
     ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
     ' 
