@@ -20,7 +20,7 @@ Public Class MS2ATopDown
         NoiseFilter = settings.NoiseFilter
     End Sub
 
-    Public Function MS2Annotation(queries As IEnumerable(Of Query)) As Query()
+    Public Function MS2Annotation(queries As Query()) As Query()
         Dim result As Query()
 
 

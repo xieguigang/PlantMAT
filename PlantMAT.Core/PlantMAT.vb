@@ -150,6 +150,6 @@ Module PlantMAT
                 Next
             End Function
 
-        Return pipeline.CreateFromPopulator(joinIterator())
+        Return joinIterator().ToArray
     End Function
 End Module
