@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::8cd6be5ac2c667b7b4c5dacb2be4c283, PlantMAT.Core\Models\Query.vb"
+﻿#Region "Microsoft.VisualBasic::ec287a3560e41ad28df56cd28510297b, PlantMAT.Core\Models\Query.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,8 @@
 
     '     Class Query
     ' 
-    '         Properties: Candidates, Ms2Peaks, PeakNO, PrecursorIon
+    '         Properties: Accession, Candidates, Ms2Peaks, PeakNO, PrecursorIon
+    '                     RT
     ' 
     '         Function: ParseMs1PeakList, ToString
     ' 
