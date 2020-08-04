@@ -245,6 +245,12 @@ Module PlantMAT
             .ToArray
     End Function
 
+    ''' <summary>
+    ''' run report table output
+    ''' </summary>
+    ''' <param name="result"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("report.table")>
     <RApiReturn(GetType(Report.Table))>
     Public Function reportTable(<RRawVectorArgument> result As Object, Optional env As Environment = Nothing) As Object

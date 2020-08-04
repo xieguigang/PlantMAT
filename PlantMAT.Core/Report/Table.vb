@@ -105,7 +105,7 @@ Namespace Report
                 }
             Else
                 For Each candidate As CandidateResult In query.Candidates
-                    Dim ions = candidate.Ms2Anno.ions _
+                    Dim ions = If(candidate.Ms2Anno Is Nothing, {}, candidate.Ms2Anno.ions) _
                         .OrderByDescending(Function(a) a.ionAbu) _
                         .Take(5) _
                         .ToArray
@@ -150,7 +150,11 @@ Namespace Report
         End Function
 
         Private Shared Function annotatedIon(ion As IonAnnotation) As String
-            Return $"{ion.productMz} {ion.annotation}"
+            If ion Is Nothing Then
+                Return ""
+            Else
+                Return $"{ion.productMz} {ion.annotation}"
+            End If
         End Function
     End Class
 End Namespace
