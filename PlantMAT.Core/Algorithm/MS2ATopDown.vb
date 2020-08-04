@@ -1,5 +1,4 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.Language
 
 ''' <summary>
 ''' This module performs MS2 annotation
@@ -44,51 +43,10 @@ Public Class MS2ATopDown
     End Function
 
     Private Iterator Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
-
-        'Application.ScreenUpdating = False
-        'Application.EnableEvents = False
-
-        '  Dim dd As Object
-
-        'Clear all previous results in the output display
-        'With PublicVS_Code.Query
-        '    Call .Unprotect
-        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-        '    If LastRow >= 4 Then
-        '        Call .Range("V4:" & "W" & LastRow).ClearContents
-        '        For Each dd In .DropDowns()
-        '            If Left(dd.Name, 7) = "dd_MS2A" Then dd.Delete
-        '        Next dd
-        '    End If
-        '    .ScrollArea = ""
-        'End With
-
-        'Read the parameters in Settings (module: PublicVS_Code)
-        '  Call PublicVS_Code.Settings_Check()
-        ' Call PublicVS_Code.Settings_Reading()
-
-        ' i = 4
-
-        'Loop through all compounds and do MS2 annotation for each
-        '   Do While PublicVS_Code.Query.Cells(i, 4) <> ""
-        ' DoEvents
-
         For Each query As Query In queries
-
-            'Skip the compound if there are no hits from combinatorial enumeration
-            'Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
-            '    i = i + 1
-            'Loop
-
-            'If this is the last + 1 cell, then exit the loop
-            ' If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
-
             'Read compound serial number and precuror ion mz
-            '  With PublicVS_Code.Query
-            Dim CmpdTag = query.PeakNO ' .Cells(i, 2)
-            Dim DHIonMZ = query.PrecursorIon ' .Cells(i, 4)
-            '   End With
-
+            Dim CmpdTag = query.PeakNO
+            Dim DHIonMZ = query.PrecursorIon
             Dim IonMZ_crc As Double
             Dim Rsyb As String
 
@@ -102,85 +60,11 @@ Public Class MS2ATopDown
             End If
 
             'Perform the MS2 annotation and display the results
-            ' If SingleQ = True Then
             Call MS2A_TopDown_MS2Annotation(query, IonMZ_crc, Rsyb)
-            'Else
-            '    Call MS2File_Searching()
-
-            '    If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
-            '        With PublicVS_Code.Query
-            '            If ErrorCheck = True Then
-            '                .Cells(i, 22) = "Data error"
-            '            Else
-            '                .Cells(i, 22) = "Data not found"
-            '            End If
-            '            .Cells(i, 22).HorizontalAlignment = xlLeft
-            '            .Cells(i, 22).Font.Color = RGB(217, 217, 217)
-            '        End With
-            '        i = i + 1
-            '        Do While PublicVS_Code.Query.Cells(i, 4) = "..."
-            '            i = i + 1
-            '        Loop
-            '    Else
-            '        Call MS2A_TopDown_MS2Annotation()
-            '    End If
-            'End If
 
             Yield query
         Next
-
-        'Go to the top of spreadsheet and lock (protect) the spreadsheet
-        '   With PublicVS_Code.Query
-        '       Application.Goto.Range("A1"), True
-        '.ScrollArea = "A4:Z" & CStr(i + 1)
-        '       Call .Protect
-        '   End With
-
-        'Application.EnableEvents = True
-        'Application.ScreenUpdating = True
-
     End Function
-
-    'Sub MS2File_Searching()
-
-    '    'On Error GoTo ErrorHandler
-
-
-    '    Dim MS2FileName As String
-
-    '    FileCheck = False
-    '    ErrorCheck = False
-
-
-    '    MS2FileName = CStr(CmpdTag) & ".txt"
-
-    '    'Find MS2 data for each compound and read into data array eIonList()
-    '    For Each file As String In MS2FilePath.ListDirectory
-
-
-    '        If InStr(file, MS2FileName) = 1 Then
-    '            FileCheck = True
-    '            eIon_n = 0
-    '            TotalIonInt = 0
-    '            ReDim eIonList(1 To 2, 1 To 1)
-    '            For Each lineText As String In (MS2FilePath & "/" & MS2FileName).IterateAllLines
-
-    '                Dim eIon = Strings.Split(CStr(lineText), Chr(9))
-    '                DaughterIonMZ = eIon(0)
-    '                DaughterIonInt = eIon(1)
-    '                TotalIonInt = TotalIonInt + DaughterIonInt
-    '                If DaughterIonMZ = 0 Then Exit Sub
-
-    '                eIon_n = eIon_n + 1
-    '                ReDim Preserve eIonList(1 To 2, 1 To eIon_n)
-    '                eIonList(1, eIon_n) = DaughterIonMZ
-    '                eIonList(2, eIon_n) = DaughterIonInt
-    '            Next
-    '        End If
-
-    '    Next
-
-    'End Sub
 
     ''' <summary>
     ''' Loop through all candidates for each compound
@@ -197,23 +81,20 @@ Public Class MS2ATopDown
     End Sub
 
     Private Sub MS2A_TopDown_MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
-        ' DoEvents
         Dim candidate As CandidateResult = query.Candidate(i)
 
         'Read the results from combinatorial enumeration
-        ' With PublicVS_Code.Query
-        Dim AglyN = candidate.Name  ' .Cells(i, 7)
-        Dim Agly_w = candidate.ExactMass  ' Val(.Cells(i, 7).Comment.Text)
-        Dim Hex_max = candidate.Hex  ' .Cells(i, 8)
-        Dim HexA_max = candidate.HexA ' .Cells(i, 9)
-        Dim dHex_max = candidate.dHex ' .Cells(i, 10)
-        Dim Pen_max = candidate.Pen ' .Cells(i, 11)
-        Dim Mal_max = candidate.Mal '  .Cells(i, 12)
-        Dim Cou_max = candidate.Cou ' .Cells(i, 13)
-        Dim Fer_max = candidate.Fer ' .Cells(i, 14)
-        Dim Sin_max = candidate.Sin ' .Cells(i, 15)
-        Dim DDMP_max = candidate.DDMP ' .Cells(i, 16)
-        '  End With
+        Dim AglyN = candidate.Name
+        Dim Agly_w = candidate.ExactMass
+        Dim Hex_max = candidate.Hex
+        Dim HexA_max = candidate.HexA
+        Dim dHex_max = candidate.dHex
+        Dim Pen_max = candidate.Pen
+        Dim Mal_max = candidate.Mal
+        Dim Cou_max = candidate.Cou
+        Dim Fer_max = candidate.Fer
+        Dim Sin_max = candidate.Sin
+        Dim DDMP_max = candidate.DDMP
 
         'First, predict the ions based on the results from combinatorial enumeration
         Dim prediction As New MS2A_TopDown_MS2Annotation_IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
@@ -231,10 +112,7 @@ Public Class MS2ATopDown
         Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
         'Third, add a dropdown list for each candidate and show the annotation results in the list
-        ' With PublicVS_Code.Query.Cells(i, 23)
-        '  comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
         Dim combName = "dd_MS2A_TopDown_" & CStr(i)
-        '   End With
         Dim comb As New List(Of String)
 
         'Fourth, save the annotation results in the cell
@@ -261,23 +139,9 @@ Public Class MS2ATopDown
             }
 
         'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
-        'With PublicVS_Code.Query
-        '    If AglyCheck = True Then
-        '        .Cells(i, 22) = "*"
-        '        .Cells(i, 22).HorizontalAlignment = xlCenter
-        '        .Cells(i, 22).Font.Color = RGB(118, 147, 60)
-        '    End If
-        '    If aIon_n > 0 Then
-        '        .Cells(i, 23) = CStr(aIon_n) & " ions annotated: " & Left(aResult, Len(aResult) - 2)
-        '        .Cells(i, 23).Font.Color = RGB(255, 255, 255)
-        '        .Cells(i, 23).HorizontalAlignment = xlFill
-        '    End If
-        'End With
-
-        '  i = i + 1
-
-        'If the last candidate has been analyzed, then exit the loop and go to the next compound
-        '  If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
+        If AglyCheck = True Then
+            candidate.Ms2Anno.aglycone = True
+        End If
     End Sub
 
     ''' <summary>
@@ -288,7 +152,6 @@ Public Class MS2ATopDown
     ''' <param name="pIonList"></param>
     ''' <returns>AglyCheck</returns>
     Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As String(,), ByRef aIon_n As Integer, ByRef aIonList As String(,)) As Boolean
-
         'Initialize the annotated ion list aIonList() to none
         Dim AglyCheck = False
         Dim eIonList = query.Ms2Peaks

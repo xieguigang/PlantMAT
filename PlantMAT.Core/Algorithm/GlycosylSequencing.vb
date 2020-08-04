@@ -1,4 +1,6 @@
-﻿Public Class GlycosylSequencing
+﻿Imports Microsoft.VisualBasic.Linq
+
+Public Class GlycosylSequencing
 
     Dim PrecursorIonType$
     Dim PrecursorIonMZ#
@@ -20,52 +22,10 @@
         PrecursorIonN = settings.PrecursorIonN
     End Sub
 
-    ' Attribute VB_Name = "MS2P_Code"
     Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
-
-        'Application.ScreenUpdating = False
-        'Application.EnableEvents = False
-
-        'Dim dd As Object
-
-        'With PublicVS_Code.Query
-        '    Call .Unprotect
-        '    LastRow = .Range("D" & Rows.Count).End(xlUp).Row
-        '    If LastRow >= 4 Then
-        '        Call .Range("Y4:" & "Z" & LastRow).ClearContents
-        '        For Each dd In .DropDowns()
-        '            If Left(dd.Name, 7) = "dd_MS2P" Then dd.Delete
-        '        Next dd
-        '    End If
-        '    .ScrollArea = ""
-        'End With
-
-        '  Call PublicVS_Code.Settings_Check
-        '  Call PublicVS_Code.Settings_Reading
-
-        '  i = 4
-
         For Each query As Query In queries
-
-
-
-            '        Do While PublicVS_Code.Query.Cells(i, 4) <> ""
-            'DoEvents
-
-            'Do While PublicVS_Code.Query.Cells(i, 7) = "No hits"
-            '    i = i + 1
-            '    k = k + 1
-            'Loop
-
-            '  If PublicVS_Code.Query.Cells(i, 4) = "" Then Exit Do
-
-            '   k = 1
-
-            '   With PublicVS_Code.Query
-            Dim CmpdTag = query.PeakNO ' .Cells(i, 2)
-            Dim DHIonMZ = query.PrecursorIon ' .Cells(i, 4)
-            '   End With
-
+            Dim CmpdTag = query.PeakNO
+            Dim DHIonMZ = query.PrecursorIon
             Dim MIonMZ#
             Dim Rsyb$
 
@@ -80,121 +40,65 @@
             If Not query.Ms2Peaks Is Nothing Then
                 Call MS2P_MS2Prediction(query, MIonMZ)
             End If
-            ' If SingleQ = True Then
-
-            'Else
-            '    Call MS2File_Searching()
-
-            '    If FileCheck = False And PublicVS_Code.Query.Cells(i, 4) <> "" Then
-            '        With PublicVS_Code.Query
-            '            If ErrorCheck = True Then
-            '                .Cells(i, 22) = "Data error"
-            '            Else
-            '                .Cells(i, 22) = "Data not found"
-            '            End If
-            '            .Cells(i, 22).HorizontalAlignment = xlLeft
-            '            .Cells(i, 22).Font.Color = RGB(217, 217, 217)
-            '        End With
-            '        i = i + 1
-            '        k = k + 1
-            '        Do While PublicVS_Code.Query.Cells(i, 4) = "..."
-            '            i = i + 1
-            '            k = k + 1
-            '        Loop
-            '    Else
-            '        Call MS2P_MS2Prediction()
-            '    End If
-            'End If
 
             Yield query
         Next
-
-        '   With PublicVS_Code.Query
-        '       Application.Goto.Range("A1"), True
-        '.ScrollArea = "A4:Z" & CStr(i + 1)
-        '       Call .Protect
-        '   End With
-
-        'Application.EnableEvents = True
-        'Application.ScreenUpdating = True
-
     End Function
 
     Private Sub MS2P_MS2Prediction(query As Query, MIonMZ As Double)
         'Predict MS2
         For i As Integer = 0 To query.Candidates.Count - 1
-            'DoEvents
-            query(i).Glycosyl = MS2P_MS2PredictionLoop(query, i, MIonMZ)
+            For Each smile As SMILES In query(i).SMILES
+                MS2P_MS2PredictionLoop(query, i, smile, MIonMZ).DoCall(AddressOf query(i).Glycosyl.Add)
+            Next
         Next
     End Sub
 
-    Private Function MS2P_MS2PredictionLoop(query As Query, i As Integer, MIonMZ As Double) As Glycosyl
+    Private Function MS2P_MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double) As Glycosyl
         'Find how many structural possibilites for each peak in 'SMILES' sheet
-        ' Dim peakNo As Integer
         Dim RS(,) As String
-        Dim k = 1
-
-        'Do While True
-        '    peakNo = SMILES.Cells(r, 2)
-        '    If peakNo = 0 Or peakNo = CmpdTag Then Exit Do
-        '    r = r + 1
-        'Loop
-
-        ' Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
         'Create a combbox for MS2 prediction results of each combination possibility
-        ' With PublicVS_Code.Query.Cells(i, 26)
-        ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
         Dim combName = "dd_MS2P_" & CStr(i)
         Dim comb As New List(Of String)
         Dim candidate As CandidateResult = query.Candidate(i)
-        ' End With
 
         'Predict MS2 [MSPrediction()] for each structural possibility
-        Dim PredNo = k
+        ' Dim PredNo = k
         Dim Pred_n = 0
         Dim Match_n = 0
         Dim Match_m = 0
         Dim GlycN As String
         Dim Lt As String
-        Dim smilesPointer As SMILES
 
         ReDim RS(2, 1)
 
-        ' With SMILES
-        '  Do While peakNo = CmpdTag And PredNo = k
-        ' DoEvents
-        For Each smiles In candidate.SMILES
-            Pred_n = Pred_n + 1
-            GlycN = smiles.GlycN   '.Cells(r, 4)
+        '  For Each smiles As SMILES In candidate.SMILES
+        Pred_n = Pred_n + 1
+        GlycN = smiles.GlycN
 
-            Dim Comma_n = 0
-            For e = 1 To Len(GlycN)
-                Lt = Mid(GlycN, e, 1)
-                If Lt = "," Then Comma_n = Comma_n + 1
-            Next e
+        Dim Comma_n = 0
+        For e = 1 To Len(GlycN)
+            Lt = Mid(GlycN, e, 1)
+            If Lt = "," Then Comma_n = Comma_n + 1
+        Next e
 
-            RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
+        RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-            ' r = r + 1
-            ' peakNo = smiles.peakNo ' .Cells(r, 2)
+        Dim temp = ""
 
-            Dim temp = ""
+        For l = 1 To Len(smiles.Sequence)
+            If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
+            temp = temp + Mid(smiles.Sequence, l, 1)
+        Next l
 
-            For l = 1 To Len(smiles.Sequence) ' .Cells(r, 3)
-                If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-                temp = temp + Mid(smiles.Sequence, l, 1)
-            Next l
+        ' PredNo = Val(temp)
+        ' smilesPointer = smiles
 
-            PredNo = Val(temp)
-            ' Loop
-            '  End With
-            smilesPointer = smiles
-
-            If PredNo <> k Then
-                Exit For
-            End If
-        Next
+        'If PredNo <> k Then
+        'Exit For
+        'End If
+        '  Next
 
         'Sort RS() in descending order and write new list to combbox and worksheet
         Dim pResult = ""
@@ -226,25 +130,6 @@
             .pResult = pResult,
             .list = comb.ToArray
         }
-
-        'With PublicVS_Code.Query
-        '    If .Cells(i, 22) = "*" Then
-        '        .Cells(i, 25) = "*"
-        '        .Cells(i, 25).HorizontalAlignment = xlCenter
-        '        .Cells(i, 25).Font.Color = RGB(118, 147, 60)
-        '    End If
-        '    If Match_n > 0 And Match_m > 0 Then
-        '        .Cells(i, 26) = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates: " &
-        '                        Left(pResult, Len(pResult) - 2)
-        '        .Cells(i, 26).Font.Color = RGB(255, 255, 255)
-        '        .Cells(i, 26).HorizontalAlignment = xlFill
-        '    End If
-        'End With
-
-        ' i = i + 1
-        ' k = k + 1
-
-        ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
     End Function
 
     Private Function MS2P_MS2Prediction_IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
