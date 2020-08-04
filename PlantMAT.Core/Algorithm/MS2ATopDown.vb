@@ -86,20 +86,20 @@ Public Class MS2ATopDown
         'Read the results from combinatorial enumeration
         Dim AglyN = candidate.Name
         Dim Agly_w = candidate.ExactMass
-        Dim Hex_max = candidate.Hex
-        Dim HexA_max = candidate.HexA
-        Dim dHex_max = candidate.dHex
-        Dim Pen_max = candidate.Pen
-        Dim Mal_max = candidate.Mal
-        Dim Cou_max = candidate.Cou
-        Dim Fer_max = candidate.Fer
-        Dim Sin_max = candidate.Sin
-        Dim DDMP_max = candidate.DDMP
+        Dim Hex_max As Integer = CInt(candidate.Hex)
+        Dim HexA_max As Integer = CInt(candidate.HexA)
+        Dim dHex_max As Integer = CInt(candidate.dHex)
+        Dim Pen_max As Integer = CInt(candidate.Pen)
+        Dim Mal_max As Integer = CInt(candidate.Mal)
+        Dim Cou_max As Integer = CInt(candidate.Cou)
+        Dim Fer_max As Integer = CInt(candidate.Fer)
+        Dim Sin_max As Integer = CInt(candidate.Sin)
+        Dim DDMP_max As Integer = CInt(candidate.DDMP)
 
         'First, predict the ions based on the results from combinatorial enumeration
         Dim prediction As New MS2A_TopDown_MS2Annotation_IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
                 .Hex_max = Hex_max,
-            .HexA_max = HexA_max#, .dHex_max = dHex_max#, .Pen_max = Pen_max#, .Mal_max = Mal_max#, .Cou_max = Cou_max#, .Fer_max = Fer_max#, .Sin_max = Sin_max#, .DDMP_max = DDMP_max#}
+            .HexA_max = HexA_max, .dHex_max = dHex_max, .Pen_max = Pen_max, .Mal_max = Mal_max, .Cou_max = Cou_max, .Fer_max = Fer_max, .Sin_max = Sin_max, .DDMP_max = DDMP_max}
         Dim pIon_n As Integer = 0
         Dim pIonList As Object(,) = Nothing
 

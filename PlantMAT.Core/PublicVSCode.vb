@@ -82,7 +82,7 @@
                         Return New db_PrecursorIon With {
                             .IonType = row(0),
                             .Adducts = Val(row(1)),
-                            .M = Val(row(2))
+                            .M = Integer.Parse(row(2))
                         }
                     End Function) _
             .ToArray
