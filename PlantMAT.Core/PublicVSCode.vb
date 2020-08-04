@@ -136,17 +136,20 @@ Module PublicVSCode
     Friend Iterator Function GetPrecursorIons(names As IEnumerable(Of String)) As IEnumerable(Of PrecursorInfo)
         Dim positive = Provider.GetCalculator("+")
         Dim negative = Provider.GetCalculator("-")
+        Dim key As String
 
         For Each name As String In names
+            key = name.GetStackValue("[", "]")
+
             If name.Last = "+"c Then
-                If positive.ContainsKey(name) Then
-                    Yield New PrecursorInfo(positive(name))
+                If positive.ContainsKey(key) Then
+                    Yield New PrecursorInfo(positive(key))
                 Else
                     Throw New PlantMATException($"missing or unsupported precursor type: " & name)
                 End If
             ElseIf name.Last = "-"c Then
-                If negative.ContainsKey(name) Then
-                    Yield New PrecursorInfo(negative(name))
+                If negative.ContainsKey(key) Then
+                    Yield New PrecursorInfo(negative(key))
                 Else
                     Throw New PlantMATException($"missing or unsupported precursor type: " & name)
                 End If
@@ -157,26 +160,6 @@ Module PublicVSCode
     End Function
 
     Public Function GetPrecursorInfo(precursor_type As String) As PrecursorInfo
-        Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type))
-    End Function
-
-    <Extension>
-    Public Function PrecursorValue(precursor_type As String) As (IonMZ_crc#, Rsyb$, Precursor As PrecursorInfo)
-        Dim precursor As PrecursorInfo
-        Dim IonMZ_crc As Double
-        Dim Rsyb As String
-
-        'Find the ion type (pos or neg) based on the setting
-        If Right(precursor_type, 1) = "-" Then
-            precursor = New PrecursorInfo(Provider.GetCalculator("-")(precursor_type))
-            IonMZ_crc = (precursor.charge * e_w) - Math.Abs(precursor.adduct)  ' H_w
-            Rsyb = precursor.precursor_type.StringReplace("\[(\d+)?M", "") ' "-H]-"
-        Else
-            precursor = New PrecursorInfo(Provider.GetCalculator("+")(precursor_type))
-            IonMZ_crc = Math.Abs(precursor.adduct) - (precursor.charge * e_w) ' H_w
-            Rsyb = precursor.precursor_type.StringReplace("\[(\d+)?M", "") ' "+H]+"
-        End If
-
-        Return (IonMZ_crc, Rsyb, precursor)
+        Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]")))
     End Function
 End Module
