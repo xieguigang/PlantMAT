@@ -21,10 +21,10 @@ let result = library.csv
 ;
 
 # output the annotation result data set
-result
-:> json(compress = FALSE)
-:> writeLines(`${dirname(raw)}/${basename(raw)}.json`)
-;
+# result
+# :> json(compress = FALSE)
+# :> writeLines(`${dirname(raw)}/${basename(raw)}.json`)
+# ;
 
 result
 :> report.table
