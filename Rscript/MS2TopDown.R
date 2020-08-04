@@ -13,5 +13,5 @@ library.csv
 :> join.ms2(files = list.files(dirname(demo), pattern = "*.txt"))
 :> as.object(MS2ATopDown(settings = config()))$MS2Annotation
 :> json(compress = FALSE)
-:> writeLines("./A17_Root_MS1TopDown.json")
+:> writeLines("./A17_Root_MS2TopDown.json")
 ;
