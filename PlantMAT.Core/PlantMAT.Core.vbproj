@@ -140,6 +140,7 @@
     <Compile Include="Models\AnnotationResult\Glycosyl.vb" />
     <Compile Include="Models\AnnotationResult\Ms2IonAnnotations.vb" />
     <Compile Include="Models\AnnotationResult\SMILES.vb" />
+    <Compile Include="Report\Table.vb" />
     <Compile Include="Report\Html.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="Models\Models.vb" />
