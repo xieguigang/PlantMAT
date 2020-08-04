@@ -1,66 +1,70 @@
-﻿Public Class Query
+﻿Imports PlantMAT.Core.Models.AnnotationResult
 
-    ''' <summary>
-    ''' 一般为保留时间取整数
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property PeakNO As Integer
-    Public Property PrecursorIon As Double
-    Public Property Candidates As New List(Of CandidateResult)
-    Public Property Ms2Peaks As Ms2Peaks
+Namespace Models
 
-    Default Public ReadOnly Property Candidate(i As Integer) As CandidateResult
-        Get
-            Return _Candidates(i)
-        End Get
-    End Property
+    Public Class Query
 
-    Public Overrides Function ToString() As String
-        Return $"[{PeakNO}] {PrecursorIon} {If(Candidates.Count = 0, "no hits", Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ")) & "..."}"
-    End Function
+        ''' <summary>
+        ''' 一般为保留时间取整数
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property PeakNO As Integer
+        Public Property PrecursorIon As Double
+        Public Property Candidates As New List(Of CandidateResult)
+        Public Property Ms2Peaks As Ms2Peaks
 
-    Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
-        Return file _
-            .Select(Function(line) line.StringSplit("\s+")) _
-            .Select(Function(tokens)
-                        Return New Query With {
-                            .PeakNO = Integer.Parse(tokens(Scan0)),
-                            .PrecursorIon = Val(tokens(1))
-                        }
-                    End Function) _
-            .OrderBy(Function(q) q.PeakNO) _
-            .ToArray
-    End Function
+        Default Public ReadOnly Property Candidate(i As Integer) As CandidateResult
+            Get
+                Return _Candidates(i)
+            End Get
+        End Property
 
-End Class
+        Public Overrides Function ToString() As String
+            Return $"[{PeakNO}] {PrecursorIon} {If(Candidates.Count = 0, "no hits", Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ")) & "..."}"
+        End Function
 
-Public Class Ms2Peaks
+        Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
+            Return file _
+                .Select(Function(line) line.StringSplit("\s+")) _
+                .Select(Function(tokens)
+                            Return New Query With {
+                                .PeakNO = Integer.Parse(tokens(Scan0)),
+                                .PrecursorIon = Val(tokens(1))
+                            }
+                        End Function) _
+                .OrderBy(Function(q) q.PeakNO) _
+                .ToArray
+        End Function
 
-    Public Property mz As Double()
-    Public Property into As Double()
+    End Class
 
-    Public ReadOnly Property TotalIonInt As Double
-        Get
-            Return into.Sum
-        End Get
-    End Property
+    Public Class Ms2Peaks
 
-    Public Shared Function ParseMs2(file As IEnumerable(Of String)) As Ms2Peaks
-        Dim raw As Double()() = file _
-            .Select(Function(line)
-                        Return line _
-                            .StringSplit("\s+") _
-                            .Select(AddressOf Val) _
-                            .ToArray
-                    End Function) _
-            .ToArray
-        Dim mz = raw.Select(Function(a) a(Scan0)).ToArray
-        Dim into = raw.Select(Function(a) a(1)).ToArray
+        Public Property mz As Double()
+        Public Property into As Double()
 
-        Return New Ms2Peaks With {
-            .mz = mz,
-            .into = into
-        }
-    End Function
+        Public ReadOnly Property TotalIonInt As Double
+            Get
+                Return into.Sum
+            End Get
+        End Property
 
-End Class
+        Public Shared Function ParseMs2(file As IEnumerable(Of String)) As Ms2Peaks
+            Dim raw As Double()() = file _
+                .Select(Function(line)
+                            Return line _
+                                .StringSplit("\s+") _
+                                .Select(AddressOf Val) _
+                                .ToArray
+                        End Function) _
+                .ToArray
+            Dim mz = raw.Select(Function(a) a(Scan0)).ToArray
+            Dim into = raw.Select(Function(a) a(1)).ToArray
+
+            Return New Ms2Peaks With {
+                .mz = mz,
+                .into = into
+            }
+        End Function
+    End Class
+End Namespace

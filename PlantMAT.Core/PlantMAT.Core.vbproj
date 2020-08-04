@@ -135,7 +135,10 @@
     <Compile Include="Algorithm\MS1TopDown.vb" />
     <Compile Include="Algorithm\MS2ATopDown.vb" />
     <Compile Include="Algorithm\GlycosylSequencing.vb" />
-    <Compile Include="Models\AnnotationResult.vb" />
+    <Compile Include="Models\AnnotationResult\AnnotationResult.vb" />
+    <Compile Include="Models\AnnotationResult\Glycosyl.vb" />
+    <Compile Include="Models\AnnotationResult\Ms2IonAnnotations.vb" />
+    <Compile Include="Models\AnnotationResult\SMILES.vb" />
     <Compile Include="zzz.vb" />
     <Compile Include="Models\Models.vb" />
     <Compile Include="Models\Query.vb" />
