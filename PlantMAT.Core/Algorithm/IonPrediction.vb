@@ -79,7 +79,7 @@ Namespace Algorithm
             pIonList = Me.pIonList
         End Sub
 
-        Sub MS2A_TopDown_MS2Annotation_IonPrediction()
+        Sub IonPrediction()
 
             'Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
             Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max
@@ -104,7 +104,7 @@ Namespace Algorithm
                                                 For H2O_n = 0 To 1
                                                     For CO2_n = 0 To 1
 
-                                                        Call MS2A_TopDown_MS2Annotation_IonPrediction_LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
+                                                        Call LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
 
                                                         CO2Loss = CO2Loss + "-CO2"
                                                     Next CO2_n
@@ -141,7 +141,7 @@ Namespace Algorithm
 
         End Sub
 
-        Sub MS2A_TopDown_MS2Annotation_IonPrediction_LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
+        Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
             'Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
             Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n

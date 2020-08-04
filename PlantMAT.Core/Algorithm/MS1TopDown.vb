@@ -101,7 +101,7 @@ Namespace Algorithm
             ' Run combinatorial enumeration
             Console.WriteLine("Now analyzing, please wait...")
             ' Peform combinatorial enumeration and show the calculation progress (MS1CP)
-            result = MS1_CombinatorialPrediction(query, settings.PrecursorIonMZ, settings.PrecursorIonN).ToArray
+            result = CombinatorialPrediction(query, settings.PrecursorIonMZ, settings.PrecursorIonN).ToArray
             ' Show the message box after the calculation is finished
             Console.WriteLine("Substructure prediction finished")
 
@@ -114,15 +114,15 @@ Namespace Algorithm
         ''' <param name="queries"></param>
         ''' <param name="PrecursorIonMZ">adducts</param>
         ''' <param name="PrecursorIonN">M</param>
-        Private Function MS1_CombinatorialPrediction(queries As IEnumerable(Of Query), PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of Query)
+        Private Function CombinatorialPrediction(queries As IEnumerable(Of Query), PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of Query)
             Return queries _
             .AsParallel _
             .Select(Function(query)
-                        Return MS1_CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
+                        Return CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
                     End Function)
         End Function
 
-        Private Function MS1_CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As Query
+        Private Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As Query
             Dim ErrorCheck = False
             Dim RT_E = query.PeakNO
             Dim M_w = (query.PrecursorIon - PrecursorIonMZ) / PrecursorIonN
@@ -142,7 +142,7 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                Call MS1_CombinatorialPrediction_RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w).DoCall(AddressOf Candidate.AddRange)
+                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w).DoCall(AddressOf Candidate.AddRange)
 
                                             Next DDMP_n
                                         Next Sin_n
@@ -156,10 +156,10 @@ Namespace Algorithm
 
             query.Candidates = Candidate
 
-            Return MS1_CombinatorialPrediciton_PatternPrediction(query)
+            Return PatternPrediction(query)
         End Function
 
-        Private Iterator Function MS1_CombinatorialPrediction_RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double) As IEnumerable(Of CandidateResult)
             Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
             Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
@@ -173,7 +173,7 @@ Namespace Algorithm
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
                 If Bal >= settings.AglyconeMWRange(0) And Bal <= settings.AglyconeMWRange(1) Then
-                    For Each candidate In MS1_CombinatorialPrediciton_InternalDatabase(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
+                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
                         Yield candidate
                     Next
                 End If
@@ -181,9 +181,9 @@ Namespace Algorithm
             End If
         End Function
 
-        Private Iterator Function MS1_CombinatorialPrediciton_InternalDatabase(RT_E#, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
             For Each ref As Library In library
-                For Each candidate In MS1_CombinatorialPrediciton_DatabaseSearch(RT_E:=RT_E, AglyN:=ref.CommonName,
+                For Each candidate In DatabaseSearch(RT_E:=RT_E, AglyN:=ref.CommonName,
             AglyT:=ref.Class,
             AglyO:=ref.Genus,
             AglyW:=ref.ExactMass,
@@ -193,7 +193,7 @@ Namespace Algorithm
             Next
         End Function
 
-        Private Iterator Function MS1_CombinatorialPrediciton_DatabaseSearch(RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function DatabaseSearch(RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
             If AglyT = AglyconeType.ToString Or AglyconeType = db_AglyconeType.All Then
                 If AglyO = AglyconeSource.ToString Or AglyconeSource = db_AglyconeSource.All Then
 
@@ -225,17 +225,17 @@ Namespace Algorithm
             End If
         End Function
 
-        Private Function MS1_CombinatorialPrediciton_PatternPrediction(query As Query) As Query
+        Private Function PatternPrediction(query As Query) As Query
             For m As Integer = 0 To query.Candidates.Count - 1
                 Dim candidate As CandidateResult = query(m)
 
-                Call MS1_CombinatorialPrediciton_PatternPrediction(query.PeakNO, candidate, m)
+                Call PatternPredictionLoop(query.PeakNO, candidate, m)
             Next
 
             Return query
         End Function
 
-        Private Sub MS1_CombinatorialPrediciton_PatternPrediction(peakNO As Integer, candidate As CandidateResult, m As Integer)
+        Private Sub PatternPredictionLoop(peakNO As Integer, candidate As CandidateResult, m As Integer)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
             Dim Hex As String, HexA As String, dHex As String, Pen As String

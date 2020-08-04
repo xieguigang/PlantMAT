@@ -110,7 +110,7 @@ Namespace Algorithm
                 End If
 
                 'Perform the MS2 annotation and display the results
-                Call MS2A_TopDown_MS2Annotation(query, IonMZ_crc, Rsyb)
+                Call MS2Annotation(query, IonMZ_crc, Rsyb)
 
                 Yield query
             Next
@@ -122,15 +122,15 @@ Namespace Algorithm
         ''' <param name="query"></param>
         ''' <param name="IonMZ_crc"></param>
         ''' <param name="Rsyb"></param>
-        Private Sub MS2A_TopDown_MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
+        Private Sub MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2A_TopDown_MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
+                    Call MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
                 End If
             Next
         End Sub
 
-        Private Sub MS2A_TopDown_MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
+        Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
             Dim candidate As CandidateResult = query.Candidate(i)
 
             'Read the results from combinatorial enumeration
@@ -153,13 +153,13 @@ Namespace Algorithm
             Dim pIon_n As Integer = 0
             Dim pIonList As Object(,) = Nothing
 
-            Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
+            Call prediction.IonPrediction()
             Call prediction.getResult(pIon_n, pIonList)
 
             'Second, compare the predicted ions with the measured
             Dim aIon_n As Integer = 0
             Dim aIonList(0 To 3, 0 To 1) As Object
-            Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
+            Dim AglyCheck As Boolean = IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
             'Third, add a dropdown list for each candidate and show the annotation results in the list
             Dim combName = "dd_MS2A_TopDown_" & CStr(i)
@@ -201,7 +201,7 @@ Namespace Algorithm
         ''' <param name="pIon_n%"></param>
         ''' <param name="pIonList"></param>
         ''' <returns>AglyCheck</returns>
-        Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
+        Private Function IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
             'Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
             Dim eIonList = query.Ms2Peaks

@@ -88,24 +88,24 @@ Namespace Algorithm
                 End If
 
                 If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2P_MS2Prediction(query, MIonMZ)
+                    Call MS2Prediction(query, MIonMZ)
                 End If
 
                 Yield query
             Next
         End Function
 
-        Private Sub MS2P_MS2Prediction(query As Query, MIonMZ As Double)
-            'Predict MS2
+        Private Sub MS2Prediction(query As Query, MIonMZ As Double)
+            ' Predict MS2
             For i As Integer = 0 To query.Candidates.Count - 1
                 For Each smile As SMILES In query(i).SMILES
-                    MS2P_MS2PredictionLoop(query, i, smile, MIonMZ).DoCall(AddressOf query(i).Glycosyl.Add)
+                    MS2PredictionLoop(query, i, smile, MIonMZ).DoCall(AddressOf query(i).Glycosyl.Add)
                 Next
             Next
         End Sub
 
-        Private Function MS2P_MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double) As Glycosyl
-            'Find how many structural possibilites for each peak in 'SMILES' sheet
+        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double) As Glycosyl
+            ' Find how many structural possibilites for each peak in 'SMILES' sheet
             Dim RS(,) As String
 
             'Create a combbox for MS2 prediction results of each combination possibility
@@ -133,7 +133,7 @@ Namespace Algorithm
                 If Lt = "," Then Comma_n = Comma_n + 1
             Next e
 
-            RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
+            RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
             Dim temp = ""
 
@@ -176,7 +176,7 @@ Namespace Algorithm
         }
         End Function
 
-        Private Function MS2P_MS2Prediction_IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
+        Private Function IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
 
             '1. Declare variables and assign mass of [M-H2O]
             Dim m(,) As String, u(,) As String, Lt As String
