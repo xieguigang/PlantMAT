@@ -14,7 +14,7 @@ library.csv
 :> read.library
 :> MS1TopDown(settings)
 :> as.object
-:> do.call("MS1CP", query = readLines(demo) :> query.ms1)
+:> do.call("MS1CP", query = readLines(demo) :> query.ms1, ionMode = -1)
 :> join.ms2(files = list.files(dirname(demo), pattern = "*.txt"))
 :> as.object(MS2ATopDown(settings))$MS2Annotation
 :> json(compress = FALSE)
