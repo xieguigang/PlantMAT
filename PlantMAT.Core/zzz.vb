@@ -17,17 +17,18 @@ Public Class zzz
         "interface within Microsoft Excel, a familiar, easily accessed program for " & vbCrLf &
         "chemists and biologists. " & vbCrLf & vbCrLf &
         "The usefulness of PlantMAT is exemplified using ultrahigh-performance liquid " & vbCrLf &
-        "chromatography–electrospray ionization quadrupole time-of-flight tandem mass " & vbCrLf &
-        "spectrometry (UHPLC–ESI-QTOF-MS/MS) metabolite profiling data of saponins and " & vbCrLf &
-        "glycosylated flavonoids from the model legume Medicago truncatula. " & vbCrLf &
+        "chromatography–electrospray ionization quadrupole time-of-flight tandem" & vbCrLf &
+        "mass spectrometry (UHPLC–ESI-QTOF-MS/MS) metabolite profiling data of saponins" & vbCrLf &
+        "and glycosylated flavonoids from the model legume Medicago truncatula. " & vbCrLf & vbCrLf &
         "The results demonstrate PlantMAT substantially increases the chemical/metabolic " & vbCrLf &
         "space of traditional chemical databases. Ten of the PlantMAT-predicted " & vbCrLf &
-        "identifications were validated and confirmed through the isolation of the compounds " & vbCrLf &
-        "using ultrahigh-performance liquid chromatography–mass spectrometry–solid-phase " & vbCrLf &
-        "extraction (UHPLC–MS–SPE) followed by de novo structural elucidation using 1D/2D " & vbCrLf &
-        "nuclear magnetic resonance (NMR). It is further demonstrated that PlantMAT enables " & vbCrLf &
-        "the dereplication of previously identified metabolites and is also a powerful " & vbCrLf &
-        "tool for the discovery of structurally novel metabolites."
+        "identifications were validated and confirmed through the isolation of the" & vbCrLf &
+        "compounds using ultrahigh-performance liquid chromatography mass spectrometry" & vbCrLf &
+        "solid-phase extraction (UHPLC–MS–SPE) followed by de novo structural" & vbCrLf &
+        "elucidation using 1D/2D nuclear magnetic resonance (NMR). " & vbCrLf & vbCrLf &
+        "It is further demonstrated that PlantMAT enables the dereplication of " & vbCrLf &
+        "previously identified metabolites and is also a powerful tool for the" & vbCrLf &
+        "discovery of structurally novel metabolites." & vbCrLf & vbCrLf & vbCrLf
 
     Public Shared Sub onLoad()
         Call GetType(PlantMAT).Assembly _
