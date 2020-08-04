@@ -74,7 +74,6 @@ Public Class Settings
     Public Property SearchPPM As Double
     Public Property NoiseFilter As Double
     Public Property mzPPM As Double
-    Public Property PatternPrediction As Boolean
 
     Public Overrides Function ToString() As String
         Dim text As New StringBuilder
@@ -104,7 +103,6 @@ Public Class Settings
                 .WriteLine("Search PPM: " & SearchPPM)
                 .WriteLine("Noise Filter: " & NoiseFilter)
                 .WriteLine("m/z PPM: " & mzPPM)
-                .WriteLine("Pattern Prediction: " & PatternPrediction)
             End With
 
             Call Settingsfile.Flush()
@@ -134,8 +132,7 @@ Public Class Settings
             .PrecursorIonN = 1,
             .SearchPPM = 10,
             .NoiseFilter = 0.05,
-            .mzPPM = 15,
-            .PatternPrediction = True
+            .mzPPM = 15
         }
     End Function
 End Class

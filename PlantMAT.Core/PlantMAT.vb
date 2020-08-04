@@ -93,7 +93,6 @@ Module PlantMAT
     ''' <param name="SearchPPM"></param>
     ''' <param name="NoiseFilter"></param>
     ''' <param name="mzPPM"></param>
-    ''' <param name="PatternPrediction"></param>
     ''' <returns></returns>
     <ExportAPI("config")>
     Public Function GetConfig(Optional AglyconeType As db_AglyconeType = db_AglyconeType.All,
@@ -115,8 +114,7 @@ Module PlantMAT
                               Optional PrecursorIonN As Integer = 1,
                               Optional SearchPPM As Double = 10,
                               Optional NoiseFilter As Double = 0.05,
-                              Optional mzPPM As Double = 15,
-                              Optional PatternPrediction As Boolean = True) As Settings
+                              Optional mzPPM As Double = 15) As Settings
 
         Return New Settings With {
             .AglyconeMWRange = DirectCast(AglyconeMWRange, Double()),
@@ -135,7 +133,6 @@ Module PlantMAT
             .NumofSugarHex = DirectCast(NumofSugarHex, Integer()),
             .NumofSugarHexA = DirectCast(NumofSugarHexA, Integer()),
             .NumofSugarPen = DirectCast(NumofSugarPen, Integer()),
-            .PatternPrediction = PatternPrediction,
             .PrecursorIonMZ = PrecursorIonMZ,
             .PrecursorIonN = PrecursorIonN,
             .PrecursorIonType = PrecursorIonType,
