@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7074d8acbe8e239aa726b868a2f43cca, PlantMAT.Core\PublicVSCode.vb"
+﻿#Region "Microsoft.VisualBasic::92601b63e45f57a30d9def716968a613, PlantMAT.Core\PublicVSCode.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     ' Module PublicVSCode
     ' 
     '     Constructor: (+1 Overloads) Sub New
-    '     Function: GetPrecursorInfo, GetPrecursorIons, QueryFromMgf
+    '     Function: GetPrecursorInfo, GetPrecursorIons, GetTopMs2, QueryFromMgf
     ' 
     ' /********************************************************************************/
 
