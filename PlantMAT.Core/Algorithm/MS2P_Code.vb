@@ -13,7 +13,11 @@
     End Sub
 
     Private Sub applySettings()
+        mzPPM = settings.mzPPM
 
+        PrecursorIonType = settings.PrecursorIonType
+        PrecursorIonMZ = settings.PrecursorIonMZ
+        PrecursorIonN = settings.PrecursorIonN
     End Sub
 
     ' Attribute VB_Name = "MS2P_Code"
