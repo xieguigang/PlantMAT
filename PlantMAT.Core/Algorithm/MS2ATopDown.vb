@@ -9,6 +9,7 @@ Public Class MS2ATopDown
     Dim settings As Settings
     Dim mzPPM As Double
     Dim NoiseFilter As Double
+    Dim PrecursorIonType$
 
     Sub New(settings As Settings)
         Me.settings = settings
@@ -18,6 +19,7 @@ Public Class MS2ATopDown
     Private Sub applySettings()
         mzPPM = settings.mzPPM
         NoiseFilter = settings.NoiseFilter
+        PrecursorIonType = settings.PrecursorIonType
     End Sub
 
     Public Function MS2Annotation(queries As Query()) As Query()
@@ -64,8 +66,6 @@ Public Class MS2ATopDown
         ' ThisWorkbook.Save
         Return result
     End Function
-
-    Dim PrecursorIonType$
 
     Private Iterator Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
 
@@ -233,7 +233,7 @@ Public Class MS2ATopDown
                 .Hex_max = Hex_max,
             .HexA_max = HexA_max#, .dHex_max = dHex_max#, .Pen_max = Pen_max#, .Mal_max = Mal_max#, .Cou_max = Cou_max#, .Fer_max = Fer_max#, .Sin_max = Sin_max#, .DDMP_max = DDMP_max#}
             Dim pIon_n As Integer
-            Dim pIonList As Double(,) = Nothing
+            Dim pIonList As String(,) = Nothing
 
             Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
             Call prediction.getResult(pIon_n, pIonList)
@@ -302,7 +302,7 @@ Public Class MS2ATopDown
     ''' <param name="pIon_n%"></param>
     ''' <param name="pIonList"></param>
     ''' <returns>AglyCheck</returns>
-    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As Double(,), ByRef aIon_n As Integer, ByRef aIonList As Double(,)) As Boolean
+    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As String(,), ByRef aIon_n As Integer, ByRef aIonList As Double(,)) As Boolean
 
         'Initialize the annotated ion list aIonList() to none
         Dim AglyCheck = False
@@ -360,7 +360,7 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
     Dim Agly_w#
     Dim AglyN$
 
-    Dim pIonList(0 To 2, 0 To 1) As Double
+    Dim pIonList(0 To 2, 0 To 1) As String
 
     Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
         Me.IonMZ_crc = IonMZ_crc
@@ -369,7 +369,7 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
         Me.AglyN = AglyN
     End Sub
 
-    Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As Double(,))
+    Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As String(,))
         pIon_n = Me.pIon_n
         pIonList = Me.pIonList
     End Sub
