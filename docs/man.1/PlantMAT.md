@@ -12,3 +12,4 @@ PlantMAT: A Metabolomics Tool for Predicting the Specialized
 + [query.ms1](PlantMAT/query.ms1.1) parse ms1 query data
 + [join.ms2](PlantMAT/join.ms2.1) join ms2 spectra data with the corresponding ms1 query values
 + [as.query](PlantMAT/as.query.1) create plantMAT query from the given mgf ion stream
++ [report.table](PlantMAT/report.table.1) run report table output
