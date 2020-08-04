@@ -180,4 +180,18 @@ Module PublicVSCode
             .RT = CInt(mgf.RtInSeconds)
         }
     End Function
+
+    <Extension>
+    Public Function GetTopMs2(ms2 As Ms2Peaks, n As Integer) As Double()
+        If ms2 Is Nothing Then
+            Return {}
+        Else
+            Return ms2.mz _
+                .Select(Function(mz, i) (mz, ms2.into(i))) _
+                .OrderByDescending(Function(a) a.Item2) _
+                .Select(Function(a) a.mz) _
+                .Take(n) _
+                .ToArray
+        End If
+    End Function
 End Module
