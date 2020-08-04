@@ -89,9 +89,10 @@ Module PlantMAT
     ''' <param name="NumofAcidFer"></param>
     ''' <param name="NumofAcidSin"></param>
     ''' <param name="NumofAcidDDMP"></param>
-    ''' <param name="PrecursorIonType"></param>
-    ''' <param name="PrecursorIonMZ"></param>
-    ''' <param name="PrecursorIonN"></param>
+    ''' <param name="PrecursorIonType">
+    ''' a character vector of list all precursor types that could be apply 
+    ''' for search the ms1 annotation in plantMAT.
+    ''' </param>
     ''' <param name="SearchPPM"></param>
     ''' <param name="NoiseFilter"></param>
     ''' <param name="mzPPM"></param>
@@ -112,8 +113,6 @@ Module PlantMAT
                               <RRawVectorArgument(GetType(Integer))> Optional NumofAcidSin As Object = "0,1",
                               <RRawVectorArgument(GetType(Integer))> Optional NumofAcidDDMP As Object = "0,1",
                               <RRawVectorArgument(GetType(String))> Optional PrecursorIonType As Object = "[M]+|[M]-|[M+H]+|[M-H]-",
-                              Optional PrecursorIonMZ As Double = -1.007277,
-                              Optional PrecursorIonN As Integer = 1,
                               Optional SearchPPM As Double = 10,
                               Optional NoiseFilter As Double = 0.05,
                               Optional mzPPM As Double = 15) As Settings
