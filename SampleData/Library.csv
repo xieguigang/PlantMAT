@@ -30,10 +30,10 @@
 "Irisolidone","Polyphenol","Isoflavone","C17H14O6","314.07903836","NA","COc1ccc(cc1)c1coc2cc(c(c(c2c1=O)O)OC)O","fqiu",#2013-08-23#
 "Tricin","Polyphenol","Flavone","C17H14O7","330.073953","NA","COc1cc(cc(c1O)OC)c1cc(=O)c2c(cc(cc2o1)O)O","fqiu",#2013-08-23#
 "Trinorlupeol","Triterpene","NA","C27H44O","384.33921627","Arabidopsis","CC1(C)C2CCC3(C)C(CCC4C5=CCCC5(C)CCC34C)C2(C)CCC1O","fqiu",#2013-08-26#
-"Cholesterol","Steroid","NA","C27H46O   ","386.35486634","Arabidopsis","CC(C)CCCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O","fqiu",#2013-08-26#
+"Cholesterol","Steroid","NA","C27H46O","386.35486634","Arabidopsis","CC(C)CCCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O","fqiu",#2013-08-26#
 "Campersterol","Steroid","NA","C28H48O","400.37051642","Arabidopsis","CC(C)C(C)CCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O","fqiu",#2013-08-26#
 "Stigmasterol","Steroid","NA","C29H48O","412.37051642","Arabidopsis","CCC(C=CC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O)C(C)C","fqiu",#2013-08-26#
-"ß-Sitosterol","Steroid","NA","C29H50O","414.38616649","Arabidopsis","CCC(CCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O)C(C)C","fqiu",#2013-08-26#
+"Sitosterol","Steroid","NA","C29H50O","414.38616649","Arabidopsis","CCC(CCC(C)C1CCC2C3CC=C4CC(CCC4(C)C3CCC12C)O)C(C)C","fqiu",#2013-08-26#
 "Bauerenol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1CCC2(C)CCC3(C)C4=CCC5C(C)(C)C(CCC5(C)C4CCC3(C)C2C1C)O","fqiu",#2013-08-26#
 "Butyrospermol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3=CCC4C(C)(C)C(CCC4(C)C3CCC12C)O)C","fqiu",#2013-08-26#
 "Cycloartenol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3CCC4C(C)(C)C(CCC54CC35CCC12C)O)C","fqiu",#2013-08-26#
@@ -46,8 +46,8 @@
 "Thalianol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(=CCCC(C)C1(C)CCC2=C1CCC1C(C)(C)C(CCC21C)O)C)C","fqiu",#2013-08-26#
 "Tirucalladienol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC(=CCCC(C)C1CCC2(C)C3=CCC4C(C)(C)C(CCC4(C)C3CCC12C)O)C","fqiu",#2013-08-26#
 "?-Taraxasterol","Triterpene","NA","C30H50O","426.38616649","Arabidopsis","CC1=CCC2(C)CCC3(C)C(CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1C","fqiu",#2013-08-26#
-"ß-Amyrin","Triterpene","NA","C30H50O","426.38616649","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
-"24-Hydroxy-ß-amyrin","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(CO)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
+"Amyrin","Triterpene","NA","C30H50O","426.38616649","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
+"24-Hydroxy-amyrin","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CCC2(C)CCC3(C)C(=CCC4C5(C)CCC(C(C)(CO)C5CCC34C)O)C2C1","fqiu",#2013-08-26#
 "Erythrodiol","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1)CO","fqiu",#2013-08-26#
 "Sophoradiol","Triterpene","NA","C30H50O2","442.38108113","Medicago","CC1(C)CC2C3=CCC4C5(C)CCC(C(C)(C)C5CCC4(C)C3(C)CCC2(C)C(C1)O)O","fqiu",#2013-08-26#
 "Oleanolic acid","Triterpene","NA","C30H48O3","456.3603457","Medicago","CC1(C)CCC2(CCC3(C)C(=CCC4C5(C)CCC(C(C)(C)C5CCC34C)O)C2C1)C(=O)O","fqiu",#2013-08-26#
