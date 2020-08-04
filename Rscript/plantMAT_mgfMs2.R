@@ -25,3 +25,8 @@ result
 :> json(compress = FALSE)
 :> writeLines(`${dirname(raw)}/${basename(raw)}.json`)
 ;
+
+result
+:> report.table
+:> write.csv(file = `${dirname(raw)}/${basename(raw)}.csv`, row_names = FALSE)
+;
