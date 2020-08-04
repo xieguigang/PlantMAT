@@ -3,6 +3,7 @@
     Dim PrecursorIonType$
     Dim PrecursorIonMZ#
     Dim PrecursorIonN%
+    Dim mzPPM As Double
 
     Dim settings As Settings
 
@@ -73,7 +74,7 @@
             End If
 
             ' If SingleQ = True Then
-            Call MS2P_MS2Prediction(query, CmpdTag)
+            Call MS2P_MS2Prediction(query, CmpdTag, MIonMZ)
             'Else
             '    Call MS2File_Searching()
 
@@ -112,11 +113,13 @@
 
     End Function
 
-    Sub MS2P_MS2Prediction(query As Query, CmpdTag As Integer)
+    Sub MS2P_MS2Prediction(query As Query, CmpdTag As Integer, MIonMZ As Double)
 
         'Find how many structural possibilites for each peak in 'SMILES' sheet
         Dim r = 3
         Dim peakNo As Integer
+        Dim RS(,) As String
+        Dim k = 1
 
         Do While True
             peakNo = SMILES.Cells(r, 2)
@@ -125,10 +128,10 @@
         Loop
 
         'Predict MS2
-        Do While True
+        For i As Integer = 0 To query.Candidates.Count - 1
             'DoEvents
 
-            Dim AglyMass = Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
+            Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
             ' With PublicVS_Code.Query.Cells(i, 26)
@@ -142,43 +145,49 @@
             Dim Pred_n = 0
             Dim Match_n = 0
             Dim Match_m = 0
+            Dim GlycN As String
+            Dim Lt As String
+
             ReDim RS(2, 1)
 
-            With SMILES
-                Do While peakNo = CmpdTag And PredNo = k
-                    ' DoEvents
+            ' With SMILES
+            Do While peakNo = CmpdTag And PredNo = k
+                ' DoEvents
 
-                    Pred_n = Pred_n + 1
-                    GlycN = .Cells(r, 4)
+                Pred_n = Pred_n + 1
+                GlycN = .Cells(r, 4)
 
-                    Comma_n = 0
-                    For e = 1 To Len(GlycN)
-                        Lt = Mid(GlycN, e, 1)
-                        If Lt = "," Then Comma_n = Comma_n + 1
-                    Next e
+                Dim Comma_n = 0
+                For e = 1 To Len(GlycN)
+                    Lt = Mid(GlycN, e, 1)
+                    If Lt = "," Then Comma_n = Comma_n + 1
+                Next e
 
-                    Call MS2P_MS2Prediction_IonPredictionMatching()
+                RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-                    r = r + 1
-                    peakNo = .Cells(r, 2)
-                    temp = ""
+                r = r + 1
+                peakNo = .Cells(r, 2)
 
-                    For l = 1 To Len(.Cells(r, 3))
-                        If Mid(.Cells(r, 3), l, 1) = "-" Then Exit For
-                        temp = temp + Mid(.Cells(r, 3), l, 1)
-                    Next l
+                Dim temp = ""
 
-                    PredNo = Val(temp)
-                Loop
-            End With
+                For l = 1 To Len(.Cells(r, 3))
+                    If Mid(.Cells(r, 3), l, 1) = "-" Then Exit For
+                    temp = temp + Mid(.Cells(r, 3), l, 1)
+                Next l
+
+                PredNo = Val(temp)
+            Loop
+            '  End With
 
             'Sort RS() in descending order and write new list to combbox and worksheet
-            pResult = ""
-            Best_n = 0
+            Dim pResult = ""
+            Dim Best_n = 0
+            Dim u As Integer
+            Dim max_real As Integer
 
             If Match_m > 0 Then
                 For t = 1 To Match_n
-                    max_temp = -1
+                    Dim max_temp = -1
                     For s = 1 To Match_n
                         If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
                             max_temp = Val(RS(1, s))
@@ -214,19 +223,22 @@
             ' k = k + 1
 
             ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
-        Loop
+        Next
 
     End Sub
 
-    Sub MS2P_MS2Prediction_IonPredictionMatching()
+    Private Function MS2P_MS2Prediction_IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
 
         '1. Declare variables and assign mass of [M-H2O]
         Dim m(,) As String, u(,) As String, Lt As String
-        Dim n1(,) As Double, n2(,) As Double, w(,) As Double
-        Dim Loss As Double, Loss1 As Double, pIonList() As Double
+        Dim n1(,) As Double, n2(,) As Double
+        Dim Loss As Double, Loss1 As Double, pIonList(,) As Double
         Dim pIonMZ As Double, eIonMZ As Double, eIonInt As Double
         ReDim m(20, 20), u(1, 100)
-        ReDim f1(1, 100), f2(1, 100), w(5, 100)
+
+        Dim f1(1, 100) As Double, f2(1, 100) As Double
+        Dim w(5, 100) As Double
+        Dim SugComb As String
 
         '2. Read aglyone/sugar/acid combination and store each component to u()
         Dim Comma_n = 0
@@ -252,9 +264,9 @@
         '3. Identify each component, calculate mass, and store value to w()
         Lt = ""
         For e = 2 To g
-            s = 1
-            For h = Len(u(1, e)) To 1 Step -1
-                Lt = Mid(u(1, e), h, 1)
+            Dim s = 1
+            For h12 = Len(u(1, e)) To 1 Step -1
+                Lt = Mid(u(1, e), h12, 1)
                 If Lt <> "-" Then
                     m(e - 1, s) = Lt + m(e - 1, s)
                     If m(e - 1, s) = "Hex" Then w(e - 1, s) = Hex_w - H2O_w
@@ -270,7 +282,7 @@
                     w(e - 1, s) = w(e - 1, s) + w(e - 1, s - 1)
                     s = s + 1
                 End If
-            Next h
+            Next h12
         Next e
 
         '4. Fragment each sugar chain forward (NL = sugar portions);
@@ -287,19 +299,19 @@
                         If w(c2, c2f) = 0 Then Exit For
                         h = h + 1
                         f1(1, h) = Loss1 + w(c2, c2f)
-                        Loss2 = f1(1, h)
+                        Dim Loss2 = f1(1, h)
                         For c3 = c2 + 1 To 5
                             For c3f = 1 To 100
                                 If w(c3, c3f) = 0 Then Exit For
                                 h = h + 1
                                 f1(1, h) = Loss2 + w(c3, c3f)
-                                Loss3 = f1(1, h)
+                                Dim Loss3 = f1(1, h)
                                 For c4 = c3 + 1 To 5
                                     For c4f = 1 To 100
                                         If w(c4, c4f) = 0 Then Exit For
                                         h = h + 1
                                         f1(1, h) = Loss3 + w(c4, c4f)
-                                        Loss4 = f1(1, h)
+                                        Dim Loss4 = f1(1, h)
                                         For c5 = c4 + 1 To 5
                                             For c5f = 1 To 100
                                                 If w(c5, c5f) = 0 Then Exit For
@@ -322,6 +334,7 @@
 
         Dim NameSugar As String
         Dim mass As Double
+        Dim f1_temp As Double
 
         For e = 2 To NumComponent
             NameComponent = u(1, e)
@@ -409,15 +422,18 @@ NextOne:
             Next x
         Next e
 
+        Dim eIon_n = eIonList.mz.Length
+        Dim TotalIonInt As Double = eIonList.TotalIonInt
+
         '8. Compare pIonList() with eIonlist(), calculate raw score, and save result to RS()
-        RawScore = 0
+        Dim RawScore = 0
         For e = 1 To g
             For h = 1 To 4
                 pIonMZ = pIonList(e, h)
                 For s = 1 To eIon_n
-                    eIonMZ = eIonList(1, s)
+                    eIonMZ = eIonList.mz(s)
                     If Math.Abs(pIonMZ - eIonMZ) / pIonMZ * 1000000 < mzPPM Then
-                        eIonInt = eIonList(2, s)
+                        eIonInt = eIonList.into(s)
                         RawScore = RawScore + Math.Log10(100000 * eIonInt / TotalIonInt)
                         GoTo NextPriIon
                     End If
@@ -432,5 +448,6 @@ NextPriIon:
         RS(1, Match_n) = CStr(RawScore)
         RS(2, Match_n) = SugComb
 
-    End Sub
+        Return RS
+    End Function
 End Class
