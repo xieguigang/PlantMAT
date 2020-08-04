@@ -278,10 +278,10 @@ Public Class MS2ATopDown
 
         Dim combText = CStr(aIon_n) & " ions annotated"
 
-        candidate.Ms2Anno = New NamedCollection(Of String) With {
-                .name = combText,
-                .value = comb.ToArray,
-                .description = aResult
+        candidate.Ms2Anno = New Ms2IonAnnotations With {
+                .title = combText,
+                .annotations = comb.ToArray,
+                .comment = aResult
             }
 
         'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
