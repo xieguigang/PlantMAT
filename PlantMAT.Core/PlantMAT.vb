@@ -70,22 +70,22 @@ Module PlantMAT
         Return New Settings With {
             .InternalAglyconeDatabase = Not ExternalAglyconeDatabase.FileExists,
             .ExternalAglyconeDatabase = ExternalAglyconeDatabase,
-            .AglyconeMWRange = AglyconeMWRange,
+            .AglyconeMWRange = DirectCast(AglyconeMWRange, Double()),
             .AglyconeSource = AglyconeSource,
             .AglyconeType = AglyconeType,
             .mzPPM = mzPPM,
             .NoiseFilter = NoiseFilter,
-            .NumofAcidAll = NumofAcidAll,
-            .NumofAcidMal = NumofAcidMal,
-            .NumofAcidDDMP = NumofAcidDDMP,
-            .NumofAcidSin = NumofAcidSin,
-            .NumofAcidFer = NumofAcidFer,
-            .NumofAcidCou = NumofAcidCou,
-            .NumofSugarAll = NumofSugarAll,
-            .NumofSugardHex = NumofSugardHex,
-            .NumofSugarHex = NumofSugarHex,
-            .NumofSugarHexA = NumofSugarHexA,
-            .NumofSugarPen = NumofSugarPen,
+            .NumofAcidAll = DirectCast(NumofAcidAll, Integer()),
+            .NumofAcidMal = DirectCast(NumofAcidMal, Integer()),
+            .NumofAcidDDMP = DirectCast(NumofAcidDDMP, Integer()),
+            .NumofAcidSin = DirectCast(NumofAcidSin, Integer()),
+            .NumofAcidFer = DirectCast(NumofAcidFer, Integer()),
+            .NumofAcidCou = DirectCast(NumofAcidCou, Integer()),
+            .NumofSugarAll = DirectCast(NumofSugarAll, Integer()),
+            .NumofSugardHex = DirectCast(NumofSugardHex, Integer()),
+            .NumofSugarHex = DirectCast(NumofSugarHex, Integer()),
+            .NumofSugarHexA = DirectCast(NumofSugarHexA, Integer()),
+            .NumofSugarPen = DirectCast(NumofSugarPen, Integer()),
             .PatternPrediction = PatternPrediction,
             .PrecursorIonMZ = PrecursorIonMZ,
             .PrecursorIonN = PrecursorIonN,
@@ -142,7 +142,7 @@ Module PlantMAT
         Dim joinIterator =
             Iterator Function() As IEnumerable(Of Query)
                 For Each query As Query In queries.populates(Of Query)(env)
-                    If fileIndex.ContainsKey(query.PeakNO) Then
+                    If fileIndex.ContainsKey(query.PeakNO.ToString) Then
                         query.Ms2Peaks = Ms2Peaks.ParseMs2(fileIndex(query.PeakNO.ToString).ReadAllLines)
                     End If
 

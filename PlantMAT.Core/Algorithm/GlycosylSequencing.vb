@@ -64,7 +64,7 @@ Public Class GlycosylSequencing
         Dim candidate As CandidateResult = query.Candidate(i)
 
         'Predict MS2 [MSPrediction()] for each structural possibility
-        ' Dim PredNo = k
+        Dim PredNo As Integer
         Dim Pred_n = 0
         Dim Match_n = 0
         Dim Match_m = 0
@@ -89,16 +89,10 @@ Public Class GlycosylSequencing
 
         For l = 1 To Len(smiles.Sequence)
             If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-            temp = temp + Mid(smiles.Sequence, l, 1)
+            temp = temp & Mid(smiles.Sequence, l, 1)
         Next l
 
-        ' PredNo = Val(temp)
-        ' smilesPointer = smiles
-
-        'If PredNo <> k Then
-        'Exit For
-        'End If
-        '  Next
+        PredNo = CInt(Val(temp))
 
         'Sort RS() in descending order and write new list to combbox and worksheet
         Dim pResult = ""
@@ -111,7 +105,7 @@ Public Class GlycosylSequencing
                 Dim max_temp = -1
                 For s = 1 To Match_n
                     If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
-                        max_temp = Val(RS(1, s))
+                        max_temp = CInt(Val(RS(1, s)))
                         u = s
                     End If
                 Next s
@@ -136,8 +130,7 @@ Public Class GlycosylSequencing
 
         '1. Declare variables and assign mass of [M-H2O]
         Dim m(,) As String, u(,) As String, Lt As String
-        Dim n1(,) As Double, n2(,) As Double
-        Dim Loss As Double, Loss1 As Double, pIonList(,) As Double
+        Dim Loss1 As Double, pIonList(,) As Double
         Dim pIonMZ As Double, eIonMZ As Double, eIonInt As Double
         ReDim m(20, 20), u(1, 100)
 
@@ -331,7 +324,7 @@ NextOne:
         Dim TotalIonInt As Double = eIonList.TotalIonInt
 
         '8. Compare pIonList() with eIonlist(), calculate raw score, and save result to RS()
-        Dim RawScore = 0
+        Dim RawScore As Double = 0
         For e = 1 To g
             For h = 1 To 4
                 pIonMZ = pIonList(e, h)

@@ -189,7 +189,7 @@ Public Class MS1TopDown
         Dim AglyS1 As String, AglyS2 As String
         Dim Hex As String, HexA As String, dHex As String, Pen As String
         Dim Cou As String, Fer As String, Sin As String, Mal As String
-        Dim e As Long, OH_n As Long
+        Dim OH_n As Long
         Dim n1 As Long, n2 As Long
         Dim AglyN As String
 
@@ -200,7 +200,7 @@ Public Class MS1TopDown
         If Right(AglyS2, 1) = "O" Then AglyS2 = Left(AglyS2, Len(AglyS2) - 1) & "."
 
         OH_n = 0
-        For e = 1 To Len(AglyS2)
+        For e As Integer = 1 To Len(AglyS2)
             If Mid(AglyS2, e, 1) = "." Then OH_n = OH_n + 1
         Next e
 
@@ -209,7 +209,7 @@ Public Class MS1TopDown
 
         n1 = 0
         n2 = 0
-        For e = 1 To Len(AglyS1)
+        For e As Integer = 1 To Len(AglyS1)
             If Information.IsNumeric(Mid(AglyS1, e, 1)) Then
                 n2 = CInt(Mid(AglyS1, e, 1))
                 If n2 > n1 Then n1 = n2
@@ -218,10 +218,11 @@ Public Class MS1TopDown
 
         ' 2. Find type and number of sugars/acids
         Dim Sug_n As Long
-        Dim Sug, Sug_p(,) As String
+        Dim Sug As String = Nothing
+        Dim Sug_p(,) As String
         Dim g As Long, h As Long, l As Long
 
-        Sug_n = candidate.GetSug_nStatic.Sum
+        Sug_n = CLng(candidate.GetSug_nStatic.Sum)
 
         If Sug_n = 0 Then
             Return
@@ -242,8 +243,8 @@ Public Class MS1TopDown
 
         Dim candidateSug_nStatic = candidate.GetSug_nStatic.ToArray
 
-        For e = 3 To 11
-            g = candidateSug_nStatic(e - 3)
+        For e As Integer = 3 To 11
+            g = CLng(candidateSug_nStatic(CInt(e - 3)))
             If g > 0 Then
                 If e = 3 Then Sug = Hex
                 If e = 4 Then Sug = HexA
@@ -277,6 +278,8 @@ Public Class MS1TopDown
         Next c
 
         For r = 2 To p
+            Dim e As Integer
+
             ' 3.3 Find the first smaller number rng(r-1,c-1)<rng(r-1,c)
             For c = Sug_n To 1 Step -1
                 If rng(r - 1, c - 1) < rng(r - 1, c) Then
@@ -326,13 +329,13 @@ Public Class MS1TopDown
         For v = 1 To p
 
             ' 4.1 Load each group of sugar/acids from permutation
-            For e = 1 To Sug_n
+            For e As Integer = 1 To Sug_n
                 x(1, e) = Sug_p(1, rng(v, e))
             Next e
 
             ' 4.2 Within each group create all possible oligosaccharides
             l = 0
-            For e = 1 To Sug_n
+            For e As Integer = 1 To Sug_n
                 h = e + 1
                 For g = 2 To Sug_n - l
                     x(g, e) = x(g - 1, e) + x(1, h)
@@ -347,7 +350,9 @@ Public Class MS1TopDown
             For z = 0 To Sug_n - 1
                 If n > OH_n Then Exit For
                 For q = 1 To Sug_n - z - 1
-                    If OH_n = 1 Then GoTo AllSugarConnected
+                    If OH_n = 1 Then
+                        GoTo AllSugarConnected
+                    End If
                     n = 2
                     If z > 0 Then
                         c = 0
@@ -361,7 +366,7 @@ Public Class MS1TopDown
                     t(w, 1) = x(q, 1)
                     t(w, n) = x(Sug_n - (q + z), (q + z) + 1)
                     If c < z Then
-                        For e = 1 To OH_n
+                        For e As Integer = 1 To OH_n
                             t(w, e) = ""
                         Next e
                         w = w - 1
@@ -371,7 +376,7 @@ Public Class MS1TopDown
                 Next q
             Next z
 AllSugarConnected:
-            For e = 1 To Sug_n
+            For e As Integer = 1 To Sug_n
                 t(w, 1) = t(w, 1) + x(1, e)
             Next e
             w = w + 1
@@ -381,7 +386,7 @@ AllSugarConnected:
         ' 4.3.2 Remove all duplicates regardless of order
         s = 1
         c = 0
-        For e = 1 To w - 1
+        For e As Integer = 1 To w - 1
             For r = 1 To s - 1
                 c = 0
                 For g = 1 To OH_n
@@ -413,7 +418,7 @@ AllSugarConnected:
         Dim SugComb As String, SugComb1 As String
         Dim n3 As Long
 
-        For e = 1 To s - 1
+        For e As Integer = 1 To s - 1
             GlycS = AglyS2
             n3 = n1
             SugComb = ""

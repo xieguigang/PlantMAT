@@ -101,14 +101,14 @@ Public Class MS2ATopDown
                 .Hex_max = Hex_max,
             .HexA_max = HexA_max#, .dHex_max = dHex_max#, .Pen_max = Pen_max#, .Mal_max = Mal_max#, .Cou_max = Cou_max#, .Fer_max = Fer_max#, .Sin_max = Sin_max#, .DDMP_max = DDMP_max#}
         Dim pIon_n As Integer = 0
-        Dim pIonList As String(,) = Nothing
+        Dim pIonList As Object(,) = Nothing
 
         Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
         Call prediction.getResult(pIon_n, pIonList)
 
         'Second, compare the predicted ions with the measured
         Dim aIon_n As Integer = 0
-        Dim aIonList(0 To 3, 0 To 1) As String
+        Dim aIonList(0 To 3, 0 To 1) As Object
         Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
         'Third, add a dropdown list for each candidate and show the annotation results in the list
@@ -122,8 +122,8 @@ Public Class MS2ATopDown
         If aIon_n > 0 Then
             For s = 1 To aIon_n
                 Dim aIonMZ = aIonList(1, s)
-                Dim aIonAbu = aIonList(2, s)
-                Dim aIonNM = aIonList(3, s)
+                Dim aIonAbu As Double = DirectCast(aIonList(2, s), Double)
+                Dim aIonNM As String = DirectCast(aIonList(3, s), String)
                 comb.Add(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
                 aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
                     CStr(Format(aIonAbu * 100, "0.00")) & ", " & aIonNM & "; "
@@ -151,7 +151,7 @@ Public Class MS2ATopDown
     ''' <param name="pIon_n%"></param>
     ''' <param name="pIonList"></param>
     ''' <returns>AglyCheck</returns>
-    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As String(,), ByRef aIon_n As Integer, ByRef aIonList As String(,)) As Boolean
+    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
         'Initialize the annotated ion list aIonList() to none
         Dim AglyCheck = False
         Dim eIonList = query.Ms2Peaks
@@ -165,8 +165,8 @@ Public Class MS2ATopDown
             Dim eIonMZ = eIonList.mz(s)
             Dim eIonInt = eIonList.into(s)
             For t = 1 To pIon_n
-                Dim pIonMZ = pIonList(1, t)
-                Dim pIonNM = pIonList(2, t)
+                Dim pIonMZ As Double = DirectCast(pIonList(1, t), Double)
+                Dim pIonNM As String = DirectCast(pIonList(2, t), String)
                 If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
                     Dim aIonAbu = eIonInt / TotalIonInt
                     If aIonAbu * 100 >= NoiseFilter Then
@@ -208,7 +208,7 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
     Dim Agly_w#
     Dim AglyN$
 
-    Dim pIonList(0 To 2, 0 To 1) As String
+    Dim pIonList(0 To 2, 0 To 1) As Object
 
     Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
         Me.IonMZ_crc = IonMZ_crc
@@ -217,7 +217,7 @@ Public Class MS2A_TopDown_MS2Annotation_IonPrediction
         Me.AglyN = AglyN
     End Sub
 
-    Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As String(,))
+    Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As Object(,))
         pIon_n = Me.pIon_n
         pIonList = Me.pIonList
     End Sub

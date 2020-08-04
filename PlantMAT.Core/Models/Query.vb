@@ -1,6 +1,4 @@
-﻿Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-
-Public Class Query
+﻿Public Class Query
 
     ''' <summary>
     ''' 一般为保留时间取整数
@@ -26,7 +24,7 @@ Public Class Query
             .Select(Function(line) line.StringSplit("\s+")) _
             .Select(Function(tokens)
                         Return New Query With {
-                            .PeakNO = tokens(Scan0),
+                            .PeakNO = Integer.Parse(tokens(Scan0)),
                             .PrecursorIon = Val(tokens(1))
                         }
                     End Function) _

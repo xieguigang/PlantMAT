@@ -117,7 +117,7 @@ Public Class SMILES
     ''' 2
     ''' </summary>
     ''' <returns></returns>
-    Public Property peakNo As String
+    Public Property peakNo As Integer
     ''' <summary>
     ''' 3
     ''' </summary>
