@@ -101,13 +101,13 @@ Namespace Algorithm
                 .ToArray
         End Sub
 
-        Public Function MS1CP(query As Query()) As Query()
+        Public Function MS1CP(query As Query(), Optional ionMode As Integer = 1) As Query()
             Dim result As Query()
 
             ' Run combinatorial enumeration
             Console.WriteLine("Now analyzing, please wait...")
             ' Peform combinatorial enumeration and show the calculation progress (MS1CP)
-            result = CombinatorialPrediction(query).ToArray
+            result = CombinatorialPrediction(query, ionMode).ToArray
             ' Show the message box after the calculation is finished
             Console.WriteLine("Substructure prediction finished")
 
@@ -118,15 +118,30 @@ Namespace Algorithm
         ''' search for given precursor_type
         ''' </summary>
         ''' <param name="queries"></param>
-        Private Function CombinatorialPrediction(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
+        Private Function CombinatorialPrediction(queries As IEnumerable(Of Query), ionMode As Integer) As IEnumerable(Of Query)
+            Dim precursors As PrecursorInfo()
+
+            If ionMode = 1 Then
+                precursors = Me.Precursors.Where(Function(a) a.precursor_type.Last = "+"c).ToArray
+            Else
+                precursors = Me.Precursors.Where(Function(a) a.precursor_type.Last = "-"c).ToArray
+            End If
+
             Return queries _
                 .AsParallel _
                 .Select(Function(query)
-                            query.Candidates = Candidate
+                            For Each type As PrecursorInfo In precursors
+                                Dim PrecursorIonMZ = type.adduct
+                                Dim PrecursorIonN = type.M
+                                Dim result = CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
+
+                                For Each item As CandidateResult In result
+                                    item.precursor_type = type.precursor_type
+                                    query.Candidates.Add(item)
+                                Next
+                            Next
 
                             Return PatternPrediction(query)
-
-                            Return CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
                         End Function)
         End Function
 
