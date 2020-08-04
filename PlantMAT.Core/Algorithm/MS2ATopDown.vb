@@ -25,45 +25,21 @@ Public Class MS2ATopDown
     Public Function MS2Annotation(queries As Query()) As Query()
         Dim result As Query()
 
+        If queries.All(Function(q) q.Candidates.IsNullOrEmpty) Then
+            Console.WriteLine("Please run combinatorial enumeration (MS1) first")
+            result = queries
+        Else
+            Console.WriteLine("Now analyzing ms2 topdown, please wait...")
+            result = MS2ATopDown(queries).ToArray
 
-        'Click to run MS2 annotation; first browse to folder where stores MS2 data
-        'Dim SelectedFolder As FileDialog
-        'SelectedFolder = Application.FileDialog(msoFileDialogFolderPicker)
-        'SelectedFolder.Title = "Select MS2 Folder"
-        'SelectedFolder.AllowMultiSelect = False
-        'SelectedFolder.Show
-        'If SelectedFolder.SelectedItems.Count = 0 Then Exit Sub
-        'MS2FilePath = SelectedFolder.SelectedItems(1) + "\"
-        ' SingleQ = False
+            Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
+            Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
+            result = New GlycosylSequencing(settings).MS2P(result).ToArray
 
-        'Peform MS2 annotation and show the calculation progress (MS2A)
-        'After finished, ask whether to continue MS2 prediction for glycosyl sequencing (MS2P)
-        '   PublicVS_Code.Query = ThisWorkbook.Sheets("Query")
-        '  SMILES = ThisWorkbook.Sheets("SMILES")
-        '  If PublicVS_Code.Query.Cells(4, 7) <> "" Or PublicVS_Code.Query.Cells(4, 22) <> "" Then
-        Console.WriteLine("Now analyzing, please wait...")
+            Console.WriteLine("Glycosyl sequencing finished")
+            Console.WriteLine("MS2 annotation finished")
+        End If
 
-        result = MS2ATopDown(queries).ToArray
-
-        ' If SMILES.Cells(4, 2) <> "" Then
-        Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
-
-        Console.WriteLine("Now analyzing, please wait...")
-
-        Dim ms2P As New GlycosylSequencing(settings)
-
-        result = ms2P.MS2P(result).ToArray
-
-        Console.WriteLine("Glycosyl sequencing finished")
-
-        '     Else
-        Console.WriteLine("MS2 annotation finished")
-        '     End If
-        'Else
-        'Console.WriteLine("Please run combinatorial enumeration (MS1) first")
-        'End If
-
-        ' ThisWorkbook.Save
         Return result
     End Function
 
