@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::693f12eb199d4cb500b31123cee14117, PlantMAT.Core\Algorithm\MS1TopDown.vb"
+﻿#Region "Microsoft.VisualBasic::c5ab2313523423df39c94f3d2e53b84f, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
     ' Author:
     ' 
@@ -56,10 +56,9 @@ Namespace Algorithm
     ''' <summary>
     ''' This module performs combinatorial enumeration
     ''' </summary>
-    Public Class MS1TopDown
+    Public Class MS1TopDown : Inherits PlantMATAlgorithm
 
         Dim library As Library()
-        Dim settings As Settings
         Dim NumHexMin, NumHexMax, NumHexAMin, NumHexAMax, NumdHexMin, NumdHexMax, NumPenMin, NumPenMax, NumMalMin, NumMalMax, NumCouMin, NumCouMax, NumFerMin, NumFerMax, NumSinMin, NumSinMax, NumDDMPMin, NumDDMPMax As Integer
         Dim NumSugarMin, NumSugarMax, NumAcidMin, NumAcidMax As Integer
         Dim AglyconeType As db_AglyconeType = db_AglyconeType.All
@@ -67,14 +66,12 @@ Namespace Algorithm
         Dim SearchPPM As Double
         Dim Precursors As PrecursorInfo()
 
-        Sub New(library As Library(), settings As Settings)
+        Public Sub New(library As Library(), settings As Settings)
+            MyBase.New(settings)
             Me.library = library
-            Me.settings = settings
-
-            Call applySettings()
         End Sub
 
-        Private Sub applySettings()
+        Protected Overrides Sub applySettings()
             Const min = 0
             Const max = 1
 

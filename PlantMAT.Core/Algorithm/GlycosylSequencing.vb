@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f9a8cb3c1a11930f3b64e69eab21e118, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
+﻿#Region "Microsoft.VisualBasic::a3db0592b217922a0d93c4cf8b6ad6d8, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
     ' Author:
     ' 
@@ -50,17 +50,15 @@ Imports PlantMAT.Core.Models.AnnotationResult
 
 Namespace Algorithm
 
-    Public Class GlycosylSequencing
+    Public Class GlycosylSequencing : Inherits PlantMATAlgorithm
 
         Dim mzPPM As Double
-        Dim settings As Settings
 
         Sub New(settings As Settings)
-            Me.settings = settings
-            Me.applySettings()
+            Call MyBase.New(settings)
         End Sub
 
-        Private Sub applySettings()
+        Protected Overrides Sub applySettings()
             mzPPM = settings.mzPPM
         End Sub
 

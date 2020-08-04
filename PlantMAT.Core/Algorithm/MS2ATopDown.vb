@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::e1d77ddb90f5bee36718698c013f6dcc, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
+﻿#Region "Microsoft.VisualBasic::057cab86566ae00e5b2f37f06004326a, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
     ' Author:
     ' 
@@ -53,18 +53,16 @@ Namespace Algorithm
     ''' <summary>
     ''' This module performs MS2 annotation
     ''' </summary>
-    Public Class MS2ATopDown
+    Public Class MS2ATopDown : Inherits PlantMATAlgorithm
 
-        Dim settings As Settings
         Dim mzPPM As Double
         Dim NoiseFilter As Double
 
         Sub New(settings As Settings)
-            Me.settings = settings
-            Me.applySettings()
+            Call MyBase.New(settings)
         End Sub
 
-        Private Sub applySettings()
+        Protected Overrides Sub applySettings()
             mzPPM = settings.mzPPM
             NoiseFilter = settings.NoiseFilter
         End Sub
