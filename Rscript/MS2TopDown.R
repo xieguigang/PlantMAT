@@ -31,3 +31,8 @@ result
 :> html
 :> writeLines("./A17_Root_MS2TopDown.html")
 ;
+
+result
+:> report.table
+:> write.csv(file = "./A17_Root_MS2TopDown.csv", row_names = FALSE)
+;
