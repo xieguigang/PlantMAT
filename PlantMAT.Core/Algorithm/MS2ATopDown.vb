@@ -20,7 +20,7 @@ Public Class MS2ATopDown
         NoiseFilter = settings.NoiseFilter
     End Sub
 
-    Public Function Button_MS2Annotation(queries As IEnumerable(Of Query), SingleQ As Boolean) As Query()
+    Public Function MS2Annotation(queries As IEnumerable(Of Query)) As Query()
         Dim result As Query()
 
 
@@ -41,7 +41,7 @@ Public Class MS2ATopDown
         '  If PublicVS_Code.Query.Cells(4, 7) <> "" Or PublicVS_Code.Query.Cells(4, 22) <> "" Then
         Console.WriteLine("Now analyzing, please wait...")
 
-        result = MS2ATopDown(queries, SingleQ).ToArray
+        result = MS2ATopDown(queries).ToArray
 
         ' If SMILES.Cells(4, 2) <> "" Then
         Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
@@ -67,7 +67,7 @@ Public Class MS2ATopDown
 
     Dim PrecursorIonType$
 
-    Private Iterator Function MS2ATopDown(queries As IEnumerable(Of Query), SingleQ As Boolean) As IEnumerable(Of Query)
+    Private Iterator Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
 
         'Application.ScreenUpdating = False
         'Application.EnableEvents = False
@@ -206,7 +206,7 @@ Public Class MS2ATopDown
 
     'End Sub
 
-    Sub MS2A_TopDown_MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
+    Private Sub MS2A_TopDown_MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
         Dim i As i32 = 1
 
         'Loop through all candidates for each compound
