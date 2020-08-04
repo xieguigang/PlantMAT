@@ -18,7 +18,6 @@
         e_w = 0.00054858
 
     Sub New()
-
         Dim SugarAcidList(0 To 8, 0 To 2) As String
         SugarAcidList(0, 0) = "Hex"
         SugarAcidList(1, 0) = "HexA"

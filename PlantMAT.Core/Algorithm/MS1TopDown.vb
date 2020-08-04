@@ -189,7 +189,7 @@ Public Class MS1TopDown
         Dim AglyS1 As String, AglyS2 As String
         Dim Hex As String, HexA As String, dHex As String, Pen As String
         Dim Cou As String, Fer As String, Sin As String, Mal As String
-        Dim OH_n As Long
+        Dim OH_n As Integer
         Dim n1 As Long, n2 As Long
         Dim AglyN As String
 
@@ -220,7 +220,7 @@ Public Class MS1TopDown
         Dim Sug_n As Long
         Dim Sug As String = Nothing
         Dim Sug_p(,) As String
-        Dim g As Long, h As Long, l As Long
+        Dim l As Integer
 
         Sug_n = CLng(candidate.GetSug_nStatic.Sum)
 
@@ -228,7 +228,7 @@ Public Class MS1TopDown
             Return
         End If
 
-        ReDim Sug_p(1, 0 To Sug_n)
+        ReDim Sug_p(1, 0 To CInt(Sug_n))
         l = 1
 
         Hex = "C?C(C(C(C(CO)O?)O)O)O"
@@ -244,7 +244,7 @@ Public Class MS1TopDown
         Dim candidateSug_nStatic = candidate.GetSug_nStatic.ToArray
 
         For e As Integer = 3 To 11
-            g = CLng(candidateSug_nStatic(CInt(e - 3)))
+            Dim g = CInt(candidateSug_nStatic(CInt(e - 3)))
             If g > 0 Then
                 If e = 3 Then Sug = Hex
                 If e = 4 Then Sug = HexA
@@ -255,7 +255,7 @@ Public Class MS1TopDown
                 If e = 9 Then Sug = Fer
                 If e = 10 Then Sug = Sin
                 If e = 11 Then Sug = DDMP
-                For h = 1 To g
+                For h As Integer = 1 To g
                     Sug_p(1, l) = Sug
                     l = l + 1
                 Next h
@@ -263,25 +263,25 @@ Public Class MS1TopDown
         Next e
 
         ' 3. Permutate sugars/acids without repetition
-        Dim c As Long, r As Long, p As Long
+        Dim p As Integer
         Dim rng(,) As Long, temp As Long
         Dim temp1 As Long, y() As Long, d As Long
 
-        p = WorksheetFunction.Permut(Sug_n, Sug_n)
+        p = CInt(WorksheetFunction.Permut(Sug_n, Sug_n))
 
         ' 3.1 Create array
         ReDim rng(0 To p, 0 To Sug_n)
 
         ' 3.2 Create first row in array (1, 2, 3, ...)
-        For c = 1 To Sug_n
+        For c As Integer = 1 To Sug_n
             rng(1, c) = c
         Next c
 
-        For r = 2 To p
+        For r As Integer = 2 To p
             Dim e As Integer
 
             ' 3.3 Find the first smaller number rng(r-1,c-1)<rng(r-1,c)
-            For c = Sug_n To 1 Step -1
+            For c As Integer = Sug_n To 1 Step -1
                 If rng(r - 1, c - 1) < rng(r - 1, c) Then
                     temp = c - 1
                     Exit For
@@ -289,12 +289,12 @@ Public Class MS1TopDown
             Next c
 
             ' 3.4 Copy values from previous row
-            For c = Sug_n To 1 Step -1
+            For c As Integer = Sug_n To 1 Step -1
                 rng(r, c) = rng(r - 1, c)
             Next c
 
             ' 3.5 Find a larger number than rng(r-1,temp) as far to the right as possible
-            For c = Sug_n To 1 Step -1
+            For c As Integer = Sug_n To 1 Step -1
                 If rng(r - 1, c) > rng(r - 1, temp) Then
                     temp1 = rng(r - 1, temp)
                     rng(r, temp) = rng(r - 1, c)
@@ -316,8 +316,7 @@ Public Class MS1TopDown
         Next r
 
         ' 4 Combine sugars/acids
-        Dim z As Long, q As Long, s As Long
-        Dim v As Long, w As Long, n As Long
+        Dim w As Long, n As Long
         Dim x(,) As String, t(,) As String, u(,) As String
 
         ReDim x(0 To Sug_n, 0 To Sug_n)
@@ -326,7 +325,7 @@ Public Class MS1TopDown
 
         w = 1
 
-        For v = 1 To p
+        For v As Integer = 1 To p
 
             ' 4.1 Load each group of sugar/acids from permutation
             For e As Integer = 1 To Sug_n
@@ -336,8 +335,8 @@ Public Class MS1TopDown
             ' 4.2 Within each group create all possible oligosaccharides
             l = 0
             For e As Integer = 1 To Sug_n
-                h = e + 1
-                For g = 2 To Sug_n - l
+                Dim h = e + 1
+                For g As Integer = 2 To Sug_n - l
                     x(g, e) = x(g - 1, e) + x(1, h)
                     h = h + 1
                 Next g
@@ -347,21 +346,24 @@ Public Class MS1TopDown
             ' 4.3 Within each group make all unique combinations of mono- and oligosaccharides
             ' 4.3.1 Make all possible combinations
             n = 1
-            For z = 0 To Sug_n - 1
+            For z As Integer = 0 To Sug_n - 1
                 If n > OH_n Then Exit For
-                For q = 1 To Sug_n - z - 1
+                For q As Integer = 1 To Sug_n - z - 1
                     If OH_n = 1 Then
                         GoTo AllSugarConnected
                     End If
+
+                    Dim c As Integer
+
                     n = 2
                     If z > 0 Then
                         c = 0
-                        For s = 1 To z
-                            t(w, n) = x(1, q + s)
+                        For s1 As Integer = 1 To z
+                            t(w, n) = x(1, q + s1)
                             c = c + 1
                             n = n + 1
                             If n > OH_n - 1 Then Exit For
-                        Next s
+                        Next
                     End If
                     t(w, 1) = x(q, 1)
                     t(w, n) = x(Sug_n - (q + z), (q + z) + 1)
@@ -384,13 +386,15 @@ AllSugarConnected:
         Next v
 
         ' 4.3.2 Remove all duplicates regardless of order
-        s = 1
-        c = 0
+        Dim s = 1
+
         For e As Integer = 1 To w - 1
-            For r = 1 To s - 1
+            Dim c = 0
+
+            For r As Integer = 1 To s - 1
                 c = 0
-                For g = 1 To OH_n
-                    For h = 1 To OH_n
+                For g As Integer = 1 To OH_n
+                    For h As Integer = 1 To OH_n
                         If t(e, g) = u(r, h) Then
                             u(r, h) = u(r, h) + "*"
                             c = c + 1
@@ -401,13 +405,13 @@ AllSugarConnected:
                 If c = OH_n Then Exit For
             Next r
             If c < OH_n Then
-                For g = 1 To OH_n
+                For g As Integer = 1 To OH_n
                     u(s, g) = t(e, g)
                 Next g
                 s = s + 1
             End If
-            For r = 1 To s - 1
-                For h = 1 To OH_n
+            For r As Integer = 1 To s - 1
+                For h As Integer = 1 To OH_n
                     If Right(u(r, h), 1) = "*" Then u(r, h) = Left(u(r, h), Len(u(r, h)) - 1)
                 Next h
             Next r
@@ -418,11 +422,11 @@ AllSugarConnected:
         Dim SugComb As String, SugComb1 As String
         Dim n3 As Long
 
-        For e As Integer = 1 To s - 1
+        For e As Integer = 1 To CInt(s) - 1
             GlycS = AglyS2
             n3 = n1
             SugComb = ""
-            For g = 1 To OH_n
+            For g As Integer = 1 To OH_n
                 If u(e, g) <> "" Then
                     SugComb1 = u(e, g)
                     If InStr(SugComb1, Hex) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Hex, "-Hex")
