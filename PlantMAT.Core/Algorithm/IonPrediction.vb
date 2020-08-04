@@ -1,4 +1,47 @@
-﻿Namespace Algorithm
+﻿#Region "Microsoft.VisualBasic::2acf246290d428c289329317aa9ee570, PlantMAT.Core\Algorithm\IonPrediction.vb"
+
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class IonPrediction
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Sub: getResult, MS2A_TopDown_MS2Annotation_IonPrediction, MS2A_TopDown_MS2Annotation_IonPrediction_LossCombination
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+Namespace Algorithm
     Public Class IonPrediction
 
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%

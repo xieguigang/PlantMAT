@@ -1,4 +1,59 @@
-﻿#If _MyType <> "Empty" Then
+﻿#Region "Microsoft.VisualBasic::524f347767ac3d0f019dbac3572ac991, PlantMAT\My Project\MyExtensions\MyWpfExtension.vb"
+
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Module MyWpfExtension
+    ' 
+    '         Properties: Application, Computer, Log, User, Windows
+    '         Class MyWindows
+    ' 
+    '             Constructor: (+1 Overloads) Sub New
+    ' 
+    '             Function: [GetType], Create__Instance__, Equals, GetHashCode, ToString
+    ' 
+    '             Sub: Dispose__Instance__
+    ' 
+    ' 
+    ' 
+    ' Class Application
+    ' 
+    '     Properties: Info
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+#If _MyType <> "Empty" Then
 
 Namespace My
     ''' <summary>
