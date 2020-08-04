@@ -114,6 +114,11 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
+    ''' <summary>
+    ''' performs MS2 annotation
+    ''' </summary>
+    ''' <param name="settings"></param>
+    ''' <returns></returns>
     <ExportAPI("MS2ATopDown")>
     Public Function MS2ATopDown(settings As Settings) As MS2ATopDown
         Return New MS2ATopDown(settings)
@@ -129,6 +134,13 @@ Module PlantMAT
         Return Query.ParseMs1PeakList(file:=metabolite_list)
     End Function
 
+    ''' <summary>
+    ''' join ms2 spectra data with the corresponding ms1 query values
+    ''' </summary>
+    ''' <param name="ms1">the ms1 peak features</param>
+    ''' <param name="files">a file path vector of the ms2 spectra matrix list for each ms1 peaks</param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
     <ExportAPI("join.ms2")>
     <RApiReturn(GetType(Query))>
     Public Function joinMs2Query(<RRawVectorArgument> ms1 As Object, files As String(), Optional env As Environment = Nothing) As Object
