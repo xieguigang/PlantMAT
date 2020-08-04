@@ -246,7 +246,7 @@
 
         Dim f1(1, 100) As Double, f2(1, 100) As Double
         Dim w(5, 100) As Double
-        Dim SugComb As String
+        Dim SugComb As String = ""
 
         '2. Read aglyone/sugar/acid combination and store each component to u()
         Dim Comma_n = 0
@@ -340,7 +340,7 @@
         'calualte mass of each fragment (loss), and store value to f1()
         Dim h1 = h + 1
 
-        Dim NameSugar As String
+        Dim NameSugar As String = ""
         Dim mass As Double
         Dim f1_temp As Double
 
@@ -348,7 +348,7 @@
             NameComponent = u(1, e)
             NumDash = 0
             For g = Len(NameComponent) To 1 Step -1
-                NameSugar = Mid(NameComponent, g, 1) + NameSugar
+                NameSugar = Mid(NameComponent, g, 1) & NameSugar
                 If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
                 If NameSugar = "-Hex" Then mass = Hex_w
                 If NameSugar = "-HexA" Then mass = HexA_w
