@@ -34,5 +34,9 @@
         Public Property glycosyl3 As String
         Public Property glycosyl4 As String
         Public Property glycosyl5 As String
+
+        Public Overrides Function ToString() As String
+            Return $"Dim {accession} As {candidate}.{precursor_type}"
+        End Function
     End Class
 End Namespace
