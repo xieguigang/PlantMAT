@@ -77,8 +77,11 @@
                 Rsyb = "+H]+"
             End If
 
+            If Not query.Ms2Peaks Is Nothing Then
+                Call MS2P_MS2Prediction(query, CmpdTag, MIonMZ)
+            End If
             ' If SingleQ = True Then
-            Call MS2P_MS2Prediction(query, CmpdTag, MIonMZ)
+
             'Else
             '    Call MS2File_Searching()
 
@@ -442,7 +445,7 @@ NextOne:
         For e = 1 To g
             For h = 1 To 4
                 pIonMZ = pIonList(e, h)
-                For s = 1 To eIon_n
+                For s = 0 To eIon_n - 1
                     eIonMZ = eIonList.mz(s)
                     If Math.Abs(pIonMZ - eIonMZ) / pIonMZ * 1000000 < mzPPM Then
                         eIonInt = eIonList.into(s)

@@ -206,93 +206,102 @@ Public Class MS2ATopDown
 
     'End Sub
 
+    ''' <summary>
+    ''' Loop through all candidates for each compound
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <param name="IonMZ_crc"></param>
+    ''' <param name="Rsyb"></param>
     Private Sub MS2A_TopDown_MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
-        Dim i As i32 = 1
+        For i As Integer = 0 To query.Candidates.Count - 1
+            If Not query.Ms2Peaks Is Nothing Then
+                Call MS2A_TopDown_MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
+            End If
+        Next
+    End Sub
 
-        'Loop through all candidates for each compound
-        For Each candidate As CandidateResult In query.Candidates
-            ' DoEvents
+    Private Sub MS2A_TopDown_MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
+        ' DoEvents
+        Dim candidate As CandidateResult = query.Candidate(i)
 
-            'Read the results from combinatorial enumeration
-            ' With PublicVS_Code.Query
-            Dim AglyN = candidate.Name  ' .Cells(i, 7)
-            Dim Agly_w = candidate.ExactMass  ' Val(.Cells(i, 7).Comment.Text)
-            Dim Hex_max = candidate.Hex  ' .Cells(i, 8)
-            Dim HexA_max = candidate.HexA ' .Cells(i, 9)
-            Dim dHex_max = candidate.dHex ' .Cells(i, 10)
-            Dim Pen_max = candidate.Pen ' .Cells(i, 11)
-            Dim Mal_max = candidate.Mal '  .Cells(i, 12)
-            Dim Cou_max = candidate.Cou ' .Cells(i, 13)
-            Dim Fer_max = candidate.Fer ' .Cells(i, 14)
-            Dim Sin_max = candidate.Sin ' .Cells(i, 15)
-            Dim DDMP_max = candidate.DDMP ' .Cells(i, 16)
-            '  End With
+        'Read the results from combinatorial enumeration
+        ' With PublicVS_Code.Query
+        Dim AglyN = candidate.Name  ' .Cells(i, 7)
+        Dim Agly_w = candidate.ExactMass  ' Val(.Cells(i, 7).Comment.Text)
+        Dim Hex_max = candidate.Hex  ' .Cells(i, 8)
+        Dim HexA_max = candidate.HexA ' .Cells(i, 9)
+        Dim dHex_max = candidate.dHex ' .Cells(i, 10)
+        Dim Pen_max = candidate.Pen ' .Cells(i, 11)
+        Dim Mal_max = candidate.Mal '  .Cells(i, 12)
+        Dim Cou_max = candidate.Cou ' .Cells(i, 13)
+        Dim Fer_max = candidate.Fer ' .Cells(i, 14)
+        Dim Sin_max = candidate.Sin ' .Cells(i, 15)
+        Dim DDMP_max = candidate.DDMP ' .Cells(i, 16)
+        '  End With
 
-            'First, predict the ions based on the results from combinatorial enumeration
-            Dim prediction As New MS2A_TopDown_MS2Annotation_IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
+        'First, predict the ions based on the results from combinatorial enumeration
+        Dim prediction As New MS2A_TopDown_MS2Annotation_IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
                 .Hex_max = Hex_max,
             .HexA_max = HexA_max#, .dHex_max = dHex_max#, .Pen_max = Pen_max#, .Mal_max = Mal_max#, .Cou_max = Cou_max#, .Fer_max = Fer_max#, .Sin_max = Sin_max#, .DDMP_max = DDMP_max#}
-            Dim pIon_n As Integer
-            Dim pIonList As String(,) = Nothing
+        Dim pIon_n As Integer = 0
+        Dim pIonList As String(,) = Nothing
 
-            Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
-            Call prediction.getResult(pIon_n, pIonList)
+        Call prediction.MS2A_TopDown_MS2Annotation_IonPrediction()
+        Call prediction.getResult(pIon_n, pIonList)
 
-            'Second, compare the predicted ions with the measured
-            Dim aIon_n As Integer
-            Dim aIonList(0 To 3, 0 To 1) As Double
-            Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
+        'Second, compare the predicted ions with the measured
+        Dim aIon_n As Integer = 0
+        Dim aIonList(0 To 3, 0 To 1) As String
+        Dim AglyCheck As Boolean = MS2A_TopDown_MS2Annotation_IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
-            'Third, add a dropdown list for each candidate and show the annotation results in the list
-            ' With PublicVS_Code.Query.Cells(i, 23)
-            '  comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-            Dim combName = "dd_MS2A_TopDown_" & CStr(++i)
-            '   End With
-            Dim comb As New List(Of String)
+        'Third, add a dropdown list for each candidate and show the annotation results in the list
+        ' With PublicVS_Code.Query.Cells(i, 23)
+        '  comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+        Dim combName = "dd_MS2A_TopDown_" & CStr(i)
+        '   End With
+        Dim comb As New List(Of String)
 
-            'Fourth, save the annotation results in the cell
-            Dim aResult As String
-            aResult = ""
+        'Fourth, save the annotation results in the cell
+        Dim aResult As String
+        aResult = ""
 
-            If aIon_n > 0 Then
-                For s = 1 To aIon_n
-                    Dim aIonMZ = aIonList(1, s)
-                    Dim aIonAbu = aIonList(2, s)
-                    Dim aIonNM = aIonList(3, s)
-                    comb.Add(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
-                    aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
+        If aIon_n > 0 Then
+            For s = 1 To aIon_n
+                Dim aIonMZ = aIonList(1, s)
+                Dim aIonAbu = aIonList(2, s)
+                Dim aIonNM = aIonList(3, s)
+                comb.Add(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
+                aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " &
                     CStr(Format(aIonAbu * 100, "0.00")) & ", " & aIonNM & "; "
-                Next s
-            End If
+            Next s
+        End If
 
-            Dim combText = CStr(aIon_n) & " ions annotated"
+        Dim combText = CStr(aIon_n) & " ions annotated"
 
-            candidate.Ms2Anno = New NamedCollection(Of String) With {
+        candidate.Ms2Anno = New NamedCollection(Of String) With {
                 .name = combText,
                 .value = comb.ToArray,
                 .description = aResult
             }
 
-            'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
-            'With PublicVS_Code.Query
-            '    If AglyCheck = True Then
-            '        .Cells(i, 22) = "*"
-            '        .Cells(i, 22).HorizontalAlignment = xlCenter
-            '        .Cells(i, 22).Font.Color = RGB(118, 147, 60)
-            '    End If
-            '    If aIon_n > 0 Then
-            '        .Cells(i, 23) = CStr(aIon_n) & " ions annotated: " & Left(aResult, Len(aResult) - 2)
-            '        .Cells(i, 23).Font.Color = RGB(255, 255, 255)
-            '        .Cells(i, 23).HorizontalAlignment = xlFill
-            '    End If
-            'End With
+        'Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
+        'With PublicVS_Code.Query
+        '    If AglyCheck = True Then
+        '        .Cells(i, 22) = "*"
+        '        .Cells(i, 22).HorizontalAlignment = xlCenter
+        '        .Cells(i, 22).Font.Color = RGB(118, 147, 60)
+        '    End If
+        '    If aIon_n > 0 Then
+        '        .Cells(i, 23) = CStr(aIon_n) & " ions annotated: " & Left(aResult, Len(aResult) - 2)
+        '        .Cells(i, 23).Font.Color = RGB(255, 255, 255)
+        '        .Cells(i, 23).HorizontalAlignment = xlFill
+        '    End If
+        'End With
 
-            '  i = i + 1
+        '  i = i + 1
 
-            'If the last candidate has been analyzed, then exit the loop and go to the next compound
-            '  If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
-        Next
-
+        'If the last candidate has been analyzed, then exit the loop and go to the next compound
+        '  If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
     End Sub
 
     ''' <summary>
@@ -302,7 +311,7 @@ Public Class MS2ATopDown
     ''' <param name="pIon_n%"></param>
     ''' <param name="pIonList"></param>
     ''' <returns>AglyCheck</returns>
-    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As String(,), ByRef aIon_n As Integer, ByRef aIonList As Double(,)) As Boolean
+    Private Function MS2A_TopDown_MS2Annotation_IonMatching(query As Query, pIon_n%, pIonList As String(,), ByRef aIon_n As Integer, ByRef aIonList As String(,)) As Boolean
 
         'Initialize the annotated ion list aIonList() to none
         Dim AglyCheck = False
