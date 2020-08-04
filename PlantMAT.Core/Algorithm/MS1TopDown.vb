@@ -1,47 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::cf218c66fdc2869c4817eb912ecb39ac, PlantMAT.Core\Algorithm\MS1TopDown.vb"
+﻿#Region "Microsoft.VisualBasic::693f12eb199d4cb500b31123cee14117, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class MS1TopDown
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
-'                   RunDatabaseSearch
-' 
-'         Sub: applySettings, PatternPredictionLoop
-' 
-' 
-' /********************************************************************************/
+    '     Class MS1TopDown
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
+    '                   RunDatabaseSearch
+    ' 
+    '         Sub: applySettings, PatternPredictionLoop
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
