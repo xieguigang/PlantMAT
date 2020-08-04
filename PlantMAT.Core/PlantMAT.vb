@@ -1,48 +1,49 @@
 ﻿#Region "Microsoft.VisualBasic::f229815be26ad00a3917253cbdcb4da0, PlantMAT.Core\PlantMAT.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PlantMAT
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
-    '               ParseConfig, readLibrary
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module PlantMAT
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
+'               ParseConfig, readLibrary
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
@@ -218,5 +219,27 @@ Module PlantMAT
             End Function
 
         Return joinIterator().ToArray
+    End Function
+
+    ''' <summary>
+    ''' create plantMAT query from the given mgf ion stream
+    ''' </summary>
+    ''' <param name="mgf"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("as.query")>
+    <RApiReturn(GetType(Query))>
+    Public Function QueryFromMgf(<RRawVectorArgument> mgf As Object, Optional env As Environment = Nothing) As Object
+        Dim ions As pipeline = pipeline.TryCreatePipeline(Of Ions)(mgf, env)
+
+        If ions.isError Then
+            Return ions.getError
+        End If
+
+        Return ions.populates(Of Ions)(env) _
+            .Select(Function(ion)
+                        Return PublicVSCode.QueryFromMgf(ion)
+                    End Function) _
+            .ToArray
     End Function
 End Module

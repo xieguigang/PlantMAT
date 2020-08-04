@@ -59,9 +59,15 @@ Namespace Models
         ''' </summary>
         ''' <returns></returns>
         Public Property PeakNO As Integer
+        Public Property RT As Double
         Public Property PrecursorIon As Double
         Public Property Candidates As New List(Of CandidateResult)
         Public Property Ms2Peaks As Ms2Peaks
+        ''' <summary>
+        ''' a unique guid string of current query object
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Accession As String
 
         Default Public ReadOnly Property Candidate(i As Integer) As CandidateResult
             Get
