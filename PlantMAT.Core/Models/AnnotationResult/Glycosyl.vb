@@ -46,7 +46,6 @@ Namespace Models.AnnotationResult
 
     Public Class Glycosyl
 
-        Public Property title As String
         Public Property pResult As String
         Public Property Match_m As Integer
         Public Property Pred_n As Integer

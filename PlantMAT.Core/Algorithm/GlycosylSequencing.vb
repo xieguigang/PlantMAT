@@ -393,7 +393,10 @@ NextOne:
 NextPriIon:
             Next e
 
-            If RawScore > 0 Then Match_m = Match_m + 1
+            If RawScore > 0 Then
+                Match_m = Match_m + 1
+            End If
+
             Match_n = Match_n + 1
             ReDim Preserve RS(2, Match_n)
             RS(1, Match_n) = CStr(RawScore)
