@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
+Imports PlantMAT.Core.Models
 
 Public Class Settings
 

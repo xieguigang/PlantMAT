@@ -1,4 +1,6 @@
 ﻿Imports Microsoft.VisualBasic.Linq
+Imports PlantMAT.Core.Models
+Imports PlantMAT.Core.Models.AnnotationResult
 
 Namespace Algorithm
 
