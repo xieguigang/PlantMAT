@@ -78,7 +78,7 @@
             End If
 
             If Not query.Ms2Peaks Is Nothing Then
-                Call MS2P_MS2Prediction(query, CmpdTag, MIonMZ)
+                Call MS2P_MS2Prediction(query, MIonMZ)
             End If
             ' If SingleQ = True Then
 
@@ -120,11 +120,17 @@
 
     End Function
 
-    Sub MS2P_MS2Prediction(query As Query, CmpdTag As Integer, MIonMZ As Double)
+    Private Sub MS2P_MS2Prediction(query As Query, MIonMZ As Double)
+        'Predict MS2
+        For i As Integer = 0 To query.Candidates.Count - 1
+            'DoEvents
+            Call MS2P_MS2PredictionLoop(query, i, MIonMZ)
+        Next
+    End Sub
 
+    Private Sub MS2P_MS2PredictionLoop(query As Query, i As Integer, MIonMZ As Double)
         'Find how many structural possibilites for each peak in 'SMILES' sheet
-        Dim r = 3
-        Dim peakNo As Integer
+        ' Dim peakNo As Integer
         Dim RS(,) As String
         Dim k = 1
 
@@ -134,112 +140,106 @@
         '    r = r + 1
         'Loop
 
-        'Predict MS2
-        For i As Integer = 0 To query.Candidates.Count - 1
-            'DoEvents
+        ' Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
-            ' Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
+        'Create a combbox for MS2 prediction results of each combination possibility
+        ' With PublicVS_Code.Query.Cells(i, 26)
+        ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
+        Dim combName = "dd_MS2P_" & CStr(i)
+        Dim comb As New List(Of String)
+        Dim candidate As CandidateResult = query.Candidate(i)
+        ' End With
 
-            'Create a combbox for MS2 prediction results of each combination possibility
-            ' With PublicVS_Code.Query.Cells(i, 26)
-            ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
-            Dim combName = "dd_MS2P_" & CStr(i)
-            Dim comb As New List(Of String)
-            Dim candidate As CandidateResult = query.Candidate(i)
-            ' End With
+        'Predict MS2 [MSPrediction()] for each structural possibility
+        Dim PredNo = k
+        Dim Pred_n = 0
+        Dim Match_n = 0
+        Dim Match_m = 0
+        Dim GlycN As String
+        Dim Lt As String
+        Dim smilesPointer As SMILES
 
-            'Predict MS2 [MSPrediction()] for each structural possibility
-            Dim PredNo = k
-            Dim Pred_n = 0
-            Dim Match_n = 0
-            Dim Match_m = 0
-            Dim GlycN As String
-            Dim Lt As String
-            Dim smilesPointer As SMILES
+        ReDim RS(2, 1)
 
-            ReDim RS(2, 1)
+        ' With SMILES
+        '  Do While peakNo = CmpdTag And PredNo = k
+        ' DoEvents
+        For Each smiles In candidate.SMILES
+            Pred_n = Pred_n + 1
+            GlycN = smiles.GlycN   '.Cells(r, 4)
 
-            ' With SMILES
-            '  Do While peakNo = CmpdTag And PredNo = k
-            ' DoEvents
-            For Each smiles In candidate.SMILES
-                Pred_n = Pred_n + 1
-                GlycN = smiles.GlycN   '.Cells(r, 4)
+            Dim Comma_n = 0
+            For e = 1 To Len(GlycN)
+                Lt = Mid(GlycN, e, 1)
+                If Lt = "," Then Comma_n = Comma_n + 1
+            Next e
 
-                Dim Comma_n = 0
-                For e = 1 To Len(GlycN)
-                    Lt = Mid(GlycN, e, 1)
-                    If Lt = "," Then Comma_n = Comma_n + 1
-                Next e
+            RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-                RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
+            ' r = r + 1
+            ' peakNo = smiles.peakNo ' .Cells(r, 2)
 
-                r = r + 1
-                peakNo = smiles.peakNo ' .Cells(r, 2)
+            Dim temp = ""
 
-                Dim temp = ""
+            For l = 1 To Len(smiles.Sequence) ' .Cells(r, 3)
+                If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
+                temp = temp + Mid(smiles.Sequence, l, 1)
+            Next l
 
-                For l = 1 To Len(smiles.Sequence) ' .Cells(r, 3)
-                    If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-                    temp = temp + Mid(smiles.Sequence, l, 1)
-                Next l
+            PredNo = Val(temp)
+            ' Loop
+            '  End With
+            smilesPointer = smiles
 
-                PredNo = Val(temp)
-                ' Loop
-                '  End With
-                smilesPointer = smiles
-
-                If PredNo <> k Then
-                    Exit For
-                End If
-            Next
-
-            'Sort RS() in descending order and write new list to combbox and worksheet
-            Dim pResult = ""
-            Dim Best_n = 0
-            Dim u As Integer
-            Dim max_real As Integer
-
-            If Match_m > 0 Then
-                For t = 1 To Match_n
-                    Dim max_temp = -1
-                    For s = 1 To Match_n
-                        If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
-                            max_temp = Val(RS(1, s))
-                            u = s
-                        End If
-                    Next s
-                    RS(1, u) = RS(1, u) + "*"
-                    If t = 1 Then max_real = max_temp
-                    max_real = 1
-                    If max_temp / max_real = 1 Then Best_n = Best_n + 1
-                    comb.Add(CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u))
-                    pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
-                Next t
+            If PredNo <> k Then
+                Exit For
             End If
-
-            Dim combText = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
-
-            'With PublicVS_Code.Query
-            '    If .Cells(i, 22) = "*" Then
-            '        .Cells(i, 25) = "*"
-            '        .Cells(i, 25).HorizontalAlignment = xlCenter
-            '        .Cells(i, 25).Font.Color = RGB(118, 147, 60)
-            '    End If
-            '    If Match_n > 0 And Match_m > 0 Then
-            '        .Cells(i, 26) = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates: " &
-            '                        Left(pResult, Len(pResult) - 2)
-            '        .Cells(i, 26).Font.Color = RGB(255, 255, 255)
-            '        .Cells(i, 26).HorizontalAlignment = xlFill
-            '    End If
-            'End With
-
-            ' i = i + 1
-            ' k = k + 1
-
-            ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
         Next
 
+        'Sort RS() in descending order and write new list to combbox and worksheet
+        Dim pResult = ""
+        Dim Best_n = 0
+        Dim u As Integer
+        Dim max_real As Integer
+
+        If Match_m > 0 Then
+            For t = 1 To Match_n
+                Dim max_temp = -1
+                For s = 1 To Match_n
+                    If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
+                        max_temp = Val(RS(1, s))
+                        u = s
+                    End If
+                Next s
+                RS(1, u) = RS(1, u) + "*"
+                If t = 1 Then max_real = max_temp
+                max_real = 1
+                If max_temp / max_real = 1 Then Best_n = Best_n + 1
+                comb.Add(CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u))
+                pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
+            Next t
+        End If
+
+        Dim combText = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
+
+        'With PublicVS_Code.Query
+        '    If .Cells(i, 22) = "*" Then
+        '        .Cells(i, 25) = "*"
+        '        .Cells(i, 25).HorizontalAlignment = xlCenter
+        '        .Cells(i, 25).Font.Color = RGB(118, 147, 60)
+        '    End If
+        '    If Match_n > 0 And Match_m > 0 Then
+        '        .Cells(i, 26) = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates: " &
+        '                        Left(pResult, Len(pResult) - 2)
+        '        .Cells(i, 26).Font.Color = RGB(255, 255, 255)
+        '        .Cells(i, 26).HorizontalAlignment = xlFill
+        '    End If
+        'End With
+
+        ' i = i + 1
+        ' k = k + 1
+
+        ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
     End Sub
 
     Private Function MS2P_MS2Prediction_IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
