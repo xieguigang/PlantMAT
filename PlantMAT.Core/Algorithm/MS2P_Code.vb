@@ -138,6 +138,7 @@
             ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
             Dim combName = "dd_MS2P_" & CStr(i)
             Dim comb As New List(Of String)
+            Dim candidate As CandidateResult = query.Candidate(i)
             ' End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
@@ -147,15 +148,16 @@
             Dim Match_m = 0
             Dim GlycN As String
             Dim Lt As String
+            Dim smilesPointer As SMILES
 
             ReDim RS(2, 1)
 
             ' With SMILES
-            Do While peakNo = CmpdTag And PredNo = k
-                ' DoEvents
-
+            '  Do While peakNo = CmpdTag And PredNo = k
+            ' DoEvents
+            For Each smiles In candidate.SMILES
                 Pred_n = Pred_n + 1
-                GlycN =   '.Cells(r, 4)
+                GlycN = smiles.GlycN   '.Cells(r, 4)
 
                 Dim Comma_n = 0
                 For e = 1 To Len(GlycN)
@@ -166,18 +168,24 @@
                 RS = MS2P_MS2Prediction_IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
                 r = r + 1
-                peakNo = .Cells(r, 2)
+                peakNo = smiles.peakNo ' .Cells(r, 2)
 
                 Dim temp = ""
 
-                For l = 1 To Len(.Cells(r, 3))
-                    If Mid(.Cells(r, 3), l, 1) = "-" Then Exit For
-                    temp = temp + Mid(.Cells(r, 3), l, 1)
+                For l = 1 To Len(smiles.Sequence) ' .Cells(r, 3)
+                    If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
+                    temp = temp + Mid(smiles.Sequence, l, 1)
                 Next l
 
                 PredNo = Val(temp)
-            Loop
-            '  End With
+                ' Loop
+                '  End With
+                smilesPointer = smiles
+
+                If PredNo <> k Then
+                    Exit For
+                End If
+            Next
 
             'Sort RS() in descending order and write new list to combbox and worksheet
             Dim pResult = ""
