@@ -87,7 +87,7 @@ Public Class Settings
             .SearchPPM = 10,
             .NoiseFilter = 0.05,
             .mzPPM = 15,
-            .PatternPrediction = False
+            .PatternPrediction = True
         }
     End Function
 End Class
