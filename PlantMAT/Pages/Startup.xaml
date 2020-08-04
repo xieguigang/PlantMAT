@@ -1,0 +1,15 @@
+﻿<Window x:Class="Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlantMAT"
+        mc:Ignorable="d"
+        Title="Window1" Height="527" Width="815" WindowStyle="None" WindowStartupLocation="CenterScreen" >
+    <Grid Width="815" Height="527">
+        <Grid.Background>
+            <ImageBrush ImageSource="pack://siteoforigin:,,,/Resources/splash.png" Stretch="None"/>
+        </Grid.Background>
+
+    </Grid>
+</Window>

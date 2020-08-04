@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::f45ea36717d4fc07dfd1df98cbc26faa, PlantMAT\Pages\MainWindow.xaml.vb"
+﻿#Region "Microsoft.VisualBasic::76c71a1a391541ba4027de2573ae3fac, PlantMAT\Pages\Startup.xaml.vb"
 
     ' Author:
     ' 
@@ -31,7 +31,7 @@
 
     ' Summaries:
 
-    ' Class MainWindow
+    ' Class Window1
     ' 
     ' 
     ' 
@@ -39,6 +39,7 @@
 
 #End Region
 
-Class MainWindow
+Public Class Window1
 
 End Class
+
