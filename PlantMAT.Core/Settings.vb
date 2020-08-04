@@ -3,8 +3,6 @@ Imports System.Text
 
 Public Class Settings
 
-    Public Property InternalAglyconeDatabase As Boolean
-    Public Property ExternalAglyconeDatabase As String
     Public Property AglyconeType As db_AglyconeType
     Public Property AglyconeSource As db_AglyconeSource
     Public Property AglyconeMWRange As Double()
@@ -35,8 +33,6 @@ Public Class Settings
 
         Using Settingsfile As New StringWriter(text)
             With Settingsfile
-                .WriteLine("Internal Aglycone Database: " & InternalAglyconeDatabase)
-                .WriteLine("External Aglycone Database: " & ExternalAglyconeDatabase)
                 .WriteLine("Aglycone Type: " & AglyconeType)
                 .WriteLine("Aglycone Source: " & AglyconeSource)
                 .WriteLine("Aglycone MW Range: " & AglyconeMWRange.JoinBy(" "))
@@ -71,8 +67,6 @@ Public Class Settings
 
     Public Shared Function DefaultSettings() As Settings
         Return New Settings With {
-            .InternalAglyconeDatabase = True,
-            .ExternalAglyconeDatabase = Nothing,
             .AglyconeType = db_AglyconeType.Triterpene,
             .AglyconeSource = db_AglyconeSource.Medicago,
             .AglyconeMWRange = {400, 600},

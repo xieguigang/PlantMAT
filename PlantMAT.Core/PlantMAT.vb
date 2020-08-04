@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Scripting.MetaData
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
@@ -19,8 +20,10 @@ Module PlantMAT
 
     ''' <summary>
     ''' create plantMAT configuration
+    ''' 
+    ''' if all of the parameter is omit, then you can create a settings 
+    ''' model with all configuration set to default values.
     ''' </summary>
-    ''' <param name="ExternalAglyconeDatabase"></param>
     ''' <param name="AglyconeType"></param>
     ''' <param name="AglyconeSource"></param>
     ''' <param name="AglyconeMWRange"></param>
@@ -44,8 +47,7 @@ Module PlantMAT
     ''' <param name="PatternPrediction"></param>
     ''' <returns></returns>
     <ExportAPI("config")>
-    Public Function GetConfig(Optional ExternalAglyconeDatabase As String = Nothing,
-                              Optional AglyconeType As db_AglyconeType = db_AglyconeType.All,
+    Public Function GetConfig(Optional AglyconeType As db_AglyconeType = db_AglyconeType.All,
                               Optional AglyconeSource As db_AglyconeSource = db_AglyconeSource.All,
                               <RRawVectorArgument(GetType(Double))> Optional AglyconeMWRange As Object = "400,600",
                               <RRawVectorArgument(GetType(Integer))> Optional NumofSugarAll As Object = "0,6",
@@ -68,8 +70,6 @@ Module PlantMAT
                               Optional PatternPrediction As Boolean = True) As Settings
 
         Return New Settings With {
-            .InternalAglyconeDatabase = Not ExternalAglyconeDatabase.FileExists,
-            .ExternalAglyconeDatabase = ExternalAglyconeDatabase,
             .AglyconeMWRange = DirectCast(AglyconeMWRange, Double()),
             .AglyconeSource = AglyconeSource,
             .AglyconeType = AglyconeType,
@@ -92,6 +92,16 @@ Module PlantMAT
             .PrecursorIonType = PrecursorIonType,
             .SearchPPM = SearchPPM
         }
+    End Function
+
+    ''' <summary>
+    ''' parse the settings value from a given json string
+    ''' </summary>
+    ''' <param name="json">settings value in json text format.</param>
+    ''' <returns></returns>
+    <ExportAPI("parse.config")>
+    Public Function ParseConfig(json As String) As Settings
+        Return json.LoadJSON(Of Settings)
     End Function
 
     ''' <summary>
