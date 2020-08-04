@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3b023520dbdff4fafc6fecfe90991e66, PlantMAT.Core\PublicVSCode.vb"
+﻿#Region "Microsoft.VisualBasic::f6c935ebc0d29295225bd99dfc5d9d15, PlantMAT.Core\PublicVSCode.vb"
 
     ' Author:
     ' 
@@ -130,4 +130,3 @@ Module PublicVSCode
             .ToArray
     End Sub
 End Module
-

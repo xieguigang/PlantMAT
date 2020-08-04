@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::9f350b7d222c8d3f01b87c48948c31c3, PlantMAT.Core\Settings.vb"
+﻿#Region "Microsoft.VisualBasic::e9d8ac02cb7cb0ad3063c2315e1639c1, PlantMAT.Core\Settings.vb"
 
     ' Author:
     ' 
@@ -36,8 +36,7 @@
     '     Properties: AglyconeMWRange, AglyconeSource, AglyconeType, mzPPM, NoiseFilter
     '                 NumofAcidAll, NumofAcidCou, NumofAcidDDMP, NumofAcidFer, NumofAcidMal
     '                 NumofAcidSin, NumofSugarAll, NumofSugardHex, NumofSugarHex, NumofSugarHexA
-    '                 NumofSugarPen, PatternPrediction, PrecursorIonMZ, PrecursorIonN, PrecursorIonType
-    '                 SearchPPM
+    '                 NumofSugarPen, PrecursorIonMZ, PrecursorIonN, PrecursorIonType, SearchPPM
     ' 
     '     Function: DefaultSettings, ToString
     ' 
@@ -136,4 +135,3 @@ Public Class Settings
         }
     End Function
 End Class
-

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::0b4de36587f0ca2883f78ba9e8819fdb, PlantMAT.Core\zzz.vb"
+﻿#Region "Microsoft.VisualBasic::73bc90b34c27ff4c4c9c991c8487476c, PlantMAT.Core\zzz.vb"
 
     ' Author:
     ' 
@@ -81,4 +81,3 @@ Public Class zzz
             )
     End Sub
 End Class
-

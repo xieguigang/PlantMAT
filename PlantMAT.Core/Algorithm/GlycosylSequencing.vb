@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::bf83721770653b287b6f3c886f191015, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
+﻿#Region "Microsoft.VisualBasic::5d38a1575294cbd55df2440ed7c8c7f4, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,9 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: MS2P, MS2P_MS2Prediction_IonPredictionMatching, MS2P_MS2PredictionLoop
+    '         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
     ' 
-    '         Sub: applySettings, MS2P_MS2Prediction
+    '         Sub: applySettings, MS2Prediction
     ' 
     ' 
     ' /********************************************************************************/

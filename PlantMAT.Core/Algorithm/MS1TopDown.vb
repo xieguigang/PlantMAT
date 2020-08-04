@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c96d13072d578c8b4716c949885ccc09, PlantMAT.Core\Algorithm\MS1TopDown.vb"
+﻿#Region "Microsoft.VisualBasic::cf218c66fdc2869c4817eb912ecb39ac, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
     ' Author:
     ' 
@@ -35,10 +35,10 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: MS1_CombinatorialPrediciton_DatabaseSearch, MS1_CombinatorialPrediciton_InternalDatabase, MS1_CombinatorialPrediciton_PatternPrediction, (+2 Overloads) MS1_CombinatorialPrediction, MS1_CombinatorialPrediction_RestrictionCheck
-    '                   MS1CP
+    '         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
+    '                   RunDatabaseSearch
     ' 
-    '         Sub: applySettings, MS1_CombinatorialPrediciton_PatternPrediction
+    '         Sub: applySettings, PatternPredictionLoop
     ' 
     ' 
     ' /********************************************************************************/

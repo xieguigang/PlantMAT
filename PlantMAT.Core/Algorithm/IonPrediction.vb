@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::2acf246290d428c289329317aa9ee570, PlantMAT.Core\Algorithm\IonPrediction.vb"
+﻿#Region "Microsoft.VisualBasic::9bab3c4062df220cf0c4df48eeb04ca2, PlantMAT.Core\Algorithm\IonPrediction.vb"
 
     ' Author:
     ' 
@@ -34,7 +34,7 @@
     '     Class IonPrediction
     ' 
     '         Constructor: (+1 Overloads) Sub New
-    '         Sub: getResult, MS2A_TopDown_MS2Annotation_IonPrediction, MS2A_TopDown_MS2Annotation_IonPrediction_LossCombination
+    '         Sub: getResult, IonPrediction, LossCombination
     ' 
     ' 
     ' /********************************************************************************/

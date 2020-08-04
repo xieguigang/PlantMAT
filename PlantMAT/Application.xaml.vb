@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::cda7d5318cc4dd20ab2fc882fa2dbb27, PlantMAT\Application.xaml.vb"
+﻿#Region "Microsoft.VisualBasic::68b7e60026993a64a70f1cf15db95d7e, PlantMAT\Application.xaml.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Class Application
     ' can be handled in this file.
 
 End Class
-

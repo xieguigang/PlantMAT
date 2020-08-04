@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::62586fbcb4c0404c838d68ee20ad0a68, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
+﻿#Region "Microsoft.VisualBasic::3bc8939df9bfb922358a76a0864562a1, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
     ' Author:
     ' 
@@ -35,9 +35,9 @@
     ' 
     '         Constructor: (+1 Overloads) Sub New
     ' 
-    '         Function: MS2A_TopDown_MS2Annotation_IonMatching, MS2Annotation, MS2ATopDown
+    '         Function: IonMatching, MS2Annotation, MS2ATopDown
     ' 
-    '         Sub: applySettings, MS2A_TopDown_MS2Annotation, MS2A_TopDown_MS2AnnotationLoop
+    '         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
     ' 
     ' 
     ' /********************************************************************************/

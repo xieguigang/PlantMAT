@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4c1658780719cdc17f58f2efda6a7613, PlantMAT.Core\PlantMATException.vb"
+﻿#Region "Microsoft.VisualBasic::747e8ed8d1c5f8f577664409db7e928c, PlantMAT.Core\PlantMATException.vb"
 
     ' Author:
     ' 
@@ -45,4 +45,3 @@ Public Class PlantMATException : Inherits InvalidOperationException
         Call MyBase.New(message)
     End Sub
 End Class
-
