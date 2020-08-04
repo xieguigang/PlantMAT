@@ -1,44 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::f6c935ebc0d29295225bd99dfc5d9d15, PlantMAT.Core\PublicVSCode.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PublicVSCode
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    ' /********************************************************************************/
+' Module PublicVSCode
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.CompilerServices
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports PlantMAT.Core.Models
 
 Module PublicVSCode
@@ -129,4 +131,48 @@ Module PublicVSCode
                     End Function) _
             .ToArray
     End Sub
+
+    <Extension>
+    Friend Iterator Function GetPrecursorIons(names As IEnumerable(Of String)) As IEnumerable(Of PrecursorInfo)
+        Dim positive = Provider.GetCalculator("+")
+        Dim negative = Provider.GetCalculator("-")
+
+        For Each name As String In names
+            If name.Last = "+"c Then
+                If positive.ContainsKey(name) Then
+                    Yield New PrecursorInfo(positive(name))
+                Else
+                    Throw New PlantMATException($"missing or unsupported precursor type: " & name)
+                End If
+            ElseIf name.Last = "-"c Then
+                If negative.ContainsKey(name) Then
+                    Yield New PrecursorInfo(negative(name))
+                Else
+                    Throw New PlantMATException($"missing or unsupported precursor type: " & name)
+                End If
+            Else
+                Throw New PlantMATException($"unknown precursor type: " & name)
+            End If
+        Next
+    End Function
+
+    <Extension>
+    Public Function PrecursorValue(precursor_type As String) As (IonMZ_crc#, Rsyb$, Precursor As PrecursorInfo)
+        Dim precursor As PrecursorInfo
+        Dim IonMZ_crc As Double
+        Dim Rsyb As String
+
+        'Find the ion type (pos or neg) based on the setting
+        If Right(precursor_type, 1) = "-" Then
+            precursor = New PrecursorInfo(Provider.GetCalculator("-")(precursor_type))
+            IonMZ_crc = (precursor.charge * e_w) - Math.Abs(precursor.adduct)  ' H_w
+            Rsyb = precursor.precursor_type.StringReplace("\[(\d+)?M", "") ' "-H]-"
+        Else
+            precursor = New PrecursorInfo(Provider.GetCalculator("+")(precursor_type))
+            IonMZ_crc = Math.Abs(precursor.adduct) - (precursor.charge * e_w) ' H_w
+            Rsyb = precursor.precursor_type.StringReplace("\[(\d+)?M", "") ' "+H]+"
+        End If
+
+        Return (IonMZ_crc, Rsyb, precursor)
+    End Function
 End Module

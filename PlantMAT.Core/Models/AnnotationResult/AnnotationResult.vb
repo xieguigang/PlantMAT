@@ -49,6 +49,8 @@ Namespace Models.AnnotationResult
 
     Public Class CandidateResult
 
+        Public Property precursor_type As String
+
         ''' <summary>
         ''' 0
         ''' </summary>

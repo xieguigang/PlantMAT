@@ -1,46 +1,46 @@
 ﻿#Region "Microsoft.VisualBasic::e9d8ac02cb7cb0ad3063c2315e1639c1, PlantMAT.Core\Settings.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Class Settings
-    ' 
-    '     Properties: AglyconeMWRange, AglyconeSource, AglyconeType, mzPPM, NoiseFilter
-    '                 NumofAcidAll, NumofAcidCou, NumofAcidDDMP, NumofAcidFer, NumofAcidMal
-    '                 NumofAcidSin, NumofSugarAll, NumofSugardHex, NumofSugarHex, NumofSugarHexA
-    '                 NumofSugarPen, PrecursorIonMZ, PrecursorIonN, PrecursorIonType, SearchPPM
-    ' 
-    '     Function: DefaultSettings, ToString
-    ' 
-    ' /********************************************************************************/
+' Class Settings
+' 
+'     Properties: AglyconeMWRange, AglyconeSource, AglyconeType, mzPPM, NoiseFilter
+'                 NumofAcidAll, NumofAcidCou, NumofAcidDDMP, NumofAcidFer, NumofAcidMal
+'                 NumofAcidSin, NumofSugarAll, NumofSugardHex, NumofSugarHex, NumofSugarHexA
+'                 NumofSugarPen, PrecursorIonMZ, PrecursorIonN, PrecursorIonType, SearchPPM
+' 
+'     Function: DefaultSettings, ToString
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -67,9 +67,7 @@ Public Class Settings
     Public Property NumofAcidSin As Integer()
     Public Property NumofAcidDDMP As Integer()
 
-    Public Property PrecursorIonType As String
-    Public Property PrecursorIonMZ As Double
-    Public Property PrecursorIonN As Integer
+    Public Property PrecursorIonType As String()
     Public Property SearchPPM As Double
     Public Property NoiseFilter As Double
     Public Property mzPPM As Double
@@ -96,9 +94,7 @@ Public Class Settings
                 .WriteLine("Num of Acid Sin: " & NumofAcidSin.JoinBy(" "))
                 .WriteLine("Num of Acid DDMP: " & NumofAcidDDMP.JoinBy(" "))
 
-                .WriteLine("Precursor Ion Type: " & PrecursorIonType)
-                .WriteLine("Precursor Ion MZ: " & PrecursorIonMZ)
-                .WriteLine("Precursor Ion N: " & PrecursorIonN)
+                .WriteLine("Precursor Ion Type: " & PrecursorIonType.JoinBy(", "))
                 .WriteLine("Search PPM: " & SearchPPM)
                 .WriteLine("Noise Filter: " & NoiseFilter)
                 .WriteLine("m/z PPM: " & mzPPM)
@@ -126,9 +122,7 @@ Public Class Settings
             .NumofAcidFer = {0, 1},
             .NumofAcidSin = {0, 1},
             .NumofAcidDDMP = {0, 1},
-            .PrecursorIonType = "[M-H]-",
-            .PrecursorIonMZ = -1.007277,
-            .PrecursorIonN = 1,
+            .PrecursorIonType = {"[M]+", "[M]-", "[M+H]+", "[M-H]-"},
             .SearchPPM = 10,
             .NoiseFilter = 0.05,
             .mzPPM = 15

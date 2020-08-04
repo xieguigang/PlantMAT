@@ -5,13 +5,18 @@ setwd(!script$dir);
 const library.csv = "../SampleData/Library.csv";
 const demo as string = "../SampleData/A17_Root/metabolite_list.txt";
 
+# use default configuration
+const settings = config();
+
+print(settings);
+
 library.csv
 :> read.library
-:> MS1TopDown(settings = config())
+:> MS1TopDown(settings)
 :> as.object
 :> do.call("MS1CP", query = readLines(demo) :> query.ms1)
 :> join.ms2(files = list.files(dirname(demo), pattern = "*.txt"))
-:> as.object(MS2ATopDown(settings = config()))$MS2Annotation
+:> as.object(MS2ATopDown(settings))$MS2Annotation
 :> json(compress = FALSE)
 :> writeLines("./A17_Root_MS2TopDown.json")
 ;

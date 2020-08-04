@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::3bc8939df9bfb922358a76a0864562a1, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MS2ATopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: IonMatching, MS2Annotation, MS2ATopDown
-    ' 
-    '         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MS2ATopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: IonMatching, MS2Annotation, MS2ATopDown
+' 
+'         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
@@ -58,7 +59,6 @@ Namespace Algorithm
         Dim settings As Settings
         Dim mzPPM As Double
         Dim NoiseFilter As Double
-        Dim PrecursorIonType$
 
         Sub New(settings As Settings)
             Me.settings = settings
@@ -68,7 +68,6 @@ Namespace Algorithm
         Private Sub applySettings()
             mzPPM = settings.mzPPM
             NoiseFilter = settings.NoiseFilter
-            PrecursorIonType = settings.PrecursorIonType
         End Sub
 
         Public Function MS2Annotation(queries As Query()) As Query()
@@ -97,20 +96,9 @@ Namespace Algorithm
                 'Read compound serial number and precuror ion mz
                 Dim CmpdTag = query.PeakNO
                 Dim DHIonMZ = query.PrecursorIon
-                Dim IonMZ_crc As Double
-                Dim Rsyb As String
-
-                'Find the ion type (pos or neg) based on the setting
-                If Right(PrecursorIonType, 1) = "-" Then
-                    IonMZ_crc = e_w - H_w
-                    Rsyb = "-H]-"
-                Else
-                    IonMZ_crc = H_w - e_w
-                    Rsyb = "+H]+"
-                End If
 
                 'Perform the MS2 annotation and display the results
-                Call MS2Annotation(query, IonMZ_crc, Rsyb)
+                Call MS2Annotation(query)
 
                 Yield query
             Next
@@ -120,18 +108,20 @@ Namespace Algorithm
         ''' Loop through all candidates for each compound
         ''' </summary>
         ''' <param name="query"></param>
-        ''' <param name="IonMZ_crc"></param>
-        ''' <param name="Rsyb"></param>
-        Private Sub MS2Annotation(query As Query, IonMZ_crc As Double, Rsyb As String)
+        Private Sub MS2Annotation(query As Query)
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
+                    Dim candidate As CandidateResult = query(i)
+
+                    With PublicVSCode.PrecursorValue(candidate.precursor_type)
+                        Call MS2AnnotationLoop(query, .IonMZ_crc, .Rsyb, i)
+                    End With
                 End If
             Next
         End Sub
 
         Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
-            Dim candidate As CandidateResult = query.Candidate(i)
+            Dim candidate As CandidateResult = query(i)
 
             'Read the results from combinatorial enumeration
             Dim AglyN = candidate.Name

@@ -1,45 +1,45 @@
 ﻿#Region "Microsoft.VisualBasic::d218014795fe65e15e46920cb0e7697c, PlantMAT.Core\PlantMAT.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PlantMAT
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
-    '               ParseConfig, readLibrary
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module PlantMAT
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
+'               ParseConfig, readLibrary
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -109,7 +109,7 @@ Module PlantMAT
                               <RRawVectorArgument(GetType(Integer))> Optional NumofAcidFer As Object = "0,1",
                               <RRawVectorArgument(GetType(Integer))> Optional NumofAcidSin As Object = "0,1",
                               <RRawVectorArgument(GetType(Integer))> Optional NumofAcidDDMP As Object = "0,1",
-                              Optional PrecursorIonType As String = "[M-H]-",
+                              <RRawVectorArgument(GetType(String))> Optional PrecursorIonType As Object = "[M]+|[M]-|[M+H]+|[M-H]-",
                               Optional PrecursorIonMZ As Double = -1.007277,
                               Optional PrecursorIonN As Integer = 1,
                               Optional SearchPPM As Double = 10,
@@ -133,8 +133,6 @@ Module PlantMAT
             .NumofSugarHex = DirectCast(NumofSugarHex, Integer()),
             .NumofSugarHexA = DirectCast(NumofSugarHexA, Integer()),
             .NumofSugarPen = DirectCast(NumofSugarPen, Integer()),
-            .PrecursorIonMZ = PrecursorIonMZ,
-            .PrecursorIonN = PrecursorIonN,
             .PrecursorIonType = PrecursorIonType,
             .SearchPPM = SearchPPM
         }

@@ -52,9 +52,9 @@ Namespace Algorithm
 
     Public Class GlycosylSequencing
 
-        Dim PrecursorIonType$
-        Dim PrecursorIonMZ#
-        Dim PrecursorIonN%
+        'Dim PrecursorIonType$
+        'Dim PrecursorIonMZ#
+        'Dim PrecursorIonN%
         Dim mzPPM As Double
 
         Dim settings As Settings
@@ -67,19 +67,31 @@ Namespace Algorithm
         Private Sub applySettings()
             mzPPM = settings.mzPPM
 
-            PrecursorIonType = settings.PrecursorIonType
-            PrecursorIonMZ = settings.PrecursorIonMZ
-            PrecursorIonN = settings.PrecursorIonN
+            'PrecursorIonType = settings.PrecursorIonType
+            'PrecursorIonMZ = settings.PrecursorIonMZ
+            'PrecursorIonN = settings.PrecursorIonN
         End Sub
 
         Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
             For Each query As Query In queries
-                Dim CmpdTag = query.PeakNO
-                Dim DHIonMZ = query.PrecursorIon
+                If Not query.Ms2Peaks Is Nothing Then
+                    Call MS2Prediction(query)
+                End If
+
+                Yield query
+            Next
+        End Function
+
+        Private Sub MS2Prediction(query As Query)
+            Dim DHIonMZ = query.PrecursorIon
+
+            ' Predict MS2
+            For i As Integer = 0 To query.Candidates.Count - 1
                 Dim MIonMZ#
                 Dim Rsyb$
+                Dim precursor = query(i).precursor_type
 
-                If Right(PrecursorIonType, 1) = "-" Then
+                If Right(precursor, 1) = "-" Then
                     MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) - H_w + e_w
                     Rsyb = "-H]-"
                 Else
@@ -87,17 +99,6 @@ Namespace Algorithm
                     Rsyb = "+H]+"
                 End If
 
-                If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2Prediction(query, MIonMZ)
-                End If
-
-                Yield query
-            Next
-        End Function
-
-        Private Sub MS2Prediction(query As Query, MIonMZ As Double)
-            ' Predict MS2
-            For i As Integer = 0 To query.Candidates.Count - 1
                 For Each smile As SMILES In query(i).SMILES
                     MS2PredictionLoop(query, i, smile, MIonMZ).DoCall(AddressOf query(i).Glycosyl.Add)
                 Next
