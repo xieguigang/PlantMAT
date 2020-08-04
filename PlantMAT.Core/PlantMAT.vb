@@ -237,6 +237,7 @@ Module PlantMAT
         End If
 
         Return ions.populates(Of Ions)(env) _
+            .AsParallel _
             .Select(Function(ion)
                         Return PublicVSCode.QueryFromMgf(ion)
                     End Function) _
