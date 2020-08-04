@@ -81,17 +81,17 @@ Namespace Algorithm
 
         Sub IonPrediction()
 
-            'Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
+            ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
             Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max
 
-            'Calculate the the mass of precursor ion
+            ' Calculate the the mass of precursor ion
             Dim MIonMZ = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
                  Total_max * H2O_w + IonMZ_crc
 
-            'Do brute force iteration to generate all hypothetical neutral losses
-            'as a combination of different glycosyl and acyl groups, and
-            'for each predicted neutral loss, calcualte the ion mz
+            ' Do brute force iteration to generate all hypothetical neutral losses
+            ' as a combination of different glycosyl and acyl groups, and
+            ' for each predicted neutral loss, calcualte the ion mz
             For Hex_n = 0 To Hex_max
                 For HexA_n = 0 To HexA_max
                     For dHex_n = 0 To dHex_max
@@ -143,24 +143,26 @@ Namespace Algorithm
 
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
-            'Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
+            ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
             Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
-            'Calculate the mass of the predicte neutral loss
+            ' Calculate the mass of the predicte neutral loss
             Dim Loss_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w +
                  Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w -
                  Total_n * H2O_w + H2O_n * H2O_w + CO2_n * CO2_w
 
-            'Calculate the precuror ion mz based on the calcualted loss mass
+            ' Calculate the precuror ion mz based on the calcualted loss mass
             Dim pIonMZ = MIonMZ - Loss_w
             Dim pIonNM As String
 
-            'Find if the ion is related to the H2O/CO2 loss from aglycone
+            ' Find if the ion is related to the H2O/CO2 loss from aglycone
             If Hex_n = Hex_max And HexA_n = HexA_max And dHex_n = dHex_max And Pen_n = Pen_max And
-           Mal_n = Mal_max And Cou_n = Cou_max And Fer_n = Fer_max And Sin_n = Sin_max And DDMP_n = DDMP_max Then
+                Mal_n = Mal_max And Cou_n = Cou_max And Fer_n = Fer_max And Sin_n = Sin_max And DDMP_n = DDMP_max Then
+
                 pIonNM = "[Agly" & H2OLoss & CO2Loss & Rsyb
+
                 If H2OLoss & CO2Loss = "" Or (H2OLoss & CO2Loss = "-H2O-CO2" And
-               (AglyN = "Medicagenic acid" Or AglyN = "Zanhic acid")) Then
+                    (AglyN = "Medicagenic acid" Or AglyN = "Zanhic acid")) Then
                     pIonNM = "*" & pIonNM
                 End If
             Else
@@ -169,7 +171,7 @@ Namespace Algorithm
                             H2OLoss & CO2Loss & Rsyb
             End If
 
-            'Save the predicted ion mz to data array pIonList()
+            ' Save the predicted ion mz to data array pIonList()
             pIon_n = pIon_n + 1
             ReDim Preserve pIonList(0 To 2, 0 To pIon_n)
             pIonList(1, pIon_n) = pIonMZ

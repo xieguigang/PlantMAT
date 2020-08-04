@@ -156,6 +156,10 @@ Module PublicVSCode
         Next
     End Function
 
+    Public Function GetPrecursorInfo(precursor_type As String) As PrecursorInfo
+        Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type))
+    End Function
+
     <Extension>
     Public Function PrecursorValue(precursor_type As String) As (IonMZ_crc#, Rsyb$, Precursor As PrecursorInfo)
         Dim precursor As PrecursorInfo

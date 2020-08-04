@@ -52,11 +52,7 @@ Namespace Algorithm
 
     Public Class GlycosylSequencing
 
-        'Dim PrecursorIonType$
-        'Dim PrecursorIonMZ#
-        'Dim PrecursorIonN%
         Dim mzPPM As Double
-
         Dim settings As Settings
 
         Sub New(settings As Settings)
@@ -66,10 +62,6 @@ Namespace Algorithm
 
         Private Sub applySettings()
             mzPPM = settings.mzPPM
-
-            'PrecursorIonType = settings.PrecursorIonType
-            'PrecursorIonMZ = settings.PrecursorIonMZ
-            'PrecursorIonN = settings.PrecursorIonN
         End Sub
 
         Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
@@ -88,15 +80,12 @@ Namespace Algorithm
             ' Predict MS2
             For i As Integer = 0 To query.Candidates.Count - 1
                 Dim MIonMZ#
-                Dim Rsyb$
-                Dim precursor = PublicVSCode.PrecursorValue(query(i).precursor_type)
+                Dim precursor = PublicVSCode.GetPrecursorInfo(query(i).precursor_type)
 
-                If precursor.Rsyb.Last = "-"c Then
-                    MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) - H_w + e_w
-                    Rsyb = "-H]-"
+                If precursor.precursor_type.Last = "-"c Then
+                    MIonMZ = ((DHIonMZ - precursor.adduct) / precursor.M) - H_w + e_w
                 Else
-                    MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) + H_w - e_w
-                    Rsyb = "+H]+"
+                    MIonMZ = ((DHIonMZ - precursor.adduct) / precursor.M) + H_w - e_w
                 End If
 
                 For Each smile As SMILES In query(i).SMILES
@@ -109,12 +98,12 @@ Namespace Algorithm
             ' Find how many structural possibilites for each peak in 'SMILES' sheet
             Dim RS(,) As String
 
-            'Create a combbox for MS2 prediction results of each combination possibility
+            ' Create a combbox for MS2 prediction results of each combination possibility
             Dim combName = "dd_MS2P_" & CStr(i)
             Dim comb As New List(Of String)
             Dim candidate As CandidateResult = query.Candidate(i)
 
-            'Predict MS2 [MSPrediction()] for each structural possibility
+            ' Predict MS2 [MSPrediction()] for each structural possibility
             Dim PredNo As Integer
             Dim Pred_n = 0
             Dim Match_n = 0
@@ -124,7 +113,7 @@ Namespace Algorithm
 
             ReDim RS(2, 1)
 
-            '  For Each smiles As SMILES In candidate.SMILES
+            ' For Each smiles As SMILES In candidate.SMILES
             Pred_n = Pred_n + 1
             GlycN = smiles.GlycN
 
@@ -145,54 +134,65 @@ Namespace Algorithm
 
             PredNo = CInt(Val(temp))
 
-            'Sort RS() in descending order and write new list to combbox and worksheet
+            ' Sort RS() in descending order and write new list to combbox and worksheet
             Dim pResult = ""
             Dim Best_n = 0
             Dim u As Integer
             Dim max_real As Integer
 
             If Match_m > 0 Then
-                For t = 1 To Match_n
+                For t As Integer = 1 To Match_n
                     Dim max_temp = -1
+
                     For s = 1 To Match_n
                         If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
                             max_temp = CInt(Val(RS(1, s)))
                             u = s
                         End If
                     Next s
+
                     RS(1, u) = RS(1, u) + "*"
-                    If t = 1 Then max_real = max_temp
+
+                    If t = 1 Then
+                        max_real = max_temp
+                    End If
+
                     max_real = 1
-                    If max_temp / max_real = 1 Then Best_n = Best_n + 1
+
+                    If max_temp / max_real = 1 Then
+                        Best_n = Best_n + 1
+                    End If
+
                     comb.Add(CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u))
                     pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
                 Next t
             End If
 
             Return New Glycosyl With {
-            .Match_m = Match_m,
-            .Pred_n = Pred_n,
-            .pResult = pResult,
-            .list = comb.ToArray
-        }
+                .Match_m = Match_m,
+                .Pred_n = Pred_n,
+                .pResult = pResult,
+                .list = comb.ToArray
+            }
         End Function
 
         Private Function IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
-
-            '1. Declare variables and assign mass of [M-H2O]
+            ' 1. Declare variables and assign mass of [M-H2O]
             Dim m(,) As String, u(,) As String, Lt As String
             Dim Loss1 As Double, pIonList(,) As Double
             Dim pIonMZ As Double, eIonMZ As Double, eIonInt As Double
+
             ReDim m(20, 20), u(1, 100)
 
             Dim f1(1, 100) As Double, f2(1, 100) As Double
             Dim w(5, 100) As Double
             Dim SugComb As String = ""
 
-            '2. Read aglyone/sugar/acid combination and store each component to u()
+            ' 2. Read aglyone/sugar/acid combination and store each component to u()
             Dim Comma_n = 0
             Dim g = 1
-            For e = 1 To Len(GlycN)
+
+            For e As Integer = 1 To Len(GlycN)
                 Lt = Mid(GlycN, e, 1)
                 If Lt = "," And Comma_n = 0 Then
                     SugComb = Right(GlycN, Len(GlycN) - e - 1)
@@ -210,7 +210,7 @@ Namespace Algorithm
             Dim NameComponent As String
             Dim NumDash As Double
 
-            '3. Identify each component, calculate mass, and store value to w()
+            ' 3. Identify each component, calculate mass, and store value to w()
             Lt = ""
             For e = 2 To g
                 Dim s = 1
@@ -234,9 +234,10 @@ Namespace Algorithm
                 Next h12
             Next e
 
-            '4. Fragment each sugar chain forward (NL = sugar portions);
-            'calualte mass of each fragment (loss), and store value to f1()
+            ' 4. Fragment each sugar chain forward (NL = sugar portions);
+            ' calualte mass of each fragment (loss), and store value to f1()
             Dim h = 0
+
             For c1 = 1 To 5
                 For c1f = 1 To 100
                     If w(c1, c1f) = 0 Then Exit For
@@ -277,8 +278,8 @@ Namespace Algorithm
                 Next c1f
             Next c1
 
-            '5. Fragment each sugar chain backward (ion = sugar portions);
-            'calualte mass of each fragment (loss), and store value to f1()
+            ' 5. Fragment each sugar chain backward (ion = sugar portions);
+            ' calualte mass of each fragment (loss), and store value to f1()
             Dim h1 = h + 1
 
             Dim NameSugar As String = ""
@@ -346,10 +347,11 @@ Namespace Algorithm
                 f1(1, h2) = MIonMZ - f1(1, h2) + H_w - e_w
             Next h2
 
-            '6. Remove duplicates (loss with same mass) in array f1() and create a new list to f2()
+            ' 6. Remove duplicates (loss with same mass) in array f1() and create a new list to f2()
             g = 1
             f2(1, 1) = f1(1, 1)
-            For e = 1 To h
+
+            For e As Integer = 1 To h
                 For s = 1 To g
                     If Int(f1(1, e)) = Int(f2(1, s)) Then GoTo NextOne
                 Next s
@@ -358,8 +360,9 @@ Namespace Algorithm
 NextOne:
             Next e
 
-            '7. Create ion list based on possible sugar/acid losses in f2() and store value to pIonList()
+            ' 7. Create ion list based on possible sugar/acid losses in f2() and store value to pIonList()
             ReDim pIonList(g, 4)
+
             For e = 1 To g
                 h = 1
                 For x = 0 To 1
@@ -374,8 +377,9 @@ NextOne:
             Dim eIon_n = eIonList.mz.Length
             Dim TotalIonInt As Double = eIonList.TotalIonInt
 
-            '8. Compare pIonList() with eIonlist(), calculate raw score, and save result to RS()
+            ' 8. Compare pIonList() with eIonlist(), calculate raw score, and save result to RS()
             Dim RawScore As Double = 0
+
             For e = 1 To g
                 For h = 1 To 4
                     pIonMZ = pIonList(e, h)
