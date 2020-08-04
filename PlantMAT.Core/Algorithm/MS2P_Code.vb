@@ -134,6 +134,7 @@
             ' With PublicVS_Code.Query.Cells(i, 26)
             ' comb = PublicVS_Code.Query.DropDowns.Add(.Left, .Top, .Width, .Height)
             Dim combName = "dd_MS2P_" & CStr(i)
+            Dim comb As New List(Of String)
             ' End With
 
             'Predict MS2 [MSPrediction()] for each structural possibility
@@ -188,26 +189,26 @@
                     If t = 1 Then max_real = max_temp
                     max_real = 1
                     If max_temp / max_real = 1 Then Best_n = Best_n + 1
-                    comb.AddItem CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u)
-          pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
+                    comb.Add(CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u))
+                    pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
                 Next t
             End If
 
-            comb.Text = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
+            Dim combText = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
 
-            With PublicVS_Code.Query
-                If .Cells(i, 22) = "*" Then
-                    .Cells(i, 25) = "*"
-                    .Cells(i, 25).HorizontalAlignment = xlCenter
-                    .Cells(i, 25).Font.Color = RGB(118, 147, 60)
-                End If
-                If Match_n > 0 And Match_m > 0 Then
-                    .Cells(i, 26) = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates: " &
-                                    Left(pResult, Len(pResult) - 2)
-                    .Cells(i, 26).Font.Color = RGB(255, 255, 255)
-                    .Cells(i, 26).HorizontalAlignment = xlFill
-                End If
-            End With
+            'With PublicVS_Code.Query
+            '    If .Cells(i, 22) = "*" Then
+            '        .Cells(i, 25) = "*"
+            '        .Cells(i, 25).HorizontalAlignment = xlCenter
+            '        .Cells(i, 25).Font.Color = RGB(118, 147, 60)
+            '    End If
+            '    If Match_n > 0 And Match_m > 0 Then
+            '        .Cells(i, 26) = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates: " &
+            '                        Left(pResult, Len(pResult) - 2)
+            '        .Cells(i, 26).Font.Color = RGB(255, 255, 255)
+            '        .Cells(i, 26).HorizontalAlignment = xlFill
+            '    End If
+            'End With
 
             ' i = i + 1
             ' k = k + 1
@@ -220,8 +221,8 @@
     Sub MS2P_MS2Prediction_IonPredictionMatching()
 
         '1. Declare variables and assign mass of [M-H2O]
-        Dim m() As String, u() As String, Lt As String
-        Dim n1() As Double, n2() As Double, w() As Double
+        Dim m(,) As String, u(,) As String, Lt As String
+        Dim n1(,) As Double, n2(,) As Double, w(,) As Double
         Dim Loss As Double, Loss1 As Double, pIonList() As Double
         Dim pIonMZ As Double, eIonMZ As Double, eIonInt As Double
         ReDim m(20, 20), u(1, 100)

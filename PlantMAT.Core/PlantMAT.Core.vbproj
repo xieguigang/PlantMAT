@@ -110,6 +110,7 @@
     <Compile Include="Algorithm\MS1TopDown.vb" />
     <Compile Include="Algorithm\MS2ATopDown.vb" />
     <Compile Include="Algorithm\MS2P_Code.vb" />
+    <Compile Include="zzz.vb" />
     <Compile Include="Models\Models.vb" />
     <Compile Include="Models\Query.vb" />
     <Compile Include="Models\Library.vb" />
@@ -159,7 +160,7 @@
       <Name>R</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data\DataFrame\47_dotnet_ms-vb_data.framework.vbproj">
-      <Project>{7283C179-F852-4EAD-8D8F-B82EF2CBD7DB}</Project>
+      <Project>{7283c179-f852-4ead-8d8f-b82ef2cbd7db}</Project>
       <Name>47_dotnet_ms-vb_data.framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\47-dotnet_Microsoft.VisualBasic.vbproj">
