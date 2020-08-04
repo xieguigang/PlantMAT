@@ -101,7 +101,7 @@ Module PlantMAT
     ''' <returns></returns>
     <ExportAPI("read.library")>
     Public Function readLibrary(file As String) As Library()
-        Return file.LoadCsv(Of Library).ToArray
+        Return file.LoadCsv(Of Library)(mute:=True).ToArray
     End Function
 
     ''' <summary>

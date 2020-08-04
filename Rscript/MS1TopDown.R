@@ -2,7 +2,7 @@ imports "PlantMAT" from "PlantMAT.Core";
 
 setwd(!script$dir);
 
-const library.csv = "../Library.csv";
+const library.csv = "../SampleData/Library.csv";
 const demo as string = "../SampleData/A17_Root/metabolite_list.txt";
 
 library.csv
