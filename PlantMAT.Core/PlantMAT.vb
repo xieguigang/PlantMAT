@@ -2,6 +2,7 @@
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 
 ''' <summary>
@@ -126,5 +127,29 @@ Module PlantMAT
     <ExportAPI("query.ms1")>
     Public Function ms1Query(metabolite_list As String()) As Query()
         Return Query.ParseMs1PeakList(file:=metabolite_list)
+    End Function
+
+    <ExportAPI("join.ms2")>
+    <RApiReturn(GetType(Query))>
+    Public Function joinMs2Query(<RRawVectorArgument> ms1 As Object, files As String(), Optional env As Environment = Nothing) As Object
+        Dim queries As pipeline = pipeline.TryCreatePipeline(Of Query)(ms1, env)
+
+        If queries.isError Then
+            Return queries.getError
+        End If
+
+        Dim fileIndex = files.ToDictionary(Function(path) path.BaseName)
+        Dim joinIterator =
+            Iterator Function() As IEnumerable(Of Query)
+                For Each query As Query In queries.populates(Of Query)(env)
+                    If fileIndex.ContainsKey(query.PeakNO) Then
+                        query.Ms2Peaks = Ms2Peaks.ParseMs2(fileIndex(query.PeakNO.ToString).ReadAllLines)
+                    End If
+
+                    Yield query
+                Next
+            End Function
+
+        Return pipeline.CreateFromPopulator(joinIterator())
     End Function
 End Module
