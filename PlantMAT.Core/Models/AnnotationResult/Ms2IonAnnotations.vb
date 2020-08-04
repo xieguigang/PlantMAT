@@ -45,9 +45,15 @@ Namespace Models.AnnotationResult
     Public Class Ms2IonAnnotations
 
         Public Property title As String
-        Public Property annotations As String()
-        Public Property comment As String
+        Public Property ions As IonAnnotation()
         Public Property aglycone As Boolean
+
+    End Class
+
+    Public Class IonAnnotation
+        Public Property productMz As Double
+        Public Property ionAbu As Double
+        Public Property annotation As String
 
     End Class
 End Namespace

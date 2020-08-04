@@ -164,11 +164,8 @@ Namespace Algorithm
             Dim AglyCheck As Boolean = IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
 
             ' Third, add a dropdown list for each candidate and show the annotation results in the list
-            Dim combName = "dd_MS2A_TopDown_" & CStr(i)
-            Dim comb As New List(Of String)
-
             ' Fourth, save the annotation results in the cell
-            Dim aResult As String = ""
+            Dim aResult As New List(Of IonAnnotation)
 
             If aIon_n > 0 Then
                 For s As Integer = 1 To aIon_n
@@ -176,23 +173,22 @@ Namespace Algorithm
                     Dim aIonAbu As Double = DirectCast(aIonList(2, s), Double)
                     Dim aIonNM As String = DirectCast(aIonList(3, s), String)
 
-                    comb.Add(CStr(Format(aIonAbu, "0.000")) & " " & aIonNM)
-                    aResult = aResult & CStr(Format(aIonMZ, "0.0000")) & ", " & CStr(Format(aIonAbu * 100, "0.00")) & ", " & aIonNM & "; "
+                    aResult += New IonAnnotation With {
+                        .productMz = aIonMZ,
+                        .ionAbu = aIonAbu * 100,
+                        .annotation = aIonNM
+                    }
                 Next s
             End If
 
             Dim combText = CStr(aIon_n) & " ions annotated"
 
+            ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
                 .title = combText,
-                .annotations = comb.ToArray,
-                .comment = aResult
+                .ions = aResult.ToArray,
+                .aglycone = AglyCheck
             }
-
-            ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
-            If AglyCheck = True Then
-                candidate.Ms2Anno.aglycone = True
-            End If
         End Sub
 
         ''' <summary>
