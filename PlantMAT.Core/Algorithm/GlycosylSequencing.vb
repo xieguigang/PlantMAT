@@ -124,11 +124,11 @@
         'Predict MS2
         For i As Integer = 0 To query.Candidates.Count - 1
             'DoEvents
-            Call MS2P_MS2PredictionLoop(query, i, MIonMZ)
+            query(i).Glycosyl = MS2P_MS2PredictionLoop(query, i, MIonMZ)
         Next
     End Sub
 
-    Private Sub MS2P_MS2PredictionLoop(query As Query, i As Integer, MIonMZ As Double)
+    Private Function MS2P_MS2PredictionLoop(query As Query, i As Integer, MIonMZ As Double) As Glycosyl
         'Find how many structural possibilites for each peak in 'SMILES' sheet
         ' Dim peakNo As Integer
         Dim RS(,) As String
@@ -220,7 +220,12 @@
             Next t
         End If
 
-        Dim combText = CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
+        Return New Glycosyl With {
+            .Match_m = Match_m,
+            .Pred_n = Pred_n,
+            .pResult = pResult,
+            .list = comb.ToArray
+        }
 
         'With PublicVS_Code.Query
         '    If .Cells(i, 22) = "*" Then
@@ -240,7 +245,7 @@
         ' k = k + 1
 
         ' If PublicVS_Code.Query.Cells(i, 4) <> "..." Then Exit Sub
-    End Sub
+    End Function
 
     Private Function MS2P_MS2Prediction_IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
 
