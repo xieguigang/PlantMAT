@@ -89,9 +89,9 @@ Namespace Algorithm
             For i As Integer = 0 To query.Candidates.Count - 1
                 Dim MIonMZ#
                 Dim Rsyb$
-                Dim precursor = query(i).precursor_type
+                Dim precursor = PublicVSCode.PrecursorValue(query(i).precursor_type)
 
-                If Right(precursor, 1) = "-" Then
+                If precursor.Rsyb.Last = "-"c Then
                     MIonMZ = ((DHIonMZ - PrecursorIonMZ) / PrecursorIonN) - H_w + e_w
                     Rsyb = "-H]-"
                 Else
