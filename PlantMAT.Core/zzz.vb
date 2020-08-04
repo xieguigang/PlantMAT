@@ -29,7 +29,7 @@ Public Class zzz
         "the dereplication of previously identified metabolites and is also a powerful " & vbCrLf &
         "tool for the discovery of structurally novel metabolites."
 
-    Public Sub onLoad()
+    Public Shared Sub onLoad()
         Call GetType(PlantMAT).Assembly _
             .FromAssembly _
             .AppSummary(
