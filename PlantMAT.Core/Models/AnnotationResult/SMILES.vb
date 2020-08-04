@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::88582e507b84d319b6f2fe1a1f1152c0, PlantMAT.Core\Models\AnnotationResult\SMILES.vb"
+﻿#Region "Microsoft.VisualBasic::03992a413fe750bb5fc59cd7d45fe2d0, PlantMAT.Core\Models\AnnotationResult\SMILES.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class SMILES
     ' 
-    '         Properties: GlycN, GlycS, peakNo, Sequence
+    '         Properties: GlycN, GlycS
     ' 
     ' 
     ' /********************************************************************************/

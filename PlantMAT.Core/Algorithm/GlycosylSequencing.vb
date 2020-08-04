@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::a3db0592b217922a0d93c4cf8b6ad6d8, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
+﻿#Region "Microsoft.VisualBasic::4da61f168155d308aaae0807d0e83edb, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class GlycosylSequencing
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
-' 
-'         Sub: applySettings, MS2Prediction
-' 
-' 
-' /********************************************************************************/
+    '     Class GlycosylSequencing
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
+    ' 
+    '         Sub: applySettings, MS2Prediction
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7acba6a4558d0ee23dc524548bafaab9, PlantMAT.Core\PlantMATAlgorithm.vb"
+﻿#Region "Microsoft.VisualBasic::3269367b7f07b0ae36fdd2544f096055, PlantMAT.Core\PlantMATAlgorithm.vb"
 
     ' Author:
     ' 
@@ -51,4 +51,3 @@ Public MustInherit Class PlantMATAlgorithm
     Protected MustOverride Sub applySettings()
 
 End Class
-

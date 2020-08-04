@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::25778540372c5cd2433a396e5aabd585, PlantMAT.Core\Models\AnnotationResult\Ms2IonAnnotations.vb"
+﻿#Region "Microsoft.VisualBasic::30aa309bbbec1c486be5c7d81fc0f173, PlantMAT.Core\Models\AnnotationResult\Ms2IonAnnotations.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,11 @@
 
     '     Class Ms2IonAnnotations
     ' 
-    '         Properties: aglycone, annotations, comment, title
+    '         Properties: aglycone, ions, title
+    ' 
+    '     Class IonAnnotation
+    ' 
+    '         Properties: annotation, ionAbu, productMz
     ' 
     ' 
     ' /********************************************************************************/
