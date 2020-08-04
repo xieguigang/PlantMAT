@@ -46,14 +46,23 @@ Namespace Models.AnnotationResult
 
     Public Class Glycosyl
 
-        Public Property pResult As String
+        Public Property pResult As GlycosylPredition()
         Public Property Match_m As Integer
         Public Property Pred_n As Integer
-        Public Property list As String()
+        Public Property Match_n As Integer
+        Public Property Best_n As Integer
 
         Public Overrides Function ToString() As String
             Return CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"
         End Function
+
+    End Class
+
+    Public Class GlycosylPredition
+
+        Public Property ratio As Double
+        Public Property struct As String
+        Public Property best As Boolean
 
     End Class
 End Namespace

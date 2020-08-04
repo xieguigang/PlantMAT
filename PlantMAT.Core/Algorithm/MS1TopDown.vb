@@ -560,10 +560,8 @@ AllSugarConnected:
                 GlycN = AglyN + SugComb
 
                 Call New SMILES With {
-                    .Sequence = CStr(m) + "-" + CStr(e),
                     .GlycN = GlycN,
-                    .GlycS = GlycS,
-                    .peakNo = peakNO
+                    .GlycS = GlycS
                 }.DoCall(AddressOf candidate.SMILES.Add)
             Next e
         End Sub

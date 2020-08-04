@@ -130,7 +130,7 @@ Namespace Models.AnnotationResult
         Public Property SMILES As New List(Of SMILES)
 
         Public Property Ms2Anno As Ms2IonAnnotations
-        Public Property Glycosyl As New List(Of Glycosyl)
+        Public Property Glycosyl As Glycosyl
 
         Public Function GetSug_nStatic() As Double()
             ' 3 - 11

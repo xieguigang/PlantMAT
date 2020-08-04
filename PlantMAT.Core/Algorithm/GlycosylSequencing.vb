@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::a3db0592b217922a0d93c4cf8b6ad6d8, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class GlycosylSequencing
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
-    ' 
-    '         Sub: applySettings, MS2Prediction
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class GlycosylSequencing
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
+' 
+'         Sub: applySettings, MS2Prediction
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
@@ -86,30 +87,39 @@ Namespace Algorithm
                     MIonMZ = ((DHIonMZ - precursor.adduct) / precursor.M) + H_w - e_w
                 End If
 
+                ' Find how many structural possibilites for each peak in 'SMILES' sheet
+                Dim RS(,) As String
+                Dim Pred_n = 0
+                Dim Match_n = 0
+                Dim Match_m = 0
+                Dim Best_n = 0
+
+                ReDim RS(2, 1)
+
+                ' Create a combbox for MS2 prediction results of each combination possibility
+                Dim comb As New List(Of GlycosylPredition )
+
                 For Each smile As SMILES In query(i).SMILES
-                    MS2PredictionLoop(query, i, smile, MIonMZ).DoCall(AddressOf query(i).Glycosyl.Add)
+                    Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n, Best_n).DoCall(AddressOf comb.AddRange)
                 Next
+
+                If comb.Count > 0 Then
+                    query(i).Glycosyl = New Glycosyl With {
+                        .Match_m = Match_m,
+                        .Pred_n = Pred_n,
+                        .pResult = comb.ToArray,
+                        .Best_n = Best_n,
+                        .Match_n = Match_n
+                    }
+                End If
             Next
         End Sub
 
-        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double) As Glycosyl
-            ' Find how many structural possibilites for each peak in 'SMILES' sheet
-            Dim RS(,) As String
-
-            ' Create a combbox for MS2 prediction results of each combination possibility
-            Dim combName = "dd_MS2P_" & CStr(i)
-            Dim comb As New List(Of String)
-            Dim candidate As CandidateResult = query.Candidate(i)
-
+        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
+            Dim candidate As CandidateResult = query(i)
             ' Predict MS2 [MSPrediction()] for each structural possibility
-            Dim PredNo As Integer
-            Dim Pred_n = 0
-            Dim Match_n = 0
-            Dim Match_m = 0
             Dim GlycN As String
             Dim Lt As String
-
-            ReDim RS(2, 1)
 
             ' For Each smiles As SMILES In candidate.SMILES
             Pred_n = Pred_n + 1
@@ -123,20 +133,19 @@ Namespace Algorithm
 
             RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-            Dim temp = ""
+            'Dim temp = ""
 
-            For l = 1 To Len(smiles.Sequence)
-                If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-                temp = temp & Mid(smiles.Sequence, l, 1)
-            Next l
+            'For l = 1 To Len(smiles.Sequence)
+            '    If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
+            '    temp = temp & Mid(smiles.Sequence, l, 1)
+            'Next l
 
-            PredNo = CInt(Val(temp))
+            'Dim PredNo = CInt(Val(temp))
 
             ' Sort RS() in descending order and write new list to combbox and worksheet
-            Dim pResult = ""
-            Dim Best_n = 0
             Dim u As Integer
             Dim max_real As Integer
+            Dim pResult As New List(Of GlycosylPredition)
 
             If Match_m > 0 Then
                 For t As Integer = 1 To Match_n
@@ -153,25 +162,23 @@ Namespace Algorithm
 
                     If t = 1 Then
                         max_real = max_temp
+                    Else
+                        max_real = 1
                     End If
 
-                    max_real = 1
-
-                    If max_temp / max_real = 1 Then
+                    If max_temp / max_real = 1.0 Then
                         Best_n = Best_n + 1
                     End If
 
-                    comb.Add(CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u))
-                    pResult = pResult & CStr(Format(max_temp / max_real, "0.00")) & " " & RS(2, u) & "; "
+                    pResult += New GlycosylPredition With {
+                        .ratio = max_temp / max_real,
+                        .best = max_temp / max_real = 1.0,
+                        .struct = RS(2, u)
+                    }
                 Next t
             End If
 
-            Return New Glycosyl With {
-                .Match_m = Match_m,
-                .Pred_n = Pred_n,
-                .pResult = pResult,
-                .list = comb.ToArray
-            }
+            Return pResult
         End Function
 
         Private Function IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
