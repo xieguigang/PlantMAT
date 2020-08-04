@@ -2,7 +2,11 @@
 
 Public Class Query
 
-    Public Property PeakNO As String
+    ''' <summary>
+    ''' 一般为保留时间取整数
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property PeakNO As Integer
     Public Property PrecursorIon As Double
     Public Property Candidates As New List(Of CandidateResult)
     Public Property Ms2Peaks As Ms2Peaks
@@ -122,7 +126,7 @@ Public Class CandidateResult
     ''' <returns></returns>
     Public Property RTErr As Double
 
-    Public Property SMILES As New List(Of String())
+    Public Property SMILES As New List(Of SMILES)
 
     Public Property Ms2Anno As NamedCollection(Of String)
 
@@ -130,5 +134,26 @@ Public Class CandidateResult
         ' 3 - 11
         Return {Hex, HexA, dHex, Pen, Mal, Cou, Fer, Sin, DDMP}
     End Function
+
+End Class
+
+Public Class SMILES
+
+    ''' <summary>
+    ''' 2
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property peakNo As String
+    ''' <summary>
+    ''' 3
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property Sequence As String
+    ''' <summary>
+    ''' 4
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property GlycN As String
+    Public Property GlycS As String
 
 End Class

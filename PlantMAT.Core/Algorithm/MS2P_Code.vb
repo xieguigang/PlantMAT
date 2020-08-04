@@ -121,17 +121,17 @@
         Dim RS(,) As String
         Dim k = 1
 
-        Do While True
-            peakNo = SMILES.Cells(r, 2)
-            If peakNo = 0 Or peakNo = CmpdTag Then Exit Do
-            r = r + 1
-        Loop
+        'Do While True
+        '    peakNo = SMILES.Cells(r, 2)
+        '    If peakNo = 0 Or peakNo = CmpdTag Then Exit Do
+        '    r = r + 1
+        'Loop
 
         'Predict MS2
         For i As Integer = 0 To query.Candidates.Count - 1
             'DoEvents
 
-            Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
+            ' Dim AglyMass = query.Candidate(i).Mal  ' Val(PublicVS_Code.Query.Cells(i, 7).Comment.Text)
 
             'Create a combbox for MS2 prediction results of each combination possibility
             ' With PublicVS_Code.Query.Cells(i, 26)
@@ -155,7 +155,7 @@
                 ' DoEvents
 
                 Pred_n = Pred_n + 1
-                GlycN = .Cells(r, 4)
+                GlycN =   '.Cells(r, 4)
 
                 Dim Comma_n = 0
                 For e = 1 To Len(GlycN)

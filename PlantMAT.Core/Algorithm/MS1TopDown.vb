@@ -178,13 +178,13 @@ Public Class MS1TopDown
         For m As Integer = 0 To query.Candidates.Count - 1
             Dim candidate As CandidateResult = query(m)
 
-            Call MS1_CombinatorialPrediciton_PatternPrediction(candidate, m)
+            Call MS1_CombinatorialPrediciton_PatternPrediction(query.PeakNO, candidate, m)
         Next
 
         Return query
     End Function
 
-    Private Sub MS1_CombinatorialPrediciton_PatternPrediction(candidate As CandidateResult, m As Integer)
+    Private Sub MS1_CombinatorialPrediciton_PatternPrediction(peakNO As Integer, candidate As CandidateResult, m As Integer)
         ' 1. Find location and number of OH groups in aglycone
         Dim AglyS1 As String, AglyS2 As String
         Dim Hex As String, HexA As String, dHex As String, Pen As String
@@ -437,7 +437,7 @@ AllSugarConnected:
 
             GlycN = AglyN + SugComb
 
-            candidate.SMILES.Add({CStr(m) + "-" + CStr(e), GlycN, GlycS})
+            candidate.SMILES.Add(New SMILES With {.Sequence = CStr(m) + "-" + CStr(e), .GlycN = GlycN, .GlycS = GlycS, .peakNo = peakNO})
         Next e
     End Sub
 End Class
