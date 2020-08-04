@@ -50,7 +50,7 @@ Public Class MS2ATopDown
 
         Console.WriteLine("Now analyzing, please wait...")
 
-        Dim ms2P As New MS2P_Code(settings)
+        Dim ms2P As New GlycosylSequencing(settings)
 
         result = ms2P.MS2P(result).ToArray
 

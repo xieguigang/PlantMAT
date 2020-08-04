@@ -30,6 +30,7 @@ Public Class Query
                             .PrecursorIon = Val(tokens(1))
                         }
                     End Function) _
+            .OrderBy(Function(q) q.PeakNO) _
             .ToArray
     End Function
 

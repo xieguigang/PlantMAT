@@ -1,4 +1,4 @@
-﻿Public Class MS2P_Code
+﻿Public Class GlycosylSequencing
 
     Dim PrecursorIonType$
     Dim PrecursorIonMZ#
