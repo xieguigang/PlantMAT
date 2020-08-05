@@ -127,6 +127,8 @@ Namespace Algorithm
             Return queries _
                 .AsParallel _
                 .Select(Function(query)
+                            Dim candidates As New List(Of CandidateResult)
+
                             For Each type As PrecursorInfo In precursors
                                 Dim PrecursorIonMZ = type.adduct
                                 Dim PrecursorIonN = type.M
@@ -134,9 +136,11 @@ Namespace Algorithm
 
                                 For Each item As CandidateResult In result
                                     item.precursor_type = type.precursor_type
-                                    query.Candidates.Add(item)
+                                    candidates.Add(item)
                                 Next
                             Next
+
+                            query.Candidates = candidates.ToArray
 
                             Return PatternPrediction(query)
                         End Function)
@@ -255,6 +259,7 @@ Namespace Algorithm
         End Function
 
         Private Function PatternPrediction(query As Query) As Query
+            ' for each candidate result
             For m As Integer = 0 To query.Candidates.Count - 1
                 Call PatternPredictionLoop(query.PeakNO, query(m), m)
             Next
@@ -531,6 +536,7 @@ AllSugarConnected:
             Dim GlycS As String, GlycN As String
             Dim SugComb As String, SugComb1 As String
             Dim n3 As Long
+            Dim predicts As New List(Of SMILES)
 
             For e As Integer = 1 To CInt(s) - 1
                 GlycS = AglyS2
@@ -562,8 +568,10 @@ AllSugarConnected:
                 Call New SMILES With {
                     .GlycN = GlycN,
                     .GlycS = GlycS
-                }.DoCall(AddressOf candidate.SMILES.Add)
+                }.DoCall(AddressOf predicts.Add)
             Next e
+
+            candidate.SMILES = predicts.ToArray
         End Sub
     End Class
 End Namespace

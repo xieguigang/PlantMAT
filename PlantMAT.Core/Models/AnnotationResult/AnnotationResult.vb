@@ -127,8 +127,7 @@ Namespace Models.AnnotationResult
         ''' <returns></returns>
         Public Property RTErr As Double
 
-        Public Property SMILES As New List(Of SMILES)
-
+        Public Property SMILES As SMILES()
         Public Property Ms2Anno As Ms2IonAnnotations
         Public Property Glycosyl As Glycosyl
 

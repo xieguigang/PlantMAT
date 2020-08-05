@@ -113,6 +113,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -131,6 +133,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Ms2Peaks.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
     <Compile Include="Algorithm\IonPrediction.vb" />
     <Compile Include="Algorithm\MS1TopDown.vb" />
