@@ -563,7 +563,7 @@ AllSugarConnected:
                     End If
                 Next g
 
-                GlycN = AglyN + SugComb
+                GlycN = AglyN.Replace("-", "_") & SugComb
 
                 Call New SMILES With {
                     .GlycN = GlycN,

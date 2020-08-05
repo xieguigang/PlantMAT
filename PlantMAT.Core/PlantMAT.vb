@@ -286,8 +286,11 @@ Module PlantMAT
     ''' </param>
     ''' <returns></returns>
     <ExportAPI("read.query_result")>
-    Public Function readResultJSON(file As String) As Object
-        Return file.LoadJSON(Of Query())
+    Public Function readResultJSON(file As String) As Query()
+        Return file _
+            .SolveStream _
+            .ParseJson _
+            .CreateObject(GetType(Query()))
     End Function
 
     <ExportAPI("result.json")>
