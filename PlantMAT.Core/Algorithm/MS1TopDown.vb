@@ -261,13 +261,13 @@ Namespace Algorithm
         Private Function PatternPrediction(query As Query) As Query
             ' for each candidate result
             For m As Integer = 0 To query.Candidates.Count - 1
-                Call PatternPredictionLoop(query.PeakNO, query(m), m)
+                Call PatternPredictionLoop(query.Accession, query(m), m)
             Next
 
             Return query
         End Function
 
-        Private Sub PatternPredictionLoop(peakNO As Integer, candidate As CandidateResult, m As Integer)
+        Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult, m As Integer)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
             Dim Hex As String, HexA As String, dHex As String, Pen As String
@@ -563,7 +563,8 @@ AllSugarConnected:
                     End If
                 Next g
 
-                GlycN = AglyN.Replace("-", "_") & SugComb
+                ' GlycN = AglyN.Replace("-", "_") & SugComb
+                GlycN = $"[{peakNO}]" & SugComb
 
                 Call New SMILES With {
                     .GlycN = GlycN,

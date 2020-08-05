@@ -125,11 +125,11 @@ Namespace Algorithm
             Pred_n = Pred_n + 1
             GlycN = smiles.GlycN
 
-            Dim Comma_n = 0
-            For e = 1 To Len(GlycN)
-                Lt = Mid(GlycN, e, 1)
-                If Lt = "," Then Comma_n = Comma_n + 1
-            Next e
+            'Dim Comma_n = 0
+            'For e = 1 To Len(GlycN)
+            '    Lt = Mid(GlycN, e, 1)
+            '    If Lt = "," Then Comma_n = Comma_n + 1
+            'Next e
 
             RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
