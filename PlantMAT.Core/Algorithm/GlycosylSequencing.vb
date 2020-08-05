@@ -213,7 +213,7 @@ Namespace Algorithm
             Dim NumComponent = g
             Dim NameComponent As String
             Dim NumDash As Double
-            Dim w(g, 100) As Double
+            Dim w(Math.Max(g, 6), 100) As Double
 
             ' 3. Identify each component, calculate mass, and store value to w()
             Lt = ""
