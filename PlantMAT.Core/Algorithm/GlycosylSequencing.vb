@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4da61f168155d308aaae0807d0e83edb, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
+﻿#Region "Microsoft.VisualBasic::e9f5aaa420b2ff47dd7990fc47111dbf, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
     ' Author:
     ' 
