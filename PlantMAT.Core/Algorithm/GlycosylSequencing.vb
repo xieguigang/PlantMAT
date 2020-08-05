@@ -118,33 +118,13 @@ Namespace Algorithm
         Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
             Dim candidate As CandidateResult = query(i)
             ' Predict MS2 [MSPrediction()] for each structural possibility
-            Dim GlycN As String
-            ' Dim Lt As String
+            Dim GlycN As String = smiles.GlycN
 
             ' For Each smiles As SMILES In candidate.SMILES
             Pred_n = Pred_n + 1
-            GlycN = smiles.GlycN
-
-            'Dim Comma_n = 0
-            'For e = 1 To Len(GlycN)
-            '    Lt = Mid(GlycN, e, 1)
-            '    If Lt = "," Then Comma_n = Comma_n + 1
-            'Next e
-
             RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-            'Dim temp = ""
-
-            'For l = 1 To Len(smiles.Sequence)
-            '    If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-            '    temp = temp & Mid(smiles.Sequence, l, 1)
-            'Next l
-
-            'Dim PredNo = CInt(Val(temp))
-
             ' Sort RS() in descending order and write new list to combbox and worksheet
-            ' Dim u As Integer
-            ' Dim max_real As Integer
             Dim pResult As New List(Of GlycosylPredition)
 
             For t As Integer = 1 To Match_n
@@ -153,38 +133,6 @@ Namespace Algorithm
                     .struct = RS(2, t)
                 }
             Next
-
-            'If Match_m > 0 Then
-            '    For t As Integer = 1 To Match_n
-            '        Dim max_temp As Double = -1
-
-            '        ' 1 - raw score
-            '        ' 2 - gly sequence
-            '        For s = 1 To Match_n
-            '            If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
-            '                max_temp = Val(RS(1, s))
-            '                u = s
-            '            End If
-            '        Next s
-
-            '        RS(1, u) = RS(1, u) & "*"
-
-            '        If t = 1 Then
-            '            max_real = max_temp
-            '        Else
-            '            max_real = 1
-            '        End If
-
-            '        If max_temp / max_real = 1.0 Then
-            '            Best_n = Best_n + 1
-            '        End If
-
-            '        pResult += New GlycosylPredition With {
-            '            .score = max_temp,
-            '            .struct = RS(2, u)
-            '        }
-            '    Next t
-            'End If
 
             Return pResult.OrderByDescending(Function(gly) gly.score)
         End Function
