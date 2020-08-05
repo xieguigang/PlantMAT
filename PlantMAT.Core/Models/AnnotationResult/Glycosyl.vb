@@ -64,9 +64,8 @@ Namespace Models.AnnotationResult
 
     Public Class GlycosylPredition
 
-        Public Property ratio As Double
+        Public Property score As Double
         Public Property struct As String
-        Public Property best As Boolean
 
     End Class
 End Namespace

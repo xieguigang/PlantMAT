@@ -123,7 +123,7 @@ Namespace Report
                         .Take(5) _
                         .ToArray
             Dim glycosyl = If(candidate.Glycosyl Is Nothing, {}, candidate.Glycosyl.pResult) _
-                .Where(Function(a) a.best) _
+                .OrderByDescending(Function(gly) gly.score) _
                 .ToArray
 
             Return New Table With {
@@ -152,17 +152,27 @@ Namespace Report
                 .ion3 = ions.ElementAtOrDefault(2).DoCall(AddressOf annotatedIon),
                 .ion4 = ions.ElementAtOrDefault(3).DoCall(AddressOf annotatedIon),
                 .ion5 = ions.ElementAtOrDefault(4).DoCall(AddressOf annotatedIon),
-                .glycosyl1 = glycosyl.ElementAtOrDefault(0)?.struct,
-                .glycosyl2 = glycosyl.ElementAtOrDefault(1)?.struct,
-                .glycosyl3 = glycosyl.ElementAtOrDefault(2)?.struct,
-                .glycosyl4 = glycosyl.ElementAtOrDefault(3)?.struct,
-                .glycosyl5 = glycosyl.ElementAtOrDefault(4)?.struct,
+                .glycosyl1 = glycosyl.ElementAtOrDefault(0).DoCall(AddressOf glycosylSeq),
+                .glycosyl2 = glycosyl.ElementAtOrDefault(1).DoCall(AddressOf glycosylSeq),
+                .glycosyl3 = glycosyl.ElementAtOrDefault(2).DoCall(AddressOf glycosylSeq),
+                .glycosyl4 = glycosyl.ElementAtOrDefault(3).DoCall(AddressOf glycosylSeq),
+                .glycosyl5 = glycosyl.ElementAtOrDefault(4).DoCall(AddressOf glycosylSeq),
                 .aglycone = If(candidate.Ms2Anno Is Nothing, False, candidate.Ms2Anno.aglycone),
                 .Sugar_n = candidate.Sugar_n,
                 .nH2O_w = candidate.nH2O_w,
                 .Attn_w = candidate.Attn_w,
                 .Acid_n = candidate.Acid_n
             }
+        End Function
+
+        Private Shared Function glycosylSeq(glycosyl As GlycosylPredition) As String
+            If glycosyl Is Nothing Then
+                Return ""
+            Else
+                ' fix of the [#NAME?] display bugs
+                ' in excel
+                Return "X" & glycosyl.struct
+            End If
         End Function
 
         Private Shared Function annotatedIon(ion As IonAnnotation) As String
