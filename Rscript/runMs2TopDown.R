@@ -8,7 +8,10 @@ print(settings);
 
 const test as string = "V:\D042-E035\pos.mzML\save\raw.json";
 
-as.object(MS2ATopDown(settings))$MS2Annotation(read.query_result(test));
+let result = test 
+:> read.query_result 
+:> as.object(MS2ATopDown(settings))$MS2Annotation
+;
 
 # output the annotation result data set
 result

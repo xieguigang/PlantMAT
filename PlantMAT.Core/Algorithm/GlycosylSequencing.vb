@@ -99,7 +99,7 @@ Namespace Algorithm
                 ' Create a combbox for MS2 prediction results of each combination possibility
                 Dim comb As New List(Of GlycosylPredition )
 
-                For Each smile As SMILES In query(i).SMILES
+                For Each smile As SMILES In query(i).SMILES.SafeQuery
                     Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n, Best_n).DoCall(AddressOf comb.AddRange)
                 Next
 
