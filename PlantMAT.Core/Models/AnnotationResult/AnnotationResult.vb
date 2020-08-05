@@ -112,7 +112,7 @@ Namespace Models.AnnotationResult
         ''' <returns></returns>
         Public Property DDMP As Double
         ''' <summary>
-        ''' 12
+        ''' 12 mass error on ms1 ion
         ''' </summary>
         ''' <returns></returns>
         Public Property Err As Double
@@ -127,8 +127,13 @@ Namespace Models.AnnotationResult
         ''' <returns></returns>
         Public Property RTErr As Double
 
-        Public Property SMILES As New List(Of SMILES)
+        Public Property Sugar_n As Integer
+        Public Property Acid_n As Integer
 
+        Public Property Attn_w As Double
+        Public Property nH2O_w As Double
+
+        Public Property SMILES As SMILES()
         Public Property Ms2Anno As Ms2IonAnnotations
         Public Property Glycosyl As Glycosyl
 

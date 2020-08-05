@@ -125,7 +125,7 @@ Namespace Algorithm
         End Sub
 
         Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
-            Dim candidate As CandidateResult = query.Candidate(i)
+            Dim candidate As CandidateResult = query(i)
 
             ' Read the results from combinatorial enumeration
             Dim AglyN = candidate.Name

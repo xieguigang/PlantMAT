@@ -1,53 +1,55 @@
 ﻿#Region "Microsoft.VisualBasic::d26307c6ab412b9ba826634d3deec89d, PlantMAT.Core\PlantMAT.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PlantMAT
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
-    '               ParseConfig, QueryFromMgf, readLibrary, reportTable
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module PlantMAT
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
+'               ParseConfig, QueryFromMgf, readLibrary, reportTable
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports PlantMAT.Core.Algorithm
@@ -75,25 +77,27 @@ PlantMAT uses informed phytochemical knowledge for the prediction of plant
 natural products such as saponins and glycosylated flavonoids through 
 combinatorial enumeration of aglycone, glycosyl, and acyl subunits. Many of 
 the predicted structures have yet to be characterized and are absent from 
-traditional chemical databases, but have a higher probability of being present 
-in planta. 
+traditional chemical databases, but have a higher probability of being 
+present in planta. 
          
 PlantMAT allows users to operate an automated and streamlined workflow for 
 metabolite annotation from a user-friendly interface within Microsoft Excel, 
 a familiar, easily accessed program for chemists and biologists. The 
 usefulness of PlantMAT is exemplified using ultrahigh-performance liquid 
 chromatography–electrospray ionization quadrupole time-of-flight tandem 
-mass spectrometry (UHPLC–ESI-QTOF-MS/MS) metabolite profiling data of saponins 
-and glycosylated flavonoids from the model legume Medicago truncatula. 
+mass spectrometry (UHPLC–ESI-QTOF-MS/MS) metabolite profiling data of 
+saponins and glycosylated flavonoids from the model legume Medicago 
+truncatula. 
 
 The results demonstrate PlantMAT substantially increases the chemical/metabolic 
 space of traditional chemical databases. Ten of the PlantMAT-predicted 
 identifications were validated and confirmed through the isolation of the 
 compounds using ultrahigh-performance liquid chromatography mass spectrometry 
-solid-phase extraction (UHPLC–MS–SPE) followed by de novo structural elucidation 
-using 1D/2D nuclear magnetic resonance (NMR). It is further demonstrated that 
-PlantMAT enables the dereplication of previously identified metabolites and 
-is also a powerful tool for the discovery of structurally novel metabolites.
+solid-phase extraction (UHPLC–MS–SPE) followed by de novo structural 
+elucidation using 1D/2D nuclear magnetic resonance (NMR). It is further 
+demonstrated that PlantMAT enables the dereplication of previously identified 
+metabolites and is also a powerful tool for the discovery of structurally 
+novel metabolites.
 ")>
 <RTypeExport("precursor", GetType(PrecursorInfo))>
 Module PlantMAT
@@ -224,6 +228,23 @@ Module PlantMAT
     End Function
 
     ''' <summary>
+    ''' debug test tools
+    ''' </summary>
+    ''' <param name="mz">ms1 ``m/z`` value</param>
+    ''' <param name="AglyW">exact mass</param>
+    ''' <param name="Attn_w"></param>
+    ''' <param name="nH2O_w"></param>
+    ''' <param name="precursor_type"></param>
+    ''' <returns></returns>
+    <ExportAPI("ms1.err")>
+    Public Function ms1Err(mz As Double, AglyW#, Attn_w#, nH2O_w#, Optional precursor_type$ = "[M+H]+") As Double
+        Dim mz1 As Double = AglyW + Attn_w - nH2O_w
+        Dim precursor As PrecursorInfo = PublicVSCode.GetPrecursorInfo(precursor_type)
+
+        Return PPMmethod.ppm(mz1 + precursor.adduct, mz)
+    End Function
+
+    ''' <summary>
     ''' join ms2 spectra data with the corresponding ms1 query values
     ''' </summary>
     ''' <param name="ms1">the ms1 peak features</param>
@@ -275,6 +296,36 @@ Module PlantMAT
                         Return PublicVSCode.QueryFromMgf(ion)
                     End Function) _
             .ToArray
+    End Function
+
+    ''' <summary>
+    ''' read the query result json file
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file path of the json file or the json string text
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("read.query_result")>
+    Public Function readResultJSON(file As String) As Query()
+        Return file _
+            .SolveStream _
+            .ParseJson _
+            .CreateObject(GetType(Query()))
+    End Function
+
+    <ExportAPI("result.json")>
+    <RApiReturn(GetType(String))>
+    Public Function toResultJSON(<RRawVectorArgument> result As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of Query)(result, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim raw = data.populates(Of Query)(env).ToArray
+        Dim json As String = JSONSerializer.GetJson(raw, maskReadonly:=True)
+
+        Return json
     End Function
 
     ''' <summary>

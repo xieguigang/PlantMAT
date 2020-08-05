@@ -170,7 +170,7 @@ Module PublicVSCode
     Public Function QueryFromMgf(mgf As Ions) As Query
         Return New Query With {
             .PeakNO = CInt(mgf.RtInSeconds),
-            .Candidates = New List(Of CandidateResult),
+            .Candidates = {},
             .Ms2Peaks = New Ms2Peaks With {
                 .mz = mgf.Peaks.Select(Function(a) Math.Round(a.mz, 4)).ToArray,
                 .into = mgf.Peaks.Select(Function(a) Math.Round(a.intensity)).ToArray
