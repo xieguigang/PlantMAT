@@ -1,49 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::1564e39655ad74a0979b4e22ab75508d, PlantMAT.Core\Report\Table.vb"
+﻿#Region "Microsoft.VisualBasic::14041c504df9ad8e8e9aa3ce1c38c8aa, PlantMAT.Core\Report\Table.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class Table
-' 
-'         Properties: [structure], accession, candidate, cou, DDMP
-'                     dhex, err, exact_mass, fer, glycosyl1
-'                     glycosyl2, glycosyl3, glycosyl4, glycosyl5, hex
-'                     hexA, ion1, ion2, ion3, ion4
-'                     ion5, mal, mz, peakNO, pen
-'                     precursor_type, rt, sin, stats, topMs2
-' 
-'         Function: annotatedIon, PopulateRows, ToString
-' 
-' 
-' /********************************************************************************/
+    '     Class Table
+    ' 
+    '         Properties: [structure], accession, Acid_n, aglycone, Attn_w
+    '                     candidate, cou, DDMP, dhex, err
+    '                     exact_mass, fer, glycosyl1, glycosyl2, glycosyl3
+    '                     glycosyl4, glycosyl5, hex, hexA, ion1
+    '                     ion2, ion3, ion4, ion5, mal
+    '                     mz, nH2O_w, peakNO, pen, precursor_type
+    '                     rt, sin, stats, Sugar_n, topMs2
+    ' 
+    '         Function: annotatedIon, FlatTableRow, glycosylSeq, PopulateRows, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
