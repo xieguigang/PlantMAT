@@ -1,147 +1,5 @@
 [{
     "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 17,
-    "PrecursorIon": 459.1296,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 18,
-    "PrecursorIon": 459.1299,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [201.33333,114.66666,80,74.666664,93.333336,133.33333,57.333332,273.33334,312,80,80,69.333336],
-      "mz": [135.0457,162.0306,190.0237,191.0382,220.0302,221.0515,269.0792,297.0742,315.0866,345.0908,345.1044,346.1081]
-    },
-    "PeakNO": 19,
-    "PrecursorIon": 435.1298,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [256,220],
-      "mz": [167.0305,511.6823]
-    },
-    "PeakNO": 20,
-    "PrecursorIon": 613.1769,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [288],
-      "mz": [269.1066]
-    },
-    "PeakNO": 21,
-    "PrecursorIon": 443.1554,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [128,146.66667,212,118.66666,50.666668,124,92,70.666664,161.33333],
-      "mz": [128.0344,130.0842,223.113,243.1723,264.89,310.2118,354.2107,372.202,372.2138]
-    },
-    "PeakNO": 22,
-    "PrecursorIon": 372.2145,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 23,
-    "PrecursorIon": 489.1758,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [66.666664,62.666668,98.666664,245.33333,222.66667,198.66667,84,213.33333,94.666664,880,428],
-      "mz": [161.017,290.0623,305.0512,333.0339,334.0457,335.0575,349.038,363.0436,393.05,483.0897,484.1005]
-    },
-    "PeakNO": 24,
-    "PrecursorIon": 483.0932,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 25,
-    "PrecursorIon": 357.1343,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [80,120,88],
-      "mz": [129.0942,206.8372,303.1696]
-    },
-    "PeakNO": 26,
-    "PrecursorIon": 379.1608,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [376,660,280],
-      "mz": [151.0402,357.1322,651.2409]
-    },
-    "PeakNO": 27,
-    "PrecursorIon": 693.241,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [110.66666,480,105.33334,496,101.33334],
-      "mz": [121.0288,136.0173,151.0341,151.0394,152.0438]
-    },
-    "PeakNO": 28,
-    "PrecursorIon": 357.1346,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [54.666668,78.666664,838.66669,96,290.66666,1618.6666,62.666668,246.66667,66.666664],
-      "mz": [104.0096,195.0464,223.0389,224.0468,251.0311,252.0428,253.0418,267.0677,268.0738]
-    },
-    "PeakNO": 29,
-    "PrecursorIon": 267.066,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 30,
-    "PrecursorIon": 543.2086,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": {
-      "into": [52,88,96,230.66667,120,69.333336,98.666664,478.66666,65.333336],
-      "mz": [150.9622,157.0287,185.0236,185.0287,186.0331,213.0277,225.8666,245.0463,864.247]
-    },
-    "PeakNO": 31,
-    "PrecursorIon": 245.0453,
-    "RT": 0
-  },{
-    "Accession": null,
-    "Candidates": [],
-    "Ms2Peaks": null,
-    "PeakNO": 32,
-    "PrecursorIon": 267.0659,
-    "RT": 0
-  },{
-    "Accession": null,
     "Candidates": [{
         "Cou": 0,
         "DDMP": 0,
@@ -517,6 +375,148 @@
     "Ms2Peaks": null,
     "PeakNO": 126,
     "PrecursorIon": 162.8398,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 17,
+    "PrecursorIon": 459.1296,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 18,
+    "PrecursorIon": 459.1299,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [201.33333,114.66666,80,74.666664,93.333336,133.33333,57.333332,273.33334,312,80,80,69.333336],
+      "mz": [135.0457,162.0306,190.0237,191.0382,220.0302,221.0515,269.0792,297.0742,315.0866,345.0908,345.1044,346.1081]
+    },
+    "PeakNO": 19,
+    "PrecursorIon": 435.1298,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [256,220],
+      "mz": [167.0305,511.6823]
+    },
+    "PeakNO": 20,
+    "PrecursorIon": 613.1769,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [288],
+      "mz": [269.1066]
+    },
+    "PeakNO": 21,
+    "PrecursorIon": 443.1554,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [128,146.66667,212,118.66666,50.666668,124,92,70.666664,161.33333],
+      "mz": [128.0344,130.0842,223.113,243.1723,264.89,310.2118,354.2107,372.202,372.2138]
+    },
+    "PeakNO": 22,
+    "PrecursorIon": 372.2145,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 23,
+    "PrecursorIon": 489.1758,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [66.666664,62.666668,98.666664,245.33333,222.66667,198.66667,84,213.33333,94.666664,880,428],
+      "mz": [161.017,290.0623,305.0512,333.0339,334.0457,335.0575,349.038,363.0436,393.05,483.0897,484.1005]
+    },
+    "PeakNO": 24,
+    "PrecursorIon": 483.0932,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 25,
+    "PrecursorIon": 357.1343,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [80,120,88],
+      "mz": [129.0942,206.8372,303.1696]
+    },
+    "PeakNO": 26,
+    "PrecursorIon": 379.1608,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [376,660,280],
+      "mz": [151.0402,357.1322,651.2409]
+    },
+    "PeakNO": 27,
+    "PrecursorIon": 693.241,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [110.66666,480,105.33334,496,101.33334],
+      "mz": [121.0288,136.0173,151.0341,151.0394,152.0438]
+    },
+    "PeakNO": 28,
+    "PrecursorIon": 357.1346,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [54.666668,78.666664,838.66669,96,290.66666,1618.6666,62.666668,246.66667,66.666664],
+      "mz": [104.0096,195.0464,223.0389,224.0468,251.0311,252.0428,253.0418,267.0677,268.0738]
+    },
+    "PeakNO": 29,
+    "PrecursorIon": 267.066,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 30,
+    "PrecursorIon": 543.2086,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": {
+      "into": [52,88,96,230.66667,120,69.333336,98.666664,478.66666,65.333336],
+      "mz": [150.9622,157.0287,185.0236,185.0287,186.0331,213.0277,225.8666,245.0463,864.247]
+    },
+    "PeakNO": 31,
+    "PrecursorIon": 245.0453,
+    "RT": 0
+  },{
+    "Accession": null,
+    "Candidates": [],
+    "Ms2Peaks": null,
+    "PeakNO": 32,
+    "PrecursorIon": 267.0659,
     "RT": 0
   },{
     "Accession": null,

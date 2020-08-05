@@ -278,6 +278,18 @@ Module PlantMAT
     End Function
 
     ''' <summary>
+    ''' read the query result json file
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file path of the json file or the json string text
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("read.query_result")>
+    Public Function readResultJSON(file As String) As Object
+        Return file.LoadJSON(Of Query())
+    End Function
+
+    ''' <summary>
     ''' run report table output
     ''' </summary>
     ''' <param name="result"></param>
