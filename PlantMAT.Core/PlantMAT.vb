@@ -44,6 +44,7 @@
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
@@ -224,6 +225,23 @@ Module PlantMAT
     <ExportAPI("query.ms1")>
     Public Function ms1Query(metabolite_list As String()) As Query()
         Return Query.ParseMs1PeakList(file:=metabolite_list)
+    End Function
+
+    ''' <summary>
+    ''' debug test tools
+    ''' </summary>
+    ''' <param name="mz">ms1 ``m/z`` value</param>
+    ''' <param name="AglyW">exact mass</param>
+    ''' <param name="Attn_w"></param>
+    ''' <param name="nH2O_w"></param>
+    ''' <param name="precursor_type"></param>
+    ''' <returns></returns>
+    <ExportAPI("ms1.err")>
+    Public Function ms1Err(mz As Double, AglyW#, Attn_w#, nH2O_w#, Optional precursor_type$ = "[M+H]+") As Double
+        Dim mz1 As Double = AglyW + Attn_w - nH2O_w
+        Dim precursor As PrecursorInfo = PublicVSCode.GetPrecursorInfo(precursor_type)
+
+        Return PPMmethod.ppm(mz1 + precursor.adduct, mz)
     End Function
 
     ''' <summary>
