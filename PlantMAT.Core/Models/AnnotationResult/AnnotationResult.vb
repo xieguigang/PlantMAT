@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::a3a0d1898adae33b166d1447011145bd, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
+﻿#Region "Microsoft.VisualBasic::136e43619d0aa9fe59bb46b71d116bb2, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,11 @@
 
     '     Class CandidateResult
     ' 
-    '         Properties: Cou, DDMP, dHex, Err, ExactMass
-    '                     Fer, Glycosyl, Hex, HexA, Mal
-    '                     Ms2Anno, Name, Pen, precursor_type, RT
-    '                     RTErr, Sin, SMILES, SubstructureAgly
+    '         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
+    '                     Err, ExactMass, Fer, Glycosyl, Hex
+    '                     HexA, Mal, Ms2Anno, Name, nH2O_w
+    '                     Pen, precursor_type, RT, RTErr, Sin
+    '                     SMILES, SubstructureAgly, Sugar_n
     ' 
     '         Function: GetSug_nStatic
     ' 

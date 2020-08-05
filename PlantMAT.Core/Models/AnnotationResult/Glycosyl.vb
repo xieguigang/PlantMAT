@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::fad9fe4a0e060266e12fd63d295553dc, PlantMAT.Core\Models\AnnotationResult\Glycosyl.vb"
+﻿#Region "Microsoft.VisualBasic::3c7a6a6c4d528b9b0ae7ad4927fa6f38, PlantMAT.Core\Models\AnnotationResult\Glycosyl.vb"
 
     ' Author:
     ' 
@@ -39,7 +39,7 @@
     ' 
     '     Class GlycosylPredition
     ' 
-    '         Properties: best, ratio, struct
+    '         Properties: score, struct
     ' 
     ' 
     ' /********************************************************************************/
