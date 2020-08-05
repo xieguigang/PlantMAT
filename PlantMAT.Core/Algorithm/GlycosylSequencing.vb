@@ -190,7 +190,6 @@ Namespace Algorithm
             ReDim m(20, 20), u(1, 100)
 
             Dim f1(1, 100) As Double, f2(1, 100) As Double
-            Dim w(5, 100) As Double
             Dim SugComb As String = ""
 
             ' 2. Read aglyone/sugar/acid combination and store each component to u()
@@ -214,6 +213,7 @@ Namespace Algorithm
             Dim NumComponent = g
             Dim NameComponent As String
             Dim NumDash As Double
+            Dim w(g, 100) As Double
 
             ' 3. Identify each component, calculate mass, and store value to w()
             Lt = ""
