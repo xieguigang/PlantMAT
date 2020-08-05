@@ -75,6 +75,7 @@ Namespace Report
         Public Property pen As Integer
         Public Property sin As Integer
         Public Property dhex As Integer
+        Public Property aglycone As Boolean
 
         Public Property ion1 As String
         Public Property ion2 As String
@@ -143,7 +144,8 @@ Namespace Report
                         .glycosyl2 = glycosyl.ElementAtOrDefault(1)?.struct,
                         .glycosyl3 = glycosyl.ElementAtOrDefault(2)?.struct,
                         .glycosyl4 = glycosyl.ElementAtOrDefault(3)?.struct,
-                        .glycosyl5 = glycosyl.ElementAtOrDefault(4)?.struct
+                        .glycosyl5 = glycosyl.ElementAtOrDefault(4)?.struct,
+                        .aglycone = If(candidate.Ms2Anno Is Nothing, False, candidate.Ms2Anno.aglycone)
                     }
                 Next
             End If
