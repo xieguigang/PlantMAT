@@ -208,6 +208,7 @@ Namespace Algorithm
         Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
             For Each ref As Library In library
                 For Each candidate As CandidateResult In DatabaseSearch(
+                    xref:=ref.Xref,
                     RT_E:=RT_E,
                     AglyN:=ref.CommonName,
                     AglyT:=ref.Class,
@@ -234,7 +235,7 @@ Namespace Algorithm
             Next
         End Function
 
-        Private Iterator Function DatabaseSearch(RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
             If AglyT = AglyconeType.ToString Or AglyconeType = db_AglyconeType.All Then
                 If AglyO = AglyconeSource.ToString Or AglyconeSource = db_AglyconeSource.All Then
                     Dim err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
@@ -261,7 +262,8 @@ Namespace Algorithm
                             .Acid_n = Acid_n,
                             .Attn_w = Attn_w,
                             .nH2O_w = nH2O_w,
-                            .Sugar_n = Sugar_n
+                            .Sugar_n = Sugar_n,
+                            .xref = xref
                         }
                     End If
 
