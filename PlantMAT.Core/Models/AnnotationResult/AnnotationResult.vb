@@ -50,6 +50,7 @@ Namespace Models.AnnotationResult
 
     Public Class CandidateResult
 
+        Public Property xref As String
         Public Property precursor_type As String
 
         ''' <summary>

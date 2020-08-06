@@ -49,6 +49,12 @@ Namespace Models
 
     Public Class Library
 
+        ''' <summary>
+        ''' the unique reference id of current library item
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property Xref As String
+
         <Column("Common Name")>
         Public Property CommonName As String
         Public Property [Class] As String
