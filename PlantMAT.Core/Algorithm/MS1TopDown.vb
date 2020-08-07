@@ -448,7 +448,7 @@ Namespace Algorithm
                 For e As Integer = 1 To Sug_n
                     Dim h = e + 1
                     For g As Integer = 2 To Sug_n - l
-                        x(g, e) = x(g - 1, e) + x(1, h)
+                        x(g, e) = x(g - 1, e) & x(1, h)
                         h = h + 1
                     Next g
                     l = l + 1
