@@ -154,7 +154,7 @@ Namespace Algorithm
 
             For e As Integer = 1 To Len(GlycN)
                 Lt = Mid(GlycN, e, 1)
-                If Lt = "," And Comma_n = 0 Then
+                If Lt = "," AndAlso Comma_n = 0 Then
                     SugComb = Right(GlycN, Len(GlycN) - e - 1)
                     Comma_n = Comma_n + 1
                 End If

@@ -201,8 +201,8 @@ Namespace Algorithm
         Private Function IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
-            Dim eIonList = query.Ms2Peaks
-            Dim eIon_n = eIonList.mz.Length
+            Dim eIonList As Ms2Peaks = query.Ms2Peaks
+            Dim eIon_n As Integer = eIonList.fragments
             Dim TotalIonInt As Double = eIonList.TotalIonInt
 
             ' Compare the measured ions eIonList() with the predicted pIonList()

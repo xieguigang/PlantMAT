@@ -1,47 +1,47 @@
 ﻿#Region "Microsoft.VisualBasic::50143b6cc1e4152e44ead2c3a47e0ee5, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MS1TopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
-    '                   RunDatabaseSearch, RunMs1Query
-    ' 
-    '         Sub: applySettings, PatternPredictionLoop
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MS1TopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
+'                   RunDatabaseSearch, RunMs1Query
+' 
+'         Sub: applySettings, PatternPredictionLoop
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -157,7 +157,7 @@ Namespace Algorithm
             Dim Candidate As New List(Of CandidateResult)
 
             ' invali exact mass that calculated from the precursor ion
-            If M_w <= 0 Or M_w > 2000 Then
+            If M_w <= 0 OrElse M_w > 2000 Then
                 Return query
             End If
 
@@ -190,13 +190,13 @@ Namespace Algorithm
             Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
             Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
-            If Sugar_n >= NumSugarMin And Sugar_n <= NumSugarMax And Acid_n >= NumAcidMin And Acid_n <= NumAcidMax Then
+            If Sugar_n >= NumSugarMin AndAlso Sugar_n <= NumSugarMax AndAlso Acid_n >= NumAcidMin AndAlso Acid_n <= NumAcidMax Then
                 Dim Attn_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w + Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w
                 Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
                 Dim Bal = M_w + nH2O_w - Attn_w
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
-                If Bal >= settings.AglyconeMWRange(0) And Bal <= settings.AglyconeMWRange(1) Then
+                If Bal >= settings.AglyconeMWRange(0) AndAlso Bal <= settings.AglyconeMWRange(1) Then
                     For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
                         Yield candidate
                     Next
@@ -236,8 +236,8 @@ Namespace Algorithm
         End Function
 
         Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
-            If AglyT = AglyconeType.ToString Or AglyconeType = db_AglyconeType.All Then
-                If AglyO = AglyconeSource.ToString Or AglyconeSource = db_AglyconeSource.All Then
+            If AglyT = AglyconeType.ToString OrElse AglyconeType = db_AglyconeType.All Then
+                If AglyO = AglyconeSource.ToString OrElse AglyconeSource = db_AglyconeSource.All Then
                     Dim err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
 
                     If err1 <= SearchPPM Then

@@ -55,6 +55,12 @@ Namespace Models
             End Get
         End Property
 
+        Public ReadOnly Property fragments As Integer
+            Get
+                Return mz.Length
+            End Get
+        End Property
+
         Public Shared Function ParseMs2(file As IEnumerable(Of String)) As Ms2Peaks
             Dim raw As Double()() = file _
                 .Select(Function(line)
