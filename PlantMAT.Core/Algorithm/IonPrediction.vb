@@ -71,6 +71,13 @@ Namespace Algorithm
 
         Dim pIonList(0 To 2, 0 To 1) As Object
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="AglyN">the metabolite common name</param>
+        ''' <param name="Agly_w">the exact mass</param>
+        ''' <param name="IonMZ_crc">m/z</param>
+        ''' <param name="Rsyb">precursor type</param>
         Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
             Me.IonMZ_crc = IonMZ_crc
             Me.Rsyb = Rsyb
