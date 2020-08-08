@@ -1,7 +1,19 @@
+let config as string = ?"--config";
+
+if (nchar(config) > 0) {
+	config = base64_decode(config, asText_encoding = "utf8")
+}
+
+print(config);
+
+stop(1);
+
 imports "assembly" from "mzkit";
 imports "PlantMAT" from "PlantMAT.Core";
 
 setwd(!script$dir);
+
+
 
 let library_csv as string = ?"--lib"  || stop("no library data file was provided!");
 let raw_mgf as string     = ?"--ions" || stop("you should provides a valid mgf file data!");
