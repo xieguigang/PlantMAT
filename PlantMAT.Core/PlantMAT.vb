@@ -105,6 +105,7 @@ Module PlantMAT
 
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
         Internal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
     End Sub
 
@@ -348,5 +349,10 @@ Module PlantMAT
             .Select(AddressOf Report.Table.PopulateRows) _
             .IteratesALL _
             .ToArray
+    End Function
+
+    <ExportAPI("read.PlantMAT.report_table")>
+    Public Function readPlantMATReportTable(file As String) As Report.Table()
+        Return file.LoadCsv(Of Report.Table).ToArray
     End Function
 End Module
