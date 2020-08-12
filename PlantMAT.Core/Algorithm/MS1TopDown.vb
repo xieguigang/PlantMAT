@@ -158,9 +158,10 @@ Namespace Algorithm
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
-                Return query
+                Return {}
             End If
 
+            ' 暴力枚举的方法来搜索代谢物信息
             For Hex_n = NumHexMin To NumHexMax
                 For HexA_n = NumHexAMin To NumHexAMax
                     For dHex_n = NumdHexMin To NumdHexMax
@@ -171,7 +172,7 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w).DoCall(AddressOf Candidate.AddRange)
+                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN).DoCall(AddressOf Candidate.AddRange)
 
                                             Next DDMP_n
                                         Next Sin_n
@@ -186,7 +187,7 @@ Namespace Algorithm
             Return Candidate
         End Function
 
-        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
             Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
             Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
@@ -198,6 +199,9 @@ Namespace Algorithm
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
                 If Bal >= settings.AglyconeMWRange(0) AndAlso Bal <= settings.AglyconeMWRange(1) Then
                     For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
+                        candidate.Theoretical_ExactMass = M_w
+                        candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
+
                         Yield candidate
                     Next
                 End If
@@ -241,6 +245,7 @@ Namespace Algorithm
                     Dim err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
 
                     If err1 <= SearchPPM Then
+                        ' 在这里如何进行保留时间的预测？
                         Dim RT_P = 0
 
                         Yield New CandidateResult With {

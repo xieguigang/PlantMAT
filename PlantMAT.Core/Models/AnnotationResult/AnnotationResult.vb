@@ -58,6 +58,9 @@ Namespace Models.AnnotationResult
         ''' </summary>
         ''' <returns></returns>
         Public Property ExactMass As Double
+        Public Property Theoretical_ExactMass As Double
+        Public Property Theoretical_PrecursorMz As Double
+
         ''' <summary>
         ''' 1
         ''' </summary>

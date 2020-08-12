@@ -64,12 +64,22 @@ Namespace Report
         Public Property stats As String
         Public Property xref As String
         Public Property candidate As String
+
+#Region "这两个都是根据原始数据计算出来的理论值"
         Public Property exact_mass As Double
+        Public Property theoretical_precursor As Double
+#End Region
+
         Public Property precursor_type As String
         Public Property [structure] As String
 
+#Region "在库之中的分子的基础上增加的"
         Public Property Attn_w As Double
         Public Property nH2O_w As Double
+        ''' <summary>
+        ''' 理论的<see cref="theoretical_precursor"/>与实际的<see cref="mz"/>之间的ppm误差值
+        ''' </summary>
+        ''' <returns></returns>
         Public Property err As Double
 
         Public Property Sugar_n As Integer
@@ -83,6 +93,8 @@ Namespace Report
         Public Property pen As Integer
         Public Property sin As Integer
         Public Property dhex As Integer
+#End Region
+
         Public Property aglycone As Boolean
 
         Public Property ion1 As String
@@ -136,7 +148,7 @@ Namespace Report
                 .DDMP = candidate.DDMP,
                 .dhex = candidate.dHex,
                 .err = candidate.Err,
-                .exact_mass = candidate.ExactMass,
+                .exact_mass = candidate.Theoretical_ExactMass,
                 .fer = candidate.Fer,
                 .hex = candidate.Hex,
                 .hexA = candidate.HexA,
@@ -165,7 +177,8 @@ Namespace Report
                 .nH2O_w = candidate.nH2O_w,
                 .Attn_w = candidate.Attn_w,
                 .Acid_n = candidate.Acid_n,
-                .xref = candidate.xref
+                .xref = candidate.xref,
+                .theoretical_precursor = candidate.Theoretical_PrecursorMz
             }
         End Function
 
