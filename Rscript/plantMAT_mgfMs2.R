@@ -1,6 +1,6 @@
 imports "assembly" from "mzkit";
 imports "PlantMAT" from "PlantMAT.Core";
-imports "stringr" from "R.base";
+imports ["JSON", "stringr"] from "R.base";
 
 print("Run PlantMAT search, please wait for a while...");
   
@@ -25,7 +25,7 @@ print("Run PlantMAT search, please wait for a while...");
 let cli_config as string = ?"--config";
 
 if (nchar(cli_config) > 0) {
-	cli_config = fromJSON(base64_decode(cli_config, asText_encoding = "utf8"));
+	cli_config = parseJSON(base64_decode(cli_config, asText_encoding = "utf8"));
 	
 	# run utf8 decode
 	for(key in names(cli_config)) {
