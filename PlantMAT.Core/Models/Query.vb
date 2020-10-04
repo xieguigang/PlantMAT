@@ -87,7 +87,7 @@ Namespace Models
                 candidateNames = If(candidateNames.Length > 64, candidateNames.Substring(0, 63) & "...", candidateNames)
             End If
 
-            Return $"[{PeakNO}] {PrecursorIon} {candidateNames}"
+            Return $"[#{PeakNO}] {PrecursorIon.ToString("F4")} {candidateNames}"
         End Function
 
         Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
