@@ -138,7 +138,7 @@ Namespace Models.AnnotationResult
         Public Property Attn_w As Double
         Public Property nH2O_w As Double
 
-        Public Property SMILES As SMILES()
+        Public Property SMILES As String()
         Public Property Ms2Anno As Ms2IonAnnotations
         Public Property Glycosyl As Glycosyl
 

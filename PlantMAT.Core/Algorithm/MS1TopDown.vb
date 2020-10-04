@@ -567,14 +567,11 @@ AllSugarConnected:
             Next e
 
             ' 5. Attach each sugar/acid combination to aglycone to create all possible glycosides
-            Dim GlycS As String, GlycN As String
+            Dim GlycN As String
             Dim SugComb As String, SugComb1 As String
-            Dim n3 As Long
-            Dim predicts As New List(Of SMILES)
+            Dim predicted_SMILES As New List(Of String)
 
             For e As Integer = 1 To CInt(s) - 1
-                GlycS = AglyS2
-                n3 = n1
                 SugComb = ""
 
                 For g As Integer = 1 To OH_n
@@ -599,14 +596,10 @@ AllSugarConnected:
 
                 ' GlycN = AglyN.Replace("-", "_") & SugComb
                 GlycN = $"[{peakNO}]" & SugComb
+                predicted_SMILES.Add(GlycN)
+            Next
 
-                Call New SMILES With {
-                    .GlycN = GlycN,
-                    .GlycS = GlycS
-                }.DoCall(AddressOf predicts.Add)
-            Next e
-
-            candidate.SMILES = predicts.ToArray
+            candidate.SMILES = predicted_SMILES.ToArray
         End Sub
     End Class
 End Namespace

@@ -99,7 +99,7 @@ Namespace Algorithm
                 ' Create a combbox for MS2 prediction results of each combination possibility
                 Dim comb As New List(Of GlycosylPredition )
 
-                For Each smile As SMILES In query(i).SMILES.SafeQuery
+                For Each smile As String In query(i).SMILES.SafeQuery
                     Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n, Best_n).DoCall(AddressOf comb.AddRange)
                 Next
 
@@ -115,10 +115,10 @@ Namespace Algorithm
             Next
         End Sub
 
-        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
+        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As String, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
             Dim candidate As CandidateResult = query(i)
             ' Predict MS2 [MSPrediction()] for each structural possibility
-            Dim GlycN As String = smiles.GlycN
+            Dim GlycN As String = smiles
 
             ' For Each smiles As SMILES In candidate.SMILES
             Pred_n = Pred_n + 1
