@@ -57,7 +57,7 @@ if (ionMode == 0) {
 }
 
 # use default configuration
-const settings = config(AglyconeMWRange = [400, 1600]);
+const settings = config(AglyconeMWRange = [300, 1000]);
 
 print("view of the configuration values that we used for the analysis:");
 print(settings);
