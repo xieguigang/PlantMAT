@@ -111,7 +111,7 @@ Namespace Algorithm
 
             For Each item As Query In CombinatorialPrediction(query, ionMode)
                 result.Add(item)
-                Console.WriteLine($"[{++i}/{query.Length}] {query.ToString} [{stdNum.Round(i / query.Length * 100)}% done!]")
+                Console.WriteLine($"[{++i}/{query.Length}] {item.ToString} [{stdNum.Round(i / query.Length * 100)}% done!]")
             Next
 
             ' Show the message box after the calculation is finished
@@ -134,10 +134,14 @@ Namespace Algorithm
             End If
 
             Return queries _
+                .Split(App.CPUCoreNumbers) _
                 .AsParallel _
-                .Select(Function(query)
-                            Return RunMs1Query(query, precursors)
-                        End Function)
+                .Select(Iterator Function(query) As IEnumerable(Of Query)
+                            For Each item In query
+                                Yield RunMs1Query(item, precursors)
+                            Next
+                        End Function) _
+                .IteratesALL
         End Function
 
         Private Function RunMs1Query(query As Query, precursors As PrecursorInfo()) As Query

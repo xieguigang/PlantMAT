@@ -78,7 +78,15 @@ Namespace Models
         End Property
 
         Public Overrides Function ToString() As String
-            Return $"[{PeakNO}] {PrecursorIon} {If(Candidates.Count = 0, "no hits", Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ")) & "..."}"
+            Dim candidateNames$
+
+            If Candidates.Count = 0 Then
+                candidateNames = "no hits"
+            Else
+                candidateNames = Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ").Substring(0, 64) & "..."
+            End If
+
+            Return $"[{PeakNO}] {PrecursorIon} {candidateNames}"
         End Function
 
         Public Shared Function ParseMs1PeakList(file As IEnumerable(Of String)) As Query()
