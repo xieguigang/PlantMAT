@@ -46,12 +46,11 @@
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
-Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
-Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 Imports stdNum = System.Math
+Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 
 Namespace Algorithm
 
@@ -102,7 +101,10 @@ Namespace Algorithm
 
         Public Function MS1CP(query As Query(), Optional ionMode As Integer = 1) As Query()
             Dim result As New List(Of Query)
-            Dim i As i32 = 0
+            Dim start = App.NanoTime
+            Dim elapse As Double
+            Dim speed As Double
+            Dim ETA As TimeSpan
 
             ' Run combinatorial enumeration
             Console.WriteLine("Now analyzing, please wait...")
@@ -111,7 +113,11 @@ Namespace Algorithm
 
             For Each item As Query In CombinatorialPrediction(query, ionMode)
                 result.Add(item)
-                Console.WriteLine($"[{++i}/{query.Length}] {item.ToString} [{stdNum.Round(i / query.Length * 100)}% done!]")
+                elapse = (App.NanoTime - start) / TimeSpan.TicksPerMillisecond / 1000
+                speed = result.Count / elapse
+                ETA = TimeSpan.FromSeconds((query.Length - result.Count) / speed)
+
+                Console.WriteLine($"[{result.Count}/{query.Length}] {item.ToString} [{stdNum.Round(result.Count / query.Length * 100)}% done!] [{stdNum.Round(speed, 3)} query/sec, ETA {ETA.FormatTime}]")
             Next
 
             ' Show the message box after the calculation is finished
