@@ -46,10 +46,12 @@
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
 Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
+Imports stdNum = System.Math
 
 Namespace Algorithm
 
@@ -99,16 +101,23 @@ Namespace Algorithm
         End Sub
 
         Public Function MS1CP(query As Query(), Optional ionMode As Integer = 1) As Query()
-            Dim result As Query()
+            Dim result As New List(Of Query)
+            Dim i As i32 = 0
 
             ' Run combinatorial enumeration
             Console.WriteLine("Now analyzing, please wait...")
-            ' Peform combinatorial enumeration and show the calculation progress (MS1CP)
-            result = CombinatorialPrediction(query, ionMode).ToArray
+            Console.WriteLine("Peform combinatorial enumeration and show the calculation progress (MS1CP)")
+            Console.WriteLine($" --> {query.Length} queries...")
+
+            For Each item As Query In CombinatorialPrediction(query, ionMode)
+                result.Add(item)
+                Console.WriteLine($"[{++i}/{query.Length}] {query.ToString} [{stdNum.Round(i / query.Length * 100)}% done!]")
+            Next
+
             ' Show the message box after the calculation is finished
             Console.WriteLine("Substructure prediction finished")
 
-            Return result
+            Return result.ToArray
         End Function
 
         ''' <summary>
@@ -146,8 +155,6 @@ Namespace Algorithm
             Next
 
             query.Candidates = candidates.ToArray
-
-            Console.WriteLine(query.ToString & " [done!]")
 
             Return PatternPrediction(query)
         End Function
