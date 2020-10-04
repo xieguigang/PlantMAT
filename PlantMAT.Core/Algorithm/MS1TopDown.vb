@@ -100,7 +100,7 @@ Namespace Algorithm
         End Sub
 
         Public Function MS1CP(query As Query(), Optional ionMode As Integer = 1) As Query()
-            Dim result As New List(Of Query)
+            Dim result As New List(Of Query)(query.Length)
             Dim start = App.NanoTime
             Dim elapse As Double
             Dim speed As Double
@@ -117,7 +117,7 @@ Namespace Algorithm
                 speed = result.Count / elapse
                 ETA = TimeSpan.FromSeconds((query.Length - result.Count) / speed)
 
-                Console.WriteLine($"[{result.Count}/{query.Length}] {item.ToString} [{stdNum.Round(result.Count / query.Length * 100)}% done!] [{stdNum.Round(speed, 3)} query/sec, ETA {ETA.FormatTime}]")
+                Console.WriteLine($"[{result.Count}/{query.Length}] [{speed.ToString("F3").PadRight(3, "0")} query/sec, ETA {ETA.FormatTime}] {item.ToString} [{stdNum.Round(result.Count / query.Length * 100)}% done!]")
             Next
 
             ' Show the message box after the calculation is finished
