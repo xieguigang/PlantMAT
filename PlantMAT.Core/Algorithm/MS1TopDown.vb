@@ -147,6 +147,8 @@ Namespace Algorithm
 
             query.Candidates = candidates.ToArray
 
+            Console.WriteLine(query.ToString & " [done!]")
+
             Return PatternPrediction(query)
         End Function
 
