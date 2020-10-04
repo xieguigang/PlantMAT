@@ -112,7 +112,12 @@ Namespace Algorithm
             Console.WriteLine($" --> {query.Length} queries...")
 
             For Each item As Query In CombinatorialPrediction(query, ionMode)
-                result.Add(item)
+                If item.Candidates.Length = 0 Then
+                    result.Add(Nothing)
+                Else
+                    result.Add(item)
+                End If
+
                 elapse = (App.NanoTime - start) / TimeSpan.TicksPerMillisecond / 1000
                 speed = result.Count / elapse
                 ETA = TimeSpan.FromSeconds((query.Length - result.Count) / speed)
@@ -123,7 +128,7 @@ Namespace Algorithm
             ' Show the message box after the calculation is finished
             Console.WriteLine("Substructure prediction finished")
 
-            Return result.ToArray
+            Return result.Where(Function(a) Not a Is Nothing).ToArray
         End Function
 
         ''' <summary>
@@ -291,18 +296,26 @@ Namespace Algorithm
 
         Private Function PatternPrediction(query As Query) As Query
             ' for each candidate result
-            For m As Integer = 0 To query.Candidates.Count - 1
+            For m As Integer = 0 To query.Candidates.Length - 1
                 Call PatternPredictionLoop(query.Accession, query(m), m)
             Next
 
             Return query
         End Function
 
+        Const Hex = "C?C(C(C(C(CO)O?)O)O)O"
+        Const HexA = "C?C(C(C(C(C(=O)O)O?)O)O)O"
+        Const dHex = "C?C(C(C(C(C)O?)O)O)O"
+        Const Pen = "C?C(C(C(CO?)O)O)O"
+        Const Mal = "C(=O)CC(=O)O"
+        Const Cou = "c?ccc(cc?)C=CC(=O)O"
+        Const Fer = "COc?cc(ccc?O)C=CC(=O)O"
+        Const Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
+        Const DDMP = "CC?=C(C(=O)CC(O)O?)O"
+
         Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult, m As Integer)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
-            Dim Hex As String, HexA As String, dHex As String, Pen As String
-            Dim Cou As String, Fer As String, Sin As String, Mal As String
             Dim OH_n As Integer
             Dim n1 As Long, n2 As Long
             Dim AglyN As String
@@ -353,16 +366,6 @@ Namespace Algorithm
             ReDim Sug_p(1, 0 To CInt(Sug_n))
 
             l = 1
-
-            Hex = "C?C(C(C(C(CO)O?)O)O)O"
-            HexA = "C?C(C(C(C(C(=O)O)O?)O)O)O"
-            dHex = "C?C(C(C(C(C)O?)O)O)O"
-            Pen = "C?C(C(C(CO?)O)O)O"
-            Mal = "C(=O)CC(=O)O"
-            Cou = "c?ccc(cc?)C=CC(=O)O"
-            Fer = "COc?cc(ccc?O)C=CC(=O)O"
-            Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
-            Dim DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
             Dim candidateSug_nStatic = candidate.GetSug_nStatic.ToArray
 
