@@ -127,19 +127,25 @@ Namespace Algorithm
             Return queries _
                 .AsParallel _
                 .Select(Function(query)
-                            For Each type As PrecursorInfo In precursors
-                                Dim PrecursorIonMZ = type.adduct
-                                Dim PrecursorIonN = type.M
-                                Dim result = CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
-
-                                For Each item As CandidateResult In result
-                                    item.precursor_type = type.precursor_type
-                                    query.Candidates.Add(item)
-                                Next
-                            Next
-
-                            Return PatternPrediction(query)
+                            Return runAnalysis(query, precursors)
                         End Function)
+        End Function
+
+        Private Function runAnalysis(query As Query, precursors As PrecursorInfo()) As Query
+            For Each type As PrecursorInfo In precursors
+                Dim PrecursorIonMZ = type.adduct
+                Dim PrecursorIonN = type.M
+                Dim result = CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
+
+                For Each item As CandidateResult In result
+                    item.precursor_type = type.precursor_type
+                    query.Candidates.Add(item)
+                Next
+            Next
+
+            Call Console.WriteLine(query.ToString)
+
+            Return PatternPrediction(query)
         End Function
 
         Private Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
