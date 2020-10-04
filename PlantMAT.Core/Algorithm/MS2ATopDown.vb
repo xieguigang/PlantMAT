@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::d24e97b77af9f4a15bc262d77b837a50, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
+﻿#Region "Microsoft.VisualBasic::9df25aaa019db733a848e7b906dcadb3, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
     ' Author:
     ' 
@@ -125,7 +125,7 @@ Namespace Algorithm
         End Sub
 
         Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
-            Dim candidate As CandidateResult = query.Candidate(i)
+            Dim candidate As CandidateResult = query(i)
 
             ' Read the results from combinatorial enumeration
             Dim AglyN = candidate.Name
@@ -201,8 +201,8 @@ Namespace Algorithm
         Private Function IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
-            Dim eIonList = query.Ms2Peaks
-            Dim eIon_n = eIonList.mz.Length
+            Dim eIonList As Ms2Peaks = query.Ms2Peaks
+            Dim eIon_n As Integer = eIonList.fragments
             Dim TotalIonInt As Double = eIonList.TotalIonInt
 
             ' Compare the measured ions eIonList() with the predicted pIonList()

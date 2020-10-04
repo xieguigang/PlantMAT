@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::ec287a3560e41ad28df56cd28510297b, PlantMAT.Core\Models\Query.vb"
+﻿#Region "Microsoft.VisualBasic::f1ce1aafe95e25c6a38f9ee9fc40049e, PlantMAT.Core\Models\Query.vb"
 
     ' Author:
     ' 
@@ -38,21 +38,19 @@
     ' 
     '         Function: ParseMs1PeakList, ToString
     ' 
-    '     Class Ms2Peaks
-    ' 
-    '         Properties: into, mz, TotalIonInt
-    ' 
-    '         Function: ParseMs2
-    ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
+Imports System.Runtime.Serialization
+Imports System.Web.Script.Serialization
+Imports System.Xml.Serialization
 Imports PlantMAT.Core.Models.AnnotationResult
 
 Namespace Models
 
+    <KnownType(GetType(CandidateResult))>
     Public Class Query
 
         ''' <summary>
@@ -62,7 +60,7 @@ Namespace Models
         Public Property PeakNO As Integer
         Public Property RT As Double
         Public Property PrecursorIon As Double
-        Public Property Candidates As New List(Of CandidateResult)
+        Public Property Candidates As CandidateResult()
         Public Property Ms2Peaks As Ms2Peaks
         ''' <summary>
         ''' a unique guid string of current query object
@@ -70,6 +68,9 @@ Namespace Models
         ''' <returns></returns>
         Public Property Accession As String
 
+        <SoapIgnore>
+        <XmlIgnore>
+        <ScriptIgnore>
         Default Public ReadOnly Property Candidate(i As Integer) As CandidateResult
             Get
                 Return _Candidates(i)
@@ -93,35 +94,5 @@ Namespace Models
                 .ToArray
         End Function
 
-    End Class
-
-    Public Class Ms2Peaks
-
-        Public Property mz As Double()
-        Public Property into As Double()
-
-        Public ReadOnly Property TotalIonInt As Double
-            Get
-                Return into.Sum
-            End Get
-        End Property
-
-        Public Shared Function ParseMs2(file As IEnumerable(Of String)) As Ms2Peaks
-            Dim raw As Double()() = file _
-                .Select(Function(line)
-                            Return line _
-                                .StringSplit("\s+") _
-                                .Select(AddressOf Val) _
-                                .ToArray
-                        End Function) _
-                .ToArray
-            Dim mz = raw.Select(Function(a) a(Scan0)).ToArray
-            Dim into = raw.Select(Function(a) a(1)).ToArray
-
-            Return New Ms2Peaks With {
-                .mz = mz,
-                .into = into
-            }
-        End Function
     End Class
 End Namespace

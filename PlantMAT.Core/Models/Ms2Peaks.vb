@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::71859404a4796f150bbbd0f0a382c567, PlantMAT.Core\Models\Library.vb"
+﻿#Region "Microsoft.VisualBasic::7b5198d305a0d29e4869e1ba266792a6, PlantMAT.Core\Models\Ms2Peaks.vb"
 
     ' Author:
     ' 
@@ -31,49 +31,52 @@
 
     ' Summaries:
 
-    '     Class Library
+    '     Class Ms2Peaks
     ' 
-    '         Properties: [Class], [Date], CommonName, Editor, ExactMass
-    '                     Formula, Genus, Type, Universal_SMILES
+    '         Properties: into, mz, TotalIonInt
     ' 
-    '         Function: ToString
+    '         Function: ParseMs2
     ' 
     ' 
     ' /********************************************************************************/
 
 #End Region
 
-Imports Microsoft.VisualBasic.Data.csv.StorageProvider.Reflection
-
 Namespace Models
 
-    Public Class Library
+    Public Class Ms2Peaks
 
-        ''' <summary>
-        ''' the unique reference id of current library item
-        ''' </summary>
-        ''' <returns></returns>
-        Public Property Xref As String
+        Public Property mz As Double()
+        Public Property into As Double()
 
-        <Column("Common Name")>
-        Public Property CommonName As String
-        Public Property [Class] As String
-        Public Property Type As String
-        Public Property Formula As String
+        Public ReadOnly Property TotalIonInt As Double
+            Get
+                Return into.Sum
+            End Get
+        End Property
 
-        <Column("Exact Mass")>
-        Public Property ExactMass As Double
-        Public Property Genus As String
+        Public ReadOnly Property fragments As Integer
+            Get
+                Return mz.Length
+            End Get
+        End Property
 
-        <Column("Universal SMILES")>
-        Public Property Universal_SMILES As String
-        Public Property Editor As String
-        Public Property [Date] As Date
+        Public Shared Function ParseMs2(file As IEnumerable(Of String)) As Ms2Peaks
+            Dim raw As Double()() = file _
+                .Select(Function(line)
+                            Return line _
+                                .StringSplit("\s+") _
+                                .Select(AddressOf Val) _
+                                .ToArray
+                        End Function) _
+                .ToArray
+            Dim mz = raw.Select(Function(a) a(Scan0)).ToArray
+            Dim into = raw.Select(Function(a) a(1)).ToArray
 
-        Public Overrides Function ToString() As String
-            Return CommonName
+            Return New Ms2Peaks With {
+                .mz = mz,
+                .into = into
+            }
         End Function
-
     End Class
-
 End Namespace

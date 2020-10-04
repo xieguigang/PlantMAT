@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::92601b63e45f57a30d9def716968a613, PlantMAT.Core\PublicVSCode.vb"
+﻿#Region "Microsoft.VisualBasic::a97fbf6cd1743c9f08a1d128071b0050, PlantMAT.Core\PublicVSCode.vb"
 
     ' Author:
     ' 
@@ -170,7 +170,7 @@ Module PublicVSCode
     Public Function QueryFromMgf(mgf As Ions) As Query
         Return New Query With {
             .PeakNO = CInt(mgf.RtInSeconds),
-            .Candidates = New List(Of CandidateResult),
+            .Candidates = {},
             .Ms2Peaks = New Ms2Peaks With {
                 .mz = mgf.Peaks.Select(Function(a) Math.Round(a.mz, 4)).ToArray,
                 .into = mgf.Peaks.Select(Function(a) Math.Round(a.intensity)).ToArray

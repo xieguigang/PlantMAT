@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::c4a17b7ff59f0731feebec6c38585ac4, PlantMAT.Core\PlantMAT.vb"
+﻿#Region "Microsoft.VisualBasic::dbb82b6f0f05ca4128caaf40a019a228, PlantMAT.Core\PlantMAT.vb"
 
     ' Author:
     ' 
@@ -35,8 +35,9 @@
     ' 
     '     Constructor: (+1 Overloads) Sub New
     ' 
-    '     Function: GetConfig, joinMs2Query, ms1Query, MS1TopDown, MS2ATopDown
-    '               ParseConfig, QueryFromMgf, readLibrary, reportTable
+    '     Function: GetConfig, joinMs2Query, ms1Err, ms1Query, MS1TopDown
+    '               MS2ATopDown, ParseConfig, QueryFromMgf, readLibrary, readResultJSON
+    '               reportTable, toResultJSON
     ' 
     ' 
     ' /********************************************************************************/
@@ -44,10 +45,12 @@
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports PlantMAT.Core.Algorithm
@@ -62,12 +65,47 @@ Imports SMRUCC.Rsharp.Runtime.Interop
 ''' Metabolic Potential of a System and for Large-Scale Metabolite 
 ''' Identifications
 ''' </summary>
-<Package("PlantMAT", Category:=APICategories.ResearchTools, Cites:="", Url:="https://pubs.acs.org/doi/10.1021/acs.analchem.6b00906")>
+<Package("PlantMAT",
+         Category:=APICategories.ResearchTools,
+         Cites:="",
+         Url:="https://pubs.acs.org/doi/10.1021/acs.analchem.6b00906",
+         Description:="
+Custom software entitled Plant Metabolite Annotation Toolbox (PlantMAT) 
+has been developed to address the number one grand challenge in metabolomics, 
+which is the large-scale and confident identification of metabolites. 
+
+PlantMAT uses informed phytochemical knowledge for the prediction of plant 
+natural products such as saponins and glycosylated flavonoids through 
+combinatorial enumeration of aglycone, glycosyl, and acyl subunits. Many of 
+the predicted structures have yet to be characterized and are absent from 
+traditional chemical databases, but have a higher probability of being 
+present in planta. 
+         
+PlantMAT allows users to operate an automated and streamlined workflow for 
+metabolite annotation from a user-friendly interface within Microsoft Excel, 
+a familiar, easily accessed program for chemists and biologists. The 
+usefulness of PlantMAT is exemplified using ultrahigh-performance liquid 
+chromatography–electrospray ionization quadrupole time-of-flight tandem 
+mass spectrometry (UHPLC–ESI-QTOF-MS/MS) metabolite profiling data of 
+saponins and glycosylated flavonoids from the model legume Medicago 
+truncatula. 
+
+The results demonstrate PlantMAT substantially increases the chemical/metabolic 
+space of traditional chemical databases. Ten of the PlantMAT-predicted 
+identifications were validated and confirmed through the isolation of the 
+compounds using ultrahigh-performance liquid chromatography mass spectrometry 
+solid-phase extraction (UHPLC–MS–SPE) followed by de novo structural 
+elucidation using 1D/2D nuclear magnetic resonance (NMR). It is further 
+demonstrated that PlantMAT enables the dereplication of previously identified 
+metabolites and is also a powerful tool for the discovery of structurally 
+novel metabolites.
+")>
 <RTypeExport("precursor", GetType(PrecursorInfo))>
 Module PlantMAT
 
     Sub New()
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
+        Internal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
         Internal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
     End Sub
 
@@ -192,6 +230,23 @@ Module PlantMAT
     End Function
 
     ''' <summary>
+    ''' debug test tools
+    ''' </summary>
+    ''' <param name="mz">ms1 ``m/z`` value</param>
+    ''' <param name="AglyW">exact mass</param>
+    ''' <param name="Attn_w"></param>
+    ''' <param name="nH2O_w"></param>
+    ''' <param name="precursor_type"></param>
+    ''' <returns></returns>
+    <ExportAPI("ms1.err")>
+    Public Function ms1Err(mz As Double, AglyW#, Attn_w#, nH2O_w#, Optional precursor_type$ = "[M+H]+") As Double
+        Dim mz1 As Double = AglyW + Attn_w - nH2O_w
+        Dim precursor As PrecursorInfo = PublicVSCode.GetPrecursorInfo(precursor_type)
+
+        Return PPMmethod.ppm(mz1 + precursor.adduct, mz)
+    End Function
+
+    ''' <summary>
     ''' join ms2 spectra data with the corresponding ms1 query values
     ''' </summary>
     ''' <param name="ms1">the ms1 peak features</param>
@@ -246,6 +301,36 @@ Module PlantMAT
     End Function
 
     ''' <summary>
+    ''' read the query result json file
+    ''' </summary>
+    ''' <param name="file">
+    ''' the file path of the json file or the json string text
+    ''' </param>
+    ''' <returns></returns>
+    <ExportAPI("read.query_result")>
+    Public Function readResultJSON(file As String) As Query()
+        Return file _
+            .SolveStream _
+            .ParseJson _
+            .CreateObject(GetType(Query()))
+    End Function
+
+    <ExportAPI("result.json")>
+    <RApiReturn(GetType(String))>
+    Public Function toResultJSON(<RRawVectorArgument> result As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of Query)(result, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim raw = data.populates(Of Query)(env).ToArray
+        Dim json As String = JSONSerializer.GetJson(raw, maskReadonly:=True)
+
+        Return json
+    End Function
+
+    ''' <summary>
     ''' run report table output
     ''' </summary>
     ''' <param name="result"></param>
@@ -264,5 +349,10 @@ Module PlantMAT
             .Select(AddressOf Report.Table.PopulateRows) _
             .IteratesALL _
             .ToArray
+    End Function
+
+    <ExportAPI("read.PlantMAT.report_table")>
+    Public Function readPlantMATReportTable(file As String) As Report.Table()
+        Return file.LoadCsv(Of Report.Table).ToArray
     End Function
 End Module

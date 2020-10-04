@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::1a74077f0cc8ac0dce929d66d8da39fc, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
+﻿#Region "Microsoft.VisualBasic::136e43619d0aa9fe59bb46b71d116bb2, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
 
     ' Author:
     ' 
@@ -33,10 +33,11 @@
 
     '     Class CandidateResult
     ' 
-    '         Properties: Cou, DDMP, dHex, Err, ExactMass
-    '                     Fer, Glycosyl, Hex, HexA, Mal
-    '                     Ms2Anno, Name, Pen, precursor_type, RT
-    '                     RTErr, Sin, SMILES, SubstructureAgly
+    '         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
+    '                     Err, ExactMass, Fer, Glycosyl, Hex
+    '                     HexA, Mal, Ms2Anno, Name, nH2O_w
+    '                     Pen, precursor_type, RT, RTErr, Sin
+    '                     SMILES, SubstructureAgly, Sugar_n
     ' 
     '         Function: GetSug_nStatic
     ' 
@@ -49,6 +50,7 @@ Namespace Models.AnnotationResult
 
     Public Class CandidateResult
 
+        Public Property xref As String
         Public Property precursor_type As String
 
         ''' <summary>
@@ -56,6 +58,9 @@ Namespace Models.AnnotationResult
         ''' </summary>
         ''' <returns></returns>
         Public Property ExactMass As Double
+        Public Property Theoretical_ExactMass As Double
+        Public Property Theoretical_PrecursorMz As Double
+
         ''' <summary>
         ''' 1
         ''' </summary>
@@ -112,7 +117,7 @@ Namespace Models.AnnotationResult
         ''' <returns></returns>
         Public Property DDMP As Double
         ''' <summary>
-        ''' 12
+        ''' 12 mass error on ms1 ion
         ''' </summary>
         ''' <returns></returns>
         Public Property Err As Double
@@ -127,8 +132,13 @@ Namespace Models.AnnotationResult
         ''' <returns></returns>
         Public Property RTErr As Double
 
-        Public Property SMILES As New List(Of SMILES)
+        Public Property Sugar_n As Integer
+        Public Property Acid_n As Integer
 
+        Public Property Attn_w As Double
+        Public Property nH2O_w As Double
+
+        Public Property SMILES As SMILES()
         Public Property Ms2Anno As Ms2IonAnnotations
         Public Property Glycosyl As Glycosyl
 

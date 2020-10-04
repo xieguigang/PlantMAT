@@ -1,47 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::ea4e9f219648a787e5e9bf272ac8b85b, PlantMAT.Core\Algorithm\IonPrediction.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class IonPrediction
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Sub: getResult, IonPrediction, LossCombination
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class IonPrediction
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Sub: getResult, IonPrediction, LossCombination
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Namespace Algorithm
+
+    ''' <summary>
+    ''' Ms2 ion fragment prediction for natural products.
+    ''' </summary>
     Public Class IonPrediction
 
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
@@ -67,6 +71,13 @@ Namespace Algorithm
 
         Dim pIonList(0 To 2, 0 To 1) As Object
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="AglyN">the metabolite common name</param>
+        ''' <param name="Agly_w">the exact mass</param>
+        ''' <param name="IonMZ_crc">m/z</param>
+        ''' <param name="Rsyb">precursor type</param>
         Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
             Me.IonMZ_crc = IonMZ_crc
             Me.Rsyb = Rsyb
@@ -152,17 +163,16 @@ Namespace Algorithm
                  Total_n * H2O_w + H2O_n * H2O_w + CO2_n * CO2_w
 
             ' Calculate the precuror ion mz based on the calcualted loss mass
-            Dim pIonMZ = MIonMZ - Loss_w
+            Dim pIonMZ As Double = MIonMZ - Loss_w
             Dim pIonNM As String
 
             ' Find if the ion is related to the H2O/CO2 loss from aglycone
-            If Hex_n = Hex_max And HexA_n = HexA_max And dHex_n = dHex_max And Pen_n = Pen_max And
-                Mal_n = Mal_max And Cou_n = Cou_max And Fer_n = Fer_max And Sin_n = Sin_max And DDMP_n = DDMP_max Then
+            If Hex_n = Hex_max AndAlso HexA_n = HexA_max AndAlso dHex_n = dHex_max AndAlso Pen_n = Pen_max AndAlso
+                Mal_n = Mal_max AndAlso Cou_n = Cou_max AndAlso Fer_n = Fer_max AndAlso Sin_n = Sin_max AndAlso DDMP_n = DDMP_max Then
 
                 pIonNM = "[Agly" & H2OLoss & CO2Loss & Rsyb
 
-                If H2OLoss & CO2Loss = "" Or (H2OLoss & CO2Loss = "-H2O-CO2" And
-                    (AglyN = "Medicagenic acid" Or AglyN = "Zanhic acid")) Then
+                If H2OLoss & CO2Loss = "" OrElse (H2OLoss & CO2Loss = "-H2O-CO2" AndAlso (AglyN = "Medicagenic acid" OrElse AglyN = "Zanhic acid")) Then
                     pIonNM = "*" & pIonNM
                 End If
             Else

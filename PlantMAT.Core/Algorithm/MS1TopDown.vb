@@ -1,47 +1,47 @@
-﻿#Region "Microsoft.VisualBasic::d533c59fc5a40ae9eb1a985163f85ad4, PlantMAT.Core\Algorithm\MS1TopDown.vb"
+﻿#Region "Microsoft.VisualBasic::50143b6cc1e4152e44ead2c3a47e0ee5, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MS1TopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
-    '                   RunDatabaseSearch
-    ' 
-    '         Sub: applySettings, PatternPredictionLoop
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MS1TopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, MS1CP, PatternPrediction, RestrictionCheck
+'                   RunDatabaseSearch, RunMs1Query
+' 
+'         Sub: applySettings, PatternPredictionLoop
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -127,11 +127,13 @@ Namespace Algorithm
             Return queries _
                 .AsParallel _
                 .Select(Function(query)
-                            Return runAnalysis(query, precursors)
+                            Return RunMs1Query(query, precursors)
                         End Function)
         End Function
 
-        Private Function runAnalysis(query As Query, precursors As PrecursorInfo()) As Query
+        Private Function RunMs1Query(query As Query, precursors As PrecursorInfo()) As Query
+            Dim candidates As New List(Of CandidateResult)
+
             For Each type As PrecursorInfo In precursors
                 Dim PrecursorIonMZ = type.adduct
                 Dim PrecursorIonN = type.M
@@ -139,11 +141,11 @@ Namespace Algorithm
 
                 For Each item As CandidateResult In result
                     item.precursor_type = type.precursor_type
-                    query.Candidates.Add(item)
+                    candidates.Add(item)
                 Next
             Next
 
-            Call Console.WriteLine(query.ToString)
+            query.Candidates = candidates.ToArray
 
             Return PatternPrediction(query)
         End Function
@@ -154,10 +156,12 @@ Namespace Algorithm
             Dim M_w = (query.PrecursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim Candidate As New List(Of CandidateResult)
 
-            If M_w <= 0 Or M_w > 2000 Then
-                Return query
+            ' invali exact mass that calculated from the precursor ion
+            If M_w <= 0 OrElse M_w > 2000 Then
+                Return {}
             End If
 
+            ' 暴力枚举的方法来搜索代谢物信息
             For Hex_n = NumHexMin To NumHexMax
                 For HexA_n = NumHexAMin To NumHexAMax
                     For dHex_n = NumdHexMin To NumdHexMax
@@ -168,7 +172,7 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w).DoCall(AddressOf Candidate.AddRange)
+                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN).DoCall(AddressOf Candidate.AddRange)
 
                                             Next DDMP_n
                                         Next Sin_n
@@ -183,18 +187,21 @@ Namespace Algorithm
             Return Candidate
         End Function
 
-        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
             Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
             Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
-            If Sugar_n >= NumSugarMin And Sugar_n <= NumSugarMax And Acid_n >= NumAcidMin And Acid_n <= NumAcidMax Then
+            If Sugar_n >= NumSugarMin AndAlso Sugar_n <= NumSugarMax AndAlso Acid_n >= NumAcidMin AndAlso Acid_n <= NumAcidMax Then
                 Dim Attn_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w + Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w
                 Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
                 Dim Bal = M_w + nH2O_w - Attn_w
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
-                If Bal >= settings.AglyconeMWRange(0) And Bal <= settings.AglyconeMWRange(1) Then
-                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
+                If Bal >= settings.AglyconeMWRange(0) AndAlso Bal <= settings.AglyconeMWRange(1) Then
+                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
+                        candidate.Theoretical_ExactMass = M_w
+                        candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
+
                         Yield candidate
                     Next
                 End If
@@ -202,9 +209,10 @@ Namespace Algorithm
             End If
         End Function
 
-        Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
             For Each ref As Library In library
                 For Each candidate As CandidateResult In DatabaseSearch(
+                    xref:=ref.Xref,
                     RT_E:=RT_E,
                     AglyN:=ref.CommonName,
                     AglyT:=ref.Class,
@@ -222,19 +230,22 @@ Namespace Algorithm
                     Cou_n%,
                     Fer_n%,
                     Sin_n%,
-                    DDMP_n%
+                    DDMP_n%,
+                    Sugar_n%,
+                    Acid_n%
                 )
                     Yield candidate
                 Next
             Next
         End Function
 
-        Private Iterator Function DatabaseSearch(RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
-            If AglyT = AglyconeType.ToString Or AglyconeType = db_AglyconeType.All Then
-                If AglyO = AglyconeSource.ToString Or AglyconeSource = db_AglyconeSource.All Then
-                    Dim Err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
+        Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
+            If AglyT = AglyconeType.ToString OrElse AglyconeType = db_AglyconeType.All Then
+                If AglyO = AglyconeSource.ToString OrElse AglyconeSource = db_AglyconeSource.All Then
+                    Dim err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
 
-                    If Err1 <= SearchPPM Then
+                    If err1 <= SearchPPM Then
+                        ' 在这里如何进行保留时间的预测？
                         Dim RT_P = 0
 
                         Yield New CandidateResult With {
@@ -245,14 +256,19 @@ Namespace Algorithm
                             .dHex = dHex_n,
                             .Pen = Pen_n,
                             .Mal = Mal_n,
-                            .Err = Err1,
+                            .Err = err1,
                             .SubstructureAgly = AglyS,
                             .Cou = Cou_n,
                             .DDMP = DDMP_n,
                             .Fer = Fer_n,
                             .Sin = Sin_n,
                             .RT = RT_P,
-                            .RTErr = RT_P - RT_E
+                            .RTErr = RT_P - RT_E,
+                            .Acid_n = Acid_n,
+                            .Attn_w = Attn_w,
+                            .nH2O_w = nH2O_w,
+                            .Sugar_n = Sugar_n,
+                            .xref = xref
                         }
                     End If
 
@@ -261,14 +277,15 @@ Namespace Algorithm
         End Function
 
         Private Function PatternPrediction(query As Query) As Query
+            ' for each candidate result
             For m As Integer = 0 To query.Candidates.Count - 1
-                Call PatternPredictionLoop(query.PeakNO, query(m), m)
+                Call PatternPredictionLoop(query.Accession, query(m), m)
             Next
 
             Return query
         End Function
 
-        Private Sub PatternPredictionLoop(peakNO As Integer, candidate As CandidateResult, m As Integer)
+        Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult, m As Integer)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
             Dim Hex As String, HexA As String, dHex As String, Pen As String
@@ -436,7 +453,7 @@ Namespace Algorithm
                 For e As Integer = 1 To Sug_n
                     Dim h = e + 1
                     For g As Integer = 2 To Sug_n - l
-                        x(g, e) = x(g - 1, e) + x(1, h)
+                        x(g, e) = x(g - 1, e) & x(1, h)
                         h = h + 1
                     Next g
                     l = l + 1
@@ -537,6 +554,7 @@ AllSugarConnected:
             Dim GlycS As String, GlycN As String
             Dim SugComb As String, SugComb1 As String
             Dim n3 As Long
+            Dim predicts As New List(Of SMILES)
 
             For e As Integer = 1 To CInt(s) - 1
                 GlycS = AglyS2
@@ -563,13 +581,16 @@ AllSugarConnected:
                     End If
                 Next g
 
-                GlycN = AglyN + SugComb
+                ' GlycN = AglyN.Replace("-", "_") & SugComb
+                GlycN = $"[{peakNO}]" & SugComb
 
                 Call New SMILES With {
                     .GlycN = GlycN,
                     .GlycS = GlycS
-                }.DoCall(AddressOf candidate.SMILES.Add)
+                }.DoCall(AddressOf predicts.Add)
             Next e
+
+            candidate.SMILES = predicts.ToArray
         End Sub
     End Class
 End Namespace

@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::4da61f168155d308aaae0807d0e83edb, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
+﻿#Region "Microsoft.VisualBasic::6444b6f262b2a635adc5b656c488e1a6, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
     ' Author:
     ' 
@@ -99,7 +99,7 @@ Namespace Algorithm
                 ' Create a combbox for MS2 prediction results of each combination possibility
                 Dim comb As New List(Of GlycosylPredition )
 
-                For Each smile As SMILES In query(i).SMILES
+                For Each smile As SMILES In query(i).SMILES.SafeQuery
                     Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n, Best_n).DoCall(AddressOf comb.AddRange)
                 Next
 
@@ -118,67 +118,23 @@ Namespace Algorithm
         Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As SMILES, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
             Dim candidate As CandidateResult = query(i)
             ' Predict MS2 [MSPrediction()] for each structural possibility
-            Dim GlycN As String
-            Dim Lt As String
+            Dim GlycN As String = smiles.GlycN
 
             ' For Each smiles As SMILES In candidate.SMILES
             Pred_n = Pred_n + 1
-            GlycN = smiles.GlycN
-
-            Dim Comma_n = 0
-            For e = 1 To Len(GlycN)
-                Lt = Mid(GlycN, e, 1)
-                If Lt = "," Then Comma_n = Comma_n + 1
-            Next e
-
             RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
 
-            'Dim temp = ""
-
-            'For l = 1 To Len(smiles.Sequence)
-            '    If Mid(smiles.Sequence, l, 1) = "-" Then Exit For
-            '    temp = temp & Mid(smiles.Sequence, l, 1)
-            'Next l
-
-            'Dim PredNo = CInt(Val(temp))
-
             ' Sort RS() in descending order and write new list to combbox and worksheet
-            Dim u As Integer
-            Dim max_real As Integer
             Dim pResult As New List(Of GlycosylPredition)
 
-            If Match_m > 0 Then
-                For t As Integer = 1 To Match_n
-                    Dim max_temp = -1
+            For t As Integer = 1 To Match_n
+                pResult += New GlycosylPredition With {
+                    .score = RS(1, t),
+                    .struct = RS(2, t)
+                }
+            Next
 
-                    For s = 1 To Match_n
-                        If Right(RS(1, s), 1) <> "*" And Val(RS(1, s)) > max_temp Then
-                            max_temp = CInt(Val(RS(1, s)))
-                            u = s
-                        End If
-                    Next s
-
-                    RS(1, u) = RS(1, u) + "*"
-
-                    If t = 1 Then
-                        max_real = max_temp
-                    Else
-                        max_real = 1
-                    End If
-
-                    If max_temp / max_real = 1.0 Then
-                        Best_n = Best_n + 1
-                    End If
-
-                    pResult += New GlycosylPredition With {
-                        .ratio = max_temp / max_real,
-                        .best = max_temp / max_real = 1.0,
-                        .struct = RS(2, u)
-                    }
-                Next t
-            End If
-
-            Return pResult
+            Return pResult.OrderByDescending(Function(gly) gly.score)
         End Function
 
         Private Function IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
@@ -190,7 +146,6 @@ Namespace Algorithm
             ReDim m(20, 20), u(1, 100)
 
             Dim f1(1, 100) As Double, f2(1, 100) As Double
-            Dim w(5, 100) As Double
             Dim SugComb As String = ""
 
             ' 2. Read aglyone/sugar/acid combination and store each component to u()
@@ -199,7 +154,7 @@ Namespace Algorithm
 
             For e As Integer = 1 To Len(GlycN)
                 Lt = Mid(GlycN, e, 1)
-                If Lt = "," And Comma_n = 0 Then
+                If Lt = "," AndAlso Comma_n = 0 Then
                     SugComb = Right(GlycN, Len(GlycN) - e - 1)
                     Comma_n = Comma_n + 1
                 End If
@@ -214,6 +169,7 @@ Namespace Algorithm
             Dim NumComponent = g
             Dim NameComponent As String
             Dim NumDash As Double
+            Dim w(Math.Max(g, 6), 100) As Double
 
             ' 3. Identify each component, calculate mass, and store value to w()
             Lt = ""
