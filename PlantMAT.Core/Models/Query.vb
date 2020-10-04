@@ -83,7 +83,8 @@ Namespace Models
             If Candidates.Count = 0 Then
                 candidateNames = "no hits"
             Else
-                candidateNames = Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ").Substring(0, 64) & "..."
+                candidateNames = Candidates.Take(6).Select(Function(c) c.Name).JoinBy(", ")
+                candidateNames = If(candidateNames.Length > 64, candidateNames.Substring(0, 63) & "...", candidateNames)
             End If
 
             Return $"[{PeakNO}] {PrecursorIon} {candidateNames}"

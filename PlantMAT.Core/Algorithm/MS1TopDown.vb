@@ -134,14 +134,8 @@ Namespace Algorithm
             End If
 
             Return queries _
-                .Split(App.CPUCoreNumbers) _
                 .AsParallel _
-                .Select(Iterator Function(query) As IEnumerable(Of Query)
-                            For Each item In query
-                                Yield RunMs1Query(item, precursors)
-                            Next
-                        End Function) _
-                .IteratesALL
+                .Select(Function(query) RunMs1Query(query, precursors))
         End Function
 
         Private Function RunMs1Query(query As Query, precursors As PrecursorInfo()) As Query
