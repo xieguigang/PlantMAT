@@ -155,9 +155,8 @@ Namespace Algorithm
             For Each type As PrecursorInfo In precursors
                 Dim PrecursorIonMZ = type.adduct
                 Dim PrecursorIonN = type.M
-                Dim result = CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
 
-                For Each item As CandidateResult In result
+                For Each item As CandidateResult In CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
                     item.precursor_type = type.precursor_type
                     candidates.Add(item)
                 Next
@@ -168,15 +167,13 @@ Namespace Algorithm
             Return PatternPrediction(query)
         End Function
 
-        Private Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
-            Dim ErrorCheck = False
+        Private Iterator Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
             Dim RT_E = query.PeakNO
             Dim M_w = (query.PrecursorIon - PrecursorIonMZ) / PrecursorIonN
-            Dim Candidate As New List(Of CandidateResult)
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
-                Return {}
+                Return
             End If
 
             ' 暴力枚举的方法来搜索代谢物信息
@@ -190,7 +187,9 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                Call RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN).DoCall(AddressOf Candidate.AddRange)
+                                                For Each checked In RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN)
+                                                    Yield checked
+                                                Next
 
                                             Next DDMP_n
                                         Next Sin_n
@@ -201,8 +200,6 @@ Namespace Algorithm
                     Next dHex_n
                 Next HexA_n
             Next Hex_n
-
-            Return Candidate
         End Function
 
         Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
@@ -297,7 +294,7 @@ Namespace Algorithm
         Private Function PatternPrediction(query As Query) As Query
             ' for each candidate result
             For m As Integer = 0 To query.Candidates.Length - 1
-                Call PatternPredictionLoop(query.Accession, query(m), m)
+                Call PatternPredictionLoop(query.Accession, query(m))
             Next
 
             Return query
@@ -313,7 +310,7 @@ Namespace Algorithm
         Const Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
         Const DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
-        Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult, m As Integer)
+        Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
             Dim OH_n As Integer
