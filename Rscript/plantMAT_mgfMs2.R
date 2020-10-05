@@ -1,4 +1,5 @@
 imports "assembly" from "mzkit";
+imports "math" from "mzkit";
 imports "PlantMAT" from "PlantMAT.Core";
 imports ["JSON", "stringr"] from "R.base";
 
@@ -62,11 +63,18 @@ const settings = config(AglyconeMWRange = [300, 1000]);
 print("view of the configuration values that we used for the analysis:");
 print(settings);
 
+let data_query = raw_mgf 
+:> read.mgf 
+# :> take(1000)
+:> ions.unique(eq = 0.9, gt = 0.8, trim = 0.01) 
+:> as.query
+;
+
 let result = library_csv
 :> read.library
 :> MS1TopDown(settings)
 :> as.object
-:> do.call("MS1CP", query = raw_mgf :> read.mgf :> as.query, ionMode = ionMode)
+:> do.call("MS1CP", query = data_query, ionMode = ionMode)
 :> as.object(MS2ATopDown(settings))$MS2Annotation
 ;
 
