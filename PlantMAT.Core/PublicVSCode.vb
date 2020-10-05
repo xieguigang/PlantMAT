@@ -1,51 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::a97fbf6cd1743c9f08a1d128071b0050, PlantMAT.Core\PublicVSCode.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PublicVSCode
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    '     Function: GetPrecursorInfo, GetPrecursorIons, GetTopMs2, QueryFromMgf
-    ' 
-    ' /********************************************************************************/
+' Module PublicVSCode
+' 
+'     Constructor: (+1 Overloads) Sub New
+'     Function: GetPrecursorInfo, GetPrecursorIons, GetTopMs2, QueryFromMgf
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
-Imports PlantMAT.Core.Models.AnnotationResult
 
 Module PublicVSCode
 
@@ -165,6 +165,20 @@ Module PublicVSCode
 
     Public Function GetPrecursorInfo(precursor_type As String) As PrecursorInfo
         Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]")))
+    End Function
+
+    Public Function QueryFromPeakMs2(ion As PeakMs2) As Query
+        Return New Query With {
+            .PeakNO = CInt(ion.rt),
+            .Candidates = {},
+            .Ms2Peaks = New Ms2Peaks With {
+                .mz = ion.mzInto.Select(Function(a) a.mz).ToArray,
+                .into = ion.mzInto.Select(Function(a) a.intensity).ToArray
+            },
+            .Accession = ion.lib_guid,
+            .PrecursorIon = ion.mz,
+            .RT = ion.rt
+        }
     End Function
 
     Public Function QueryFromMgf(mgf As Ions) As Query

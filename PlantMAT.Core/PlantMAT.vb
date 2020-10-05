@@ -1,52 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::dbb82b6f0f05ca4128caaf40a019a228, PlantMAT.Core\PlantMAT.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PlantMAT
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: GetConfig, joinMs2Query, ms1Err, ms1Query, MS1TopDown
-    '               MS2ATopDown, ParseConfig, QueryFromMgf, readLibrary, readResultJSON
-    '               reportTable, toResultJSON
-    ' 
-    ' 
-    ' /********************************************************************************/
+' Module PlantMAT
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: GetConfig, joinMs2Query, ms1Err, ms1Query, MS1TopDown
+'               MS2ATopDown, ParseConfig, QueryFromMgf, readLibrary, readResultJSON
+'               reportTable, toResultJSON
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Linq
@@ -243,7 +244,7 @@ Module PlantMAT
         Dim mz1 As Double = AglyW + Attn_w - nH2O_w
         Dim precursor As PrecursorInfo = PublicVSCode.GetPrecursorInfo(precursor_type)
 
-        Return PPMmethod.ppm(mz1 + precursor.adduct, mz)
+        Return PPMmethod.PPM(mz1 + precursor.adduct, mz)
     End Function
 
     ''' <summary>
@@ -280,24 +281,35 @@ Module PlantMAT
     ''' <summary>
     ''' create plantMAT query from the given mgf ion stream
     ''' </summary>
-    ''' <param name="mgf"></param>
+    ''' <param name="mgf">the mgf ion collection or peak ms2 data model collection.</param>
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("as.query")>
     <RApiReturn(GetType(Query))>
     Public Function QueryFromMgf(<RRawVectorArgument> mgf As Object, Optional env As Environment = Nothing) As Object
-        Dim ions As pipeline = pipeline.TryCreatePipeline(Of Ions)(mgf, env)
+        Dim ions As pipeline = pipeline.TryCreatePipeline(Of Ions)(mgf, env, suppress:=True)
 
         If ions.isError Then
-            Return ions.getError
-        End If
+            ions = pipeline.TryCreatePipeline(Of PeakMs2)(mgf, env)
 
-        Return ions.populates(Of Ions)(env) _
-            .AsParallel _
-            .Select(Function(ion)
-                        Return PublicVSCode.QueryFromMgf(ion)
-                    End Function) _
-            .ToArray
+            If ions.isError Then
+                Return ions.getError
+            End If
+
+            Return ions.populates(Of PeakMs2)(env) _
+                .AsParallel _
+                .Select(Function(ion)
+                            Return PublicVSCode.QueryFromPeakMs2(ion)
+                        End Function) _
+                .ToArray
+        Else
+            Return ions.populates(Of Ions)(env) _
+                .AsParallel _
+                .Select(Function(ion)
+                            Return PublicVSCode.QueryFromMgf(ion)
+                        End Function) _
+                .ToArray
+        End If
     End Function
 
     ''' <summary>
