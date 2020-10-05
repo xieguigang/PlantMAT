@@ -60,6 +60,7 @@ Imports PlantMAT.Core.Report
 Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports PlantMATlib = PlantMAT.Core.Models.Library
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -196,8 +197,8 @@ Module PlantMAT
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("read.library")>
-    Public Function readLibrary(file As String) As Library()
-        Return file.LoadCsv(Of Library)(mute:=True).ToArray
+    Public Function readLibrary(file As String) As PlantMATlib()
+        Return file.LoadCsv(Of PlantMATlib)(mute:=True).ToArray
     End Function
 
     ''' <summary>
@@ -206,7 +207,7 @@ Module PlantMAT
     ''' <returns></returns>
     ''' 
     <ExportAPI("MS1TopDown")>
-    Public Function MS1TopDown(library As Library(), settings As Settings) As MS1TopDown
+    Public Function MS1TopDown(library As PlantMATlib(), settings As Settings) As MS1TopDown
         Return New MS1TopDown(library, settings)
     End Function
 
@@ -263,12 +264,14 @@ Module PlantMAT
             Return queries.getError
         End If
 
-        Dim fileIndex = files.ToDictionary(Function(path) path.BaseName)
+        Dim fileIndex As Dictionary(Of String, String) = files.ToDictionary(Function(path) path.BaseName)
         Dim joinIterator =
             Iterator Function() As IEnumerable(Of Query)
                 For Each query As Query In queries.populates(Of Query)(env)
                     If fileIndex.ContainsKey(query.PeakNO.ToString) Then
-                        query.Ms2Peaks = Ms2Peaks.ParseMs2(fileIndex(query.PeakNO.ToString).ReadAllLines)
+                        query.Ms2Peaks = fileIndex(query.PeakNO.ToString) _
+                            .ReadAllLines _
+                            .DoCall(AddressOf Ms2Peaks.ParseMs2)
                     End If
 
                     Yield query
