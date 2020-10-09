@@ -88,20 +88,22 @@ Namespace Algorithm
             Return result
         End Function
 
-        Private Iterator Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
-            For Each query As Query In queries
-                ' Perform the MS2 annotation and display the results
-                Call MS2Annotation(query)
-
-                Yield query
-            Next
+        ''' <summary>
+        ''' Perform the MS2 annotation and display the results
+        ''' </summary>
+        ''' <param name="queries"></param>
+        ''' <returns></returns>
+        Private Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
+            Return queries _
+                .AsParallel _
+                .Select(AddressOf MS2Annotation)
         End Function
 
         ''' <summary>
         ''' Loop through all candidates for each compound
         ''' </summary>
         ''' <param name="query"></param>
-        Private Sub MS2Annotation(query As Query)
+        Private Function MS2Annotation(query As Query) As Query
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
                     ' Read compound serial number and precuror ion mz
@@ -122,7 +124,9 @@ Namespace Algorithm
                     Call MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
                 End If
             Next
-        End Sub
+
+            Return query
+        End Function
 
         Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
             Dim candidate As CandidateResult = query(i)

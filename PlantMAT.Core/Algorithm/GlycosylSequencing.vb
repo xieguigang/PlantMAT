@@ -63,14 +63,16 @@ Namespace Algorithm
             mzPPM = settings.mzPPM
         End Sub
 
-        Public Iterator Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
-            For Each query As Query In queries
-                If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2Prediction(query)
-                End If
+        Public Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
+            Return queries _
+                .AsParallel _
+                .Select(Function(query)
+                            If Not query.Ms2Peaks Is Nothing Then
+                                Call MS2Prediction(query)
+                            End If
 
-                Yield query
-            Next
+                            Return query
+                        End Function)
         End Function
 
         Private Sub MS2Prediction(query As Query)

@@ -40,10 +40,11 @@ if (nchar(cli_config) > 0) {
 
 setwd(!script$dir);
 
-let library_csv as string = (?"--lib"      || cli_config$lib)  || stop("no library data file was provided!");
-let raw_mgf as string     = (?"--ions"     || cli_config$ions) || stop("you should provides a valid mgf file data!");
-let outputdir as string   = (?"--out"      || cli_config$out)  || `${dirname(raw_mgf)}/${basename(raw_mgf)}`;
-let ionMode as integer    = (?"--ion_mode" || cli_config$ion_mode);
+let library_csv as string      = (?"--lib"      || cli_config$lib)  || stop("no library data file was provided!");
+let raw_mgf as string          = (?"--ions"     || cli_config$ions) || stop("you should provides a valid mgf file data!");
+let outputdir as string        = (?"--out"      || cli_config$out)  || `${dirname(raw_mgf)}/${basename(raw_mgf)}`;
+let ionMode as integer         = (?"--ion_mode" || cli_config$ion_mode);
+let saveJSONdetails as boolean = ?"--json_output";
 
 if (!file.exists(library_csv)) {
 	stop(`the file path of library [${library_csv}] is invalid!`);
@@ -78,11 +79,13 @@ let result = library_csv
 :> as.object(MS2ATopDown(settings))$MS2Annotation
 ;
 
-# output the annotation result data set
-result
-:> result.json
-:> writeLines(`${outputdir}/PlantMAT.json`)
-;
+if (saveJSONdetails) {
+	# output the annotation result data set
+	result
+	:> result.json
+	:> writeLines(`${outputdir}/PlantMAT.json`)
+	;
+}
 
 result
 :> report.table
