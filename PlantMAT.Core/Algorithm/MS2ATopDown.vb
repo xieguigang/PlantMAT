@@ -185,11 +185,8 @@ Namespace Algorithm
                 Next s
             End If
 
-            Dim combText = CStr(aIon_n) & " ions annotated"
-
             ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
-                .title = combText,
                 .ions = aResult.ToArray,
                 .aglycone = AglyCheck
             }

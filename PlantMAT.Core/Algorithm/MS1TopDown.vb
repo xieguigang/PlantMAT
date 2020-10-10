@@ -45,6 +45,7 @@
 
 #End Region
 
+Imports System.Text
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
@@ -294,8 +295,14 @@ Namespace Algorithm
         Private Function PatternPrediction(query As Query) As Query
             ' for each candidate result
             For m As Integer = 0 To query.Candidates.Length - 1
-                Call PatternPredictionLoop(query.Accession, query(m))
+                Call PatternPredictionLoop(query.Accession, candidate:=query(m))
             Next
+
+            ' 20201010
+            ' 在这里是否需要过滤掉所有smiles字符串结果为空的candidate？
+            query.Candidates = query.Candidates _
+                .Where(Function(a) Not a.SMILES.IsNullOrEmpty) _
+                .ToArray
 
             Return query
         End Function
@@ -339,8 +346,10 @@ Namespace Algorithm
             n2 = 0
 
             For e As Integer = 1 To Len(AglyS1)
-                If Information.IsNumeric(Mid(AglyS1, e, 1)) Then
-                    n2 = CInt(Mid(AglyS1, e, 1))
+                Dim c As String = Mid(AglyS1, e, 1)
+
+                If Information.IsNumeric(c) Then
+                    n2 = CInt(c)
 
                     If n2 > n1 Then
                         n1 = n2
@@ -527,7 +536,7 @@ AllSugarConnected:
             Next v
 
             ' 4.3.2 Remove all duplicates regardless of order
-            Dim s = 1
+            Dim s As Integer = 1
 
             For e As Integer = 1 To w - 1
                 Dim c = 0
@@ -564,36 +573,39 @@ AllSugarConnected:
             Next e
 
             ' 5. Attach each sugar/acid combination to aglycone to create all possible glycosides
-            Dim GlycN As String
-            Dim SugComb As String, SugComb1 As String
+            Dim glycN As String
+            Dim sugComb As StringBuilder
+            Dim sugComb1 As String
             Dim predicted_SMILES As New List(Of String)
 
-            For e As Integer = 1 To CInt(s) - 1
-                SugComb = ""
+            For e As Integer = 1 To s - 1
+                sugComb = New StringBuilder
 
                 For g As Integer = 1 To OH_n
                     If u(e, g) <> "" Then
-                        SugComb1 = u(e, g)
+                        sugComb1 = u(e, g)
 
-                        If InStr(SugComb1, Hex) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Hex, "-Hex")
-                        If InStr(SugComb1, HexA) <> 0 Then SugComb1 = Strings.Replace(SugComb1, HexA, "-HexA")
-                        If InStr(SugComb1, dHex) <> 0 Then SugComb1 = Strings.Replace(SugComb1, dHex, "-dHex")
-                        If InStr(SugComb1, Mal) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Mal, "-Mal")
-                        If InStr(SugComb1, Pen) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Pen, "-Pen")
-                        If InStr(SugComb1, Cou) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Cou, "-Cou")
-                        If InStr(SugComb1, Fer) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Fer, "-Fer")
-                        If InStr(SugComb1, Sin) <> 0 Then SugComb1 = Strings.Replace(SugComb1, Sin, "-Sin")
-                        If InStr(SugComb1, DDMP) <> 0 Then SugComb1 = Strings.Replace(SugComb1, DDMP, "-DDMP")
+                        If InStr(sugComb1, Hex) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Hex, "-Hex")
+                        If InStr(sugComb1, HexA) <> 0 Then sugComb1 = Strings.Replace(sugComb1, HexA, "-HexA")
+                        If InStr(sugComb1, dHex) <> 0 Then sugComb1 = Strings.Replace(sugComb1, dHex, "-dHex")
+                        If InStr(sugComb1, Mal) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Mal, "-Mal")
+                        If InStr(sugComb1, Pen) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Pen, "-Pen")
+                        If InStr(sugComb1, Cou) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Cou, "-Cou")
+                        If InStr(sugComb1, Fer) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Fer, "-Fer")
+                        If InStr(sugComb1, Sin) <> 0 Then sugComb1 = Strings.Replace(sugComb1, Sin, "-Sin")
+                        If InStr(sugComb1, DDMP) <> 0 Then sugComb1 = Strings.Replace(sugComb1, DDMP, "-DDMP")
 
-                        SugComb = SugComb + ", " + SugComb1
+                        sugComb = sugComb.Append(", ").Append(sugComb1)
                     Else
                         Exit For
                     End If
                 Next g
 
                 ' GlycN = AglyN.Replace("-", "_") & SugComb
-                GlycN = $"[{peakNO}]" & SugComb
-                predicted_SMILES.Add(GlycN)
+                glycN = $"[{peakNO}]" & sugComb.ToString
+
+                sugComb.Clear()
+                predicted_SMILES.Add(glycN)
             Next
 
             candidate.SMILES = predicted_SMILES.ToArray

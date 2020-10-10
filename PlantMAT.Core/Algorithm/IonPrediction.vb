@@ -117,37 +117,37 @@ Namespace Algorithm
 
                                                         Call LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
 
-                                                        CO2Loss = CO2Loss + "-CO2"
+                                                        CO2Loss = CO2Loss & "-CO2"
                                                     Next CO2_n
                                                     CO2Loss = ""
-                                                    H2OLoss = H2OLoss + "-H2O"
+                                                    H2OLoss = H2OLoss & "-H2O"
                                                 Next H2O_n
                                                 H2OLoss = ""
-                                                DDMPLoss = DDMPLoss + "-DDMP"
+                                                DDMPLoss = DDMPLoss & "-DDMP"
                                             Next DDMP_n
                                             DDMPLoss = ""
-                                            SinLoss = SinLoss + "-Sin"
+                                            SinLoss = SinLoss & "-Sin"
                                         Next Sin_n
                                         SinLoss = ""
-                                        FerLoss = FerLoss + "-Fer"
+                                        FerLoss = FerLoss & "-Fer"
                                     Next Fer_n
                                     FerLoss = ""
-                                    CouLoss = CouLoss + "-Cou"
+                                    CouLoss = CouLoss & "-Cou"
                                 Next Cou_n
                                 CouLoss = ""
-                                MalLoss = MalLoss + "-Mal"
+                                MalLoss = MalLoss & "-Mal"
                             Next Mal_n
                             MalLoss = ""
-                            PenLoss = PenLoss + "-Pen"
+                            PenLoss = PenLoss & "-Pen"
                         Next Pen_n
                         PenLoss = ""
-                        dHexLoss = dHexLoss + "-dHex"
+                        dHexLoss = dHexLoss & "-dHex"
                     Next dHex_n
                     dHexLoss = ""
-                    HexALoss = HexALoss + "-HexA"
+                    HexALoss = HexALoss & "-HexA"
                 Next HexA_n
                 HexALoss = ""
-                HexLoss = HexLoss + "-Hex"
+                HexLoss = HexLoss & "-Hex"
             Next Hex_n
 
         End Sub

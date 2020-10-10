@@ -54,7 +54,6 @@ Namespace Models.AnnotationResult
         Public Property Match_m As Integer
         Public Property Pred_n As Integer
         Public Property Match_n As Integer
-        Public Property Best_n As Integer
 
         Public Overrides Function ToString() As String
             Return CStr(Match_m) & "/" & CStr(Pred_n) & " candidates"

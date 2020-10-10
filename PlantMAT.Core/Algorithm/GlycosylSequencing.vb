@@ -1,49 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::6444b6f262b2a635adc5b656c488e1a6, PlantMAT.Core\Algorithm\GlycosylSequencing.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class GlycosylSequencing
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
-    ' 
-    '         Sub: applySettings, MS2Prediction
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class GlycosylSequencing
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: IonPredictionMatching, MS2P, MS2PredictionLoop
+' 
+'         Sub: applySettings, MS2Prediction
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
@@ -79,9 +80,9 @@ Namespace Algorithm
             Dim DHIonMZ = query.PrecursorIon
 
             ' Predict MS2
-            For i As Integer = 0 To query.Candidates.Count - 1
+            For i As Integer = 0 To query.Candidates.Length - 1
                 Dim MIonMZ#
-                Dim precursor = PublicVSCode.GetPrecursorInfo(query(i).precursor_type)
+                Dim precursor As PrecursorInfo = PublicVSCode.GetPrecursorInfo(query(i).precursor_type)
 
                 If precursor.precursor_type.Last = "-"c Then
                     MIonMZ = ((DHIonMZ - precursor.adduct) / precursor.M) - H_w + e_w
@@ -94,15 +95,14 @@ Namespace Algorithm
                 Dim Pred_n = 0
                 Dim Match_n = 0
                 Dim Match_m = 0
-                Dim Best_n = 0
 
                 ReDim RS(2, 1)
 
                 ' Create a combbox for MS2 prediction results of each combination possibility
-                Dim comb As New List(Of GlycosylPredition )
+                Dim comb As New List(Of GlycosylPredition)
 
                 For Each smile As String In query(i).SMILES.SafeQuery
-                    Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n, Best_n).DoCall(AddressOf comb.AddRange)
+                    Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n).DoCall(AddressOf comb.AddRange)
                 Next
 
                 If comb.Count > 0 Then
@@ -110,14 +110,13 @@ Namespace Algorithm
                         .Match_m = Match_m,
                         .Pred_n = Pred_n,
                         .pResult = comb.ToArray,
-                        .Best_n = Best_n,
                         .Match_n = Match_n
                     }
                 End If
             Next
         End Sub
 
-        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As String, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%, ByRef Best_n%) As IEnumerable(Of GlycosylPredition)
+        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As String, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%) As IEnumerable(Of GlycosylPredition)
             Dim candidate As CandidateResult = query(i)
             ' Predict MS2 [MSPrediction()] for each structural possibility
             Dim GlycN As String = smiles
@@ -169,8 +168,8 @@ Namespace Algorithm
             Next e
 
             Dim NumComponent = g
-            Dim NameComponent As String
-            Dim NumDash As Double
+            Dim nameComponent As String
+            Dim numDash As Integer
             Dim w(Math.Max(g, 6), 100) As Double
 
             ' 3. Identify each component, calculate mass, and store value to w()
@@ -181,6 +180,7 @@ Namespace Algorithm
                     Lt = Mid(u(1, e), h12, 1)
                     If Lt <> "-" Then
                         m(e - 1, s) = Lt + m(e - 1, s)
+
                         If m(e - 1, s) = "Hex" Then w(e - 1, s) = Hex_w - H2O_w
                         If m(e - 1, s) = "HexA" Then w(e - 1, s) = HexA_w - H2O_w
                         If m(e - 1, s) = "dHex" Then w(e - 1, s) = dHex_w - H2O_w
@@ -245,31 +245,37 @@ Namespace Algorithm
             ' calualte mass of each fragment (loss), and store value to f1()
             Dim h1 = h + 1
 
-            Dim NameSugar As String = ""
+            Dim nameSugar As String = ""
             Dim mass As Double
             Dim f1_temp As Double
+            Dim c As String
 
             For e = 2 To NumComponent
-                NameComponent = u(1, e)
-                NumDash = 0
-                For g = Len(NameComponent) To 1 Step -1
-                    NameSugar = Mid(NameComponent, g, 1) & NameSugar
-                    If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                    If NameSugar = "-Hex" Then mass = Hex_w
-                    If NameSugar = "-HexA" Then mass = HexA_w
-                    If NameSugar = "-dHex" Then mass = dHex_w
-                    If NameSugar = "-Pen" Then mass = Pen_w
-                    If NameSugar = "-Mal" Then mass = Mal_w
-                    If NameSugar = "-Cou" Then mass = Cou_w
-                    If NameSugar = "-Fer" Then mass = Fer_w
-                    If NameSugar = "-Sin" Then mass = Sin_w
-                    If NameSugar = "-DDMP" Then mass = DDMP_w
+                nameComponent = u(1, e)
+                numDash = 0
+
+                For g = Len(nameComponent) To 1 Step -1
+
+                    c = Mid(nameComponent, g, 1)
+                    nameSugar = c & nameSugar
+
+                    If c = "-" Then numDash = numDash + 1
+                    If nameSugar = "-Hex" Then mass = Hex_w
+                    If nameSugar = "-HexA" Then mass = HexA_w
+                    If nameSugar = "-dHex" Then mass = dHex_w
+                    If nameSugar = "-Pen" Then mass = Pen_w
+                    If nameSugar = "-Mal" Then mass = Mal_w
+                    If nameSugar = "-Cou" Then mass = Cou_w
+                    If nameSugar = "-Fer" Then mass = Fer_w
+                    If nameSugar = "-Sin" Then mass = Sin_w
+                    If nameSugar = "-DDMP" Then mass = DDMP_w
+
                     If mass <> 0 Then
                         h = h + 1
-                        If NumDash = 1 Then f1_temp = mass
-                        If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
-                        If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
-                        NameSugar = ""
+                        If numDash = 1 Then f1_temp = mass
+                        If numDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
+                        If numDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
+                        nameSugar = ""
                         mass = 0
                     End If
                 Next g
@@ -280,27 +286,36 @@ Namespace Algorithm
             Next h2
 
             h1 = h + 1
+
             For e = 2 To NumComponent
-                NameComponent = u(1, e)
-                NumDash = 0
-                For g = 1 To Len(NameComponent)
-                    NameSugar = Mid(NameComponent, g, 1) + NameSugar
-                    If Mid(NameComponent, g, 1) = "-" Then NumDash = NumDash + 1
-                    If NameSugar = "Hex-" Then mass = Hex_w
-                    If NameSugar = "HexA-" Then mass = HexA_w
-                    If NameSugar = "dHex-" Then mass = dHex_w
-                    If NameSugar = "Pen-" Then mass = Pen_w
-                    If NameSugar = "Mal-" Then mass = Mal_w
-                    If NameSugar = "Cou-" Then mass = Cou_w
-                    If NameSugar = "Fer-" Then mass = Fer_w
-                    If NameSugar = "Sin-" Then mass = Sin_w
-                    If NameSugar = "DDMP-" Then mass = DDMP_w
+                nameComponent = u(1, e)
+                numDash = 0
+
+                For g = 1 To Len(nameComponent)
+
+                    c = Mid(nameComponent, g, 1)
+                    nameSugar = c & nameSugar
+
+                    If c = "-" Then numDash = numDash + 1
+                    If nameSugar = "Hex-" Then mass = Hex_w
+                    If nameSugar = "HexA-" Then mass = HexA_w
+                    If nameSugar = "dHex-" Then mass = dHex_w
+                    If nameSugar = "Pen-" Then mass = Pen_w
+                    If nameSugar = "Mal-" Then mass = Mal_w
+                    If nameSugar = "Cou-" Then mass = Cou_w
+                    If nameSugar = "Fer-" Then mass = Fer_w
+                    If nameSugar = "Sin-" Then mass = Sin_w
+                    If nameSugar = "DDMP-" Then mass = DDMP_w
+
                     If mass <> 0 Then
+
                         h = h + 1
-                        If NumDash = 1 Then f1_temp = mass
-                        If NumDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
-                        If NumDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
-                        NameSugar = ""
+
+                        If numDash = 1 Then f1_temp = mass
+                        If numDash = 2 Then f1(1, h) = f1_temp + mass - H2O_w
+                        If numDash > 2 Then f1(1, h) = f1(1, h - 1) + mass - H2O_w
+
+                        nameSugar = ""
                         mass = 0
                     End If
                 Next g
@@ -316,7 +331,9 @@ Namespace Algorithm
 
             For e As Integer = 1 To h
                 For s = 1 To g
-                    If Int(f1(1, e)) = Int(f2(1, s)) Then GoTo NextOne
+                    If Int(f1(1, e)) = Int(f2(1, s)) Then
+                        GoTo NextOne
+                    End If
                 Next s
                 g = g + 1
                 f2(1, g) = f1(1, e)
@@ -330,7 +347,9 @@ NextOne:
                 h = 1
                 For x = 0 To 1
                     For y = 0 To 1
-                        If x + y > 2 Then Exit For
+                        If x + y > 2 Then
+                            Exit For
+                        End If
                         pIonList(e, h) = MIonMZ - f2(1, e) - x * H2O_w - y * CO2_w
                         h = h + 1
                     Next y

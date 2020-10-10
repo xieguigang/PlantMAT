@@ -44,6 +44,7 @@ Imports System.Runtime.CompilerServices
 Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
 
@@ -164,7 +165,8 @@ Module PublicVSCode
     End Function
 
     Public Function GetPrecursorInfo(precursor_type As String) As PrecursorInfo
-        Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]")))
+        Static cache As New Dictionary(Of String, PrecursorInfo)
+        Return cache.ComputeIfAbsent(precursor_type, Function() New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]"))))
     End Function
 
     Public Function QueryFromPeakMs2(ion As PeakMs2) As Query
