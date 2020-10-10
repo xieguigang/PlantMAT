@@ -67,6 +67,7 @@ Namespace Algorithm
         Public Function MS2P(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
             Return queries _
                 .AsParallel _
+                .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                 .Select(Function(query)
                             If Not query.Ms2Peaks Is Nothing Then
                                 Call MS2Prediction(query)

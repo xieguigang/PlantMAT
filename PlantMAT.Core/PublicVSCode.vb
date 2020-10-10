@@ -52,6 +52,7 @@ Module PublicVSCode
 
     Public db_SugarAcid As db_SugarAcid()
     Public db_PrecursorIon As db_PrecursorIon()
+    Public Parallelism As Integer = 8
 
     Public Const Hex_w = 180.06338828,
         HexA_w = 194.04265285,
@@ -135,6 +136,16 @@ Module PublicVSCode
                         }
                     End Function) _
             .ToArray
+
+        If App.CommandLine.ContainsParameter("--parallel") Then
+            Parallelism = CInt(Val(App.CommandLine("--parallel")))
+
+            If Parallelism <= 0 Then
+                Call $"incorrect parallel configuration value: --parallel ""{App.CommandLine("--parallel")}"", a positive integer value should be specific!".Warning
+            End If
+        End If
+
+        Call $"Run PlantMAT analysis with parallelism: {Parallelism} cpu threads.".__INFO_ECHO
     End Sub
 
     <Extension>
@@ -166,7 +177,17 @@ Module PublicVSCode
 
     Public Function GetPrecursorInfo(precursor_type As String) As PrecursorInfo
         Static cache As New Dictionary(Of String, PrecursorInfo)
-        Return cache.ComputeIfAbsent(precursor_type, Function() New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]"))))
+
+        ' Operations that change non-concurrent collections must have exclusive access. 
+        ' A Concurrent update was performed on this collection And corrupted its state. 
+        ' The Collection's state is no longer correct.
+        SyncLock cache
+            Return cache.ComputeIfAbsent(precursor_type, AddressOf ParseInternal)
+        End SyncLock
+    End Function
+
+    Private Function ParseInternal(precursor_type As String) As PrecursorInfo
+        Return New PrecursorInfo(Provider.GetCalculator(precursor_type.Last)(precursor_type.GetStackValue("[", "]")))
     End Function
 
     Public Function QueryFromPeakMs2(ion As PeakMs2) As Query

@@ -96,6 +96,7 @@ Namespace Algorithm
         Private Function MS2ATopDown(queries As IEnumerable(Of Query)) As IEnumerable(Of Query)
             Return queries _
                 .AsParallel _
+                .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                 .Select(AddressOf MS2Annotation)
         End Function
 

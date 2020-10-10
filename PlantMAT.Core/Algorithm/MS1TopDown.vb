@@ -147,6 +147,7 @@ Namespace Algorithm
 
             Return queries _
                 .AsParallel _
+                .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                 .Select(Function(query) RunMs1Query(query, precursors))
         End Function
 
