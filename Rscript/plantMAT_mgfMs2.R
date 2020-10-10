@@ -67,7 +67,7 @@ print(settings);
 let data_query = raw_mgf 
 :> read.mgf 
 # :> take(1000)
-:> ions.unique(eq = 0.9, gt = 0.8, trim = 0.01) 
+:> ions.unique(eq = 0.85, gt = 0.75, trim = 0.05) 
 :> as.query
 ;
 
