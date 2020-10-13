@@ -6,7 +6,7 @@ const settings = config();
 print("view of the configuration values that we used for the analysis:");
 print(settings);
 
-const test as string = "D:\biodeep\flavone\AnnoDataSet\PlantMAT.MS1TopDown.json";
+const test as string = "F:\PlantMAT.MS1TopDown.json";
 
 let result = test 
 :> read.query_result 
