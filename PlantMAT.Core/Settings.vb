@@ -68,8 +68,23 @@ Public Class Settings
     Public Property NumofAcidDDMP As Integer()
 
     Public Property PrecursorIonType As String()
+
+    ''' <summary>
+    ''' 一级母离子搜索的ppm阈值
+    ''' </summary>
+    ''' <returns></returns>
     Public Property SearchPPM As Double
+
+    ''' <summary>
+    ''' 删除低丰度碎片的相对响应度的阈值
+    ''' </summary>
+    ''' <returns></returns>
     Public Property NoiseFilter As Double
+
+    ''' <summary>
+    ''' 二级碎片匹配的ppm值
+    ''' </summary>
+    ''' <returns></returns>
     Public Property mzPPM As Double
 
     Public Overrides Function ToString() As String
