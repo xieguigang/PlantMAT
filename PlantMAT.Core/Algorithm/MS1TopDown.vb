@@ -150,6 +150,7 @@ Namespace Algorithm
 
             Return queries _
                 .GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
+                .ToArray _
                 .AsParallel _
                 .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                 .Select(Function(query)
