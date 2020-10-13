@@ -29,18 +29,20 @@ result = PlantMAT.MS1TopDown
 ;
 
 # output the annotation result data set
-result
-:> as.stream
-:> json(compress = FALSE)
-:> writeLines("./A17_Root_MS2TopDown.json")
-;
+# result
+# :> as.stream
+# :> as.vector(mode = "query")
+# :> json(compress = FALSE)
+# :> writeLines("./A17_Root_MS2TopDown.json")
+# ;
 
 # output the annotation report html
-result
-:> as.stream
-:> html
-:> writeLines("./A17_Root_MS2TopDown.html")
-;
+# result
+# :> as.stream
+# :> as.vector(mode = "query")
+# :> html
+# :> writeLines("./A17_Root_MS2TopDown.html")
+# ;
 
 result
 :> as.stream

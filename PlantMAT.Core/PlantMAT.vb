@@ -103,6 +103,7 @@ metabolites and is also a powerful tool for the discovery of structurally
 novel metabolites.
 ")>
 <RTypeExport("precursor", GetType(PrecursorInfo))>
+<RTypeExport("query", GetType(Query))>
 Module PlantMAT
 
     Sub New()
