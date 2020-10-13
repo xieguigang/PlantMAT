@@ -46,12 +46,15 @@
 #End Region
 
 Imports System.Text
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Math
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
 Imports stdNum = System.Math
 Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
+Imports Info = Microsoft.VisualBasic.Information
 
 Namespace Algorithm
 
@@ -146,33 +149,48 @@ Namespace Algorithm
             End If
 
             Return queries _
+                .GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
                 .AsParallel _
                 .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
-                .Select(Function(query) RunMs1Query(query, precursors))
+                .Select(Function(query)
+                            Return RunMs1Query(query, precursors)
+                        End Function)
         End Function
 
-        Private Function RunMs1Query(query As Query, precursors As PrecursorInfo()) As Query
+        ''' <summary>
+        ''' query with the same precursor ion m/z
+        ''' </summary>
+        ''' <param name="queries"></param>
+        ''' <param name="precursors"></param>
+        ''' <returns></returns>
+        Private Iterator Function RunMs1Query(queries As IEnumerable(Of Query), precursors As PrecursorInfo()) As IEnumerable(Of Query)
+            Dim queryList As Query() = queries.ToArray
             Dim candidates As New List(Of CandidateResult)
+            Dim precursorIon = Aggregate query As Query In queryList Into Average(query.PrecursorIon)
 
             For Each type As PrecursorInfo In precursors
                 Dim PrecursorIonMZ = type.adduct
                 Dim PrecursorIonN = type.M
 
-                For Each item As CandidateResult In CombinatorialPrediction(query, PrecursorIonMZ, PrecursorIonN)
+                For Each item As CandidateResult In CombinatorialPrediction(0, precursorIon, PrecursorIonMZ, PrecursorIonN)
                     item.precursor_type = type.precursor_type
+                    ' add the common candidate result
                     candidates.Add(item)
                 Next
             Next
 
-            query.Candidates = candidates.ToArray
-            query = PatternPrediction(query)
+            For Each query As Query In queryList
+                Yield query
+            Next
 
-            Return query
+            Query.Candidates = candidates.ToArray
+            Query = PatternPrediction(Query)
+
+            Return Query
         End Function
 
-        Private Iterator Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
-            Dim RT_E = query.PeakNO
-            Dim M_w = (query.PrecursorIon - PrecursorIonMZ) / PrecursorIonN
+        Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
+            Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
@@ -190,7 +208,7 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                For Each checked In RestrictionCheck(RT_E, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN)
+                                                For Each checked In RestrictionCheck(rt_e, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN)
                                                     Yield checked
                                                 Next
 
@@ -350,7 +368,7 @@ Namespace Algorithm
             For e As Integer = 1 To Len(AglyS1)
                 Dim c As String = Mid(AglyS1, e, 1)
 
-                If Information.IsNumeric(c) Then
+                If Info.IsNumeric(c) Then
                     n2 = CInt(c)
 
                     If n2 > n1 Then
