@@ -60,25 +60,24 @@ if (ionMode == 0) {
 
 # use default configuration
 const settings = config(AglyconeMWRange = [400, 800], SearchPPM = 5,
-	NumofSugarAll = [0,6],
-    NumofAcidAll = [0,1],
-    NumofSugarHex = [0,6],
+	NumofSugarAll  = [0,6],
+    NumofAcidAll   = [0,1],
+    NumofSugarHex  = [0,6],
     NumofSugarHexA = [0,6],
     NumofSugardHex = [0,6],
-                              NumofSugarPen = [0,6],
-                              NumofAcidMal = [0,1],
-                              NumofAcidCou = [0,1],
-                              NumofAcidFer = [0,1],
-                              NumofAcidSin = [0,1],
-                              NumofAcidDDMP = [0,1]
-			);
+    NumofSugarPen  = [0,6],
+    NumofAcidMal   = [0,1],
+    NumofAcidCou   = [0,1],
+    NumofAcidFer   = [0,1],
+    NumofAcidSin   = [0,1],
+    NumofAcidDDMP  = [0,1]
+);
 
 print("view of the configuration values that we used for the analysis:");
 print(settings);
 
 let data_query = raw_mgf 
 :> read.mgf 
-# :> take(1000)
 :> ions.unique(eq = 0.85, gt = 0.75, trim = 0.05) 
 :> as.query
 ;
@@ -90,8 +89,12 @@ let result = library_csv
 :> do.call("MS1CP", query = data_query, ionMode = ionMode)
 ;
 
-result :> result.json :> writeLines(`${outputdir}/PlantMAT.MS1TopDown.json`);
+# save MS1TopDown result for debug
+result 
+:> result.json 
+:> writeLines(`${outputdir}/PlantMAT.MS1TopDown.json`);
 
+# run Ms2 analysis for molecular structure prediction
 result = result :> as.object(MS2ATopDown(settings))$MS2Annotation;
 
 if (saveJSONdetails) {
@@ -104,10 +107,12 @@ if (saveJSONdetails) {
 	;
 }
 
+# export result as excel table
 result
 :> as.stream
 :> report.table
 :> write.csv(file = `${outputdir}/PlantMAT.csv`, row_names = FALSE)
 ;
 
+# clear the cache data file
 result :> delete;
