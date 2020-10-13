@@ -48,14 +48,14 @@
 Imports System.Text
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Math
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
+Imports Info = Microsoft.VisualBasic.Information
 Imports stdNum = System.Math
 Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
-Imports Info = Microsoft.VisualBasic.Information
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Algorithm
 

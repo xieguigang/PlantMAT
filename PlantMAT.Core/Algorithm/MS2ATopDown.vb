@@ -93,14 +93,16 @@ Namespace Algorithm
 
             Using writer As New BinaryDataWriter(cacheFile.Open)
                 For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
-                    Dim buffer As MemoryStream = GetType(Query) _
+                    Dim json As JsonObject = GetType(Query) _
                         .GetJsonElement(query, New JSONSerializerOptions) _
-                        .As(Of JsonObject) _
-                        .DoCall(AddressOf BSON.GetBuffer)
+                        .As(Of JsonObject)
 
-                    Call writer.Write(buffer.Length)
-                    Call writer.Write(buffer.ToArray)
+                    Using buffer As MemoryStream = BSON.GetBuffer(json)
+                        Call writer.Write(buffer.Length)
+                        Call writer.Write(buffer.ToArray)
+                    End Using
 
+                    Call json.Dispose()
                     Call Console.WriteLine(query.ToString)
                 Next
             End Using
