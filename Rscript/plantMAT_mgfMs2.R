@@ -92,19 +92,22 @@ let result = library_csv
 
 result :> result.json :> writeLines(`${outputdir}/PlantMAT.MS1TopDown.json`);
 
-result
-:> as.object(MS2ATopDown(settings))$MS2Annotation
-;
+result = result :> as.object(MS2ATopDown(settings))$MS2Annotation;
 
 if (saveJSONdetails) {
 	# output the annotation result data set
 	result
+	:> as.stream
+	:> as.vector(mode = "query")
 	:> result.json
 	:> writeLines(`${outputdir}/PlantMAT.json`)
 	;
 }
 
 result
+:> as.stream
 :> report.table
 :> write.csv(file = `${outputdir}/PlantMAT.csv`, row_names = FALSE)
 ;
+
+result :> delete;

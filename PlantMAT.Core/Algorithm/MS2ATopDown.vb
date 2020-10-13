@@ -80,6 +80,14 @@ Namespace Algorithm
             cacheFile = cache
         End Sub
 
+        Public Sub Delete()
+            Call cacheFile.DeleteFile
+
+            If Not cacheFile.FileExists Then
+                Call Console.WriteLine($"cache file `{cacheFile}` cleanup!")
+            End If
+        End Sub
+
         Public Overrides Iterator Function GetQueries() As IEnumerable(Of Query)
             Using reader As New BinaryDataReader(cacheFile.Open)
                 Do While Not reader.EndOfStream

@@ -355,6 +355,13 @@ Module PlantMAT
         End If
     End Function
 
+    <ExportAPI("delete")>
+    Public Sub delete(cache As QueryPopulator)
+        If TypeOf cache Is CacheFilePopulator Then
+            Call DirectCast(cache, CacheFilePopulator).Delete()
+        End If
+    End Sub
+
     ''' <summary>
     ''' run report table output
     ''' </summary>
