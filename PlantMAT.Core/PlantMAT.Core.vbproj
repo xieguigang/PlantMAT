@@ -156,6 +156,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\InternalCache.vb" />
     <Compile Include="Models\Ms2Peaks.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
     <Compile Include="Algorithm\IonPrediction.vb" />

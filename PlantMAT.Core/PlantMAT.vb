@@ -55,6 +55,7 @@ Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports PlantMAT.Core.Algorithm
+Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Report
 Imports SMRUCC.Rsharp.Runtime
