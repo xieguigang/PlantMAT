@@ -134,12 +134,16 @@ Namespace Algorithm
             Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
             Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
 
+            Console.WriteLine($"data cache at location: {cacheFile}.")
+
             Using writer As New BinaryDataWriter(cacheFile.Open)
                 For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
                     Dim buffer = GetType(Query).GetJsonElement(query, New JSONSerializerOptions).As(Of JsonObject).DoCall(AddressOf BSON.GetBuffer)
 
                     Call writer.Write(buffer.Length)
                     Call writer.Write(buffer.ToArray)
+
+                    Call Console.WriteLine(query.ToString)
                 Next
             End Using
 
