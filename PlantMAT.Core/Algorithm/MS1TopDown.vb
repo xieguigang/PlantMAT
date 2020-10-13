@@ -55,6 +55,7 @@ Imports PlantMAT.Core.Models.AnnotationResult
 Imports stdNum = System.Math
 Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 Imports Info = Microsoft.VisualBasic.Information
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 
 Namespace Algorithm
 
@@ -148,11 +149,11 @@ Namespace Algorithm
                 precursors = Me.Precursors.Where(Function(a) a.precursor_type.Last = "-"c).ToArray
             End If
 
-            Dim runParallel = From query
+            Dim runParallel = From query As NamedCollection(Of Query)
                               In queries.GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
                                   .AsParallel _
                                   .WithDegreeOfParallelism(PublicVSCode.Parallelism)
-                              Select RunMs1Query(query, precursors)
+                              Select RunMs1Query(query, precursors).ToArray
 
             Return runParallel.IteratesALL
         End Function
