@@ -165,8 +165,9 @@ Namespace Algorithm
             Next
 
             query.Candidates = candidates.ToArray
+            query = PatternPrediction(query)
 
-            Return PatternPrediction(query)
+            Return query
         End Function
 
         Private Iterator Function CombinatorialPrediction(query As Query, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
