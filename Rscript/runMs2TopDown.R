@@ -6,7 +6,7 @@ const settings = config();
 print("view of the configuration values that we used for the analysis:");
 print(settings);
 
-const test as string = "V:\D042-E035\pos.mzML\save\raw.json";
+const test as string = "D:\biodeep\flavone\AnnoDataSet\PlantMAT.MS1TopDown.json";
 
 let result = test 
 :> read.query_result 
@@ -14,18 +14,22 @@ let result = test
 ;
 
 # output the annotation result data set
-result
-:> json(compress = FALSE)
-:> writeLines(`${dirname(test)}/${basename(test)}.Ms2TopDown.json`)
-;
+# result
+# :> json(compress = FALSE)
+# :> writeLines(`${dirname(test)}/${basename(test)}.Ms2TopDown.json`)
+# ;
 
 # output the annotation report html
-result
-:> html
-:> writeLines(`${dirname(test)}/${basename(test)}.Ms2TopDown.html`)
-;
+# result
+# :> html
+# :> writeLines(`${dirname(test)}/${basename(test)}.Ms2TopDown.html`)
+# ;
 
 result
+:> as.stream
 :> report.table
 :> write.csv(file = `${dirname(test)}/${basename(test)}.Ms2TopDown.csv`, row_names = FALSE)
 ;
+
+# clear the cache data file
+result :> delete;

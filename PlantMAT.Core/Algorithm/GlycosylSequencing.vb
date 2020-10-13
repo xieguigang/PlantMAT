@@ -68,7 +68,11 @@ Namespace Algorithm
             Return queries _
                 .AsParallel _
                 .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
-                .Select(Function(query)
+                .Select(Function(query As Query)
+                            ' fix of the reference problem
+                            ' do object clone for break reference
+                            query = New Query(query)
+
                             If Not query.Ms2Peaks Is Nothing Then
                                 Call MS2Prediction(query)
                             End If
