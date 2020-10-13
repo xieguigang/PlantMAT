@@ -79,7 +79,7 @@ print(settings);
 let data_query = raw_mgf 
 :> read.mgf 
 :> ions.unique(eq = 0.85, gt = 0.75, trim = 0.05) 
-:> as.query
+:> as.query(mol_range = [300, 1000])
 ;
 
 let result = library_csv

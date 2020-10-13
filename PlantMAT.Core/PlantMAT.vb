@@ -49,6 +49,7 @@ Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.CommandLine.Reflection
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
@@ -59,9 +60,11 @@ Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Report
 Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
 Imports PlantMATlib = PlantMAT.Core.Models.Library
+Imports REnv = SMRUCC.Rsharp.Runtime
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -291,8 +294,19 @@ Module PlantMAT
     ''' <returns></returns>
     <ExportAPI("as.query")>
     <RApiReturn(GetType(Query))>
-    Public Function QueryFromMgf(<RRawVectorArgument> mgf As Object, Optional env As Environment = Nothing) As Object
+    Public Function QueryFromMgf(<RRawVectorArgument> mgf As Object,
+                                 <RRawVectorArgument>
+                                 Optional mol_range As Object = Nothing,
+                                 Optional env As Environment = Nothing) As Object
+
         Dim ions As pipeline = pipeline.TryCreatePipeline(Of Ions)(mgf, env, suppress:=True)
+        Dim mwRange As DoubleRange = Nothing
+
+        If Not mol_range Is Nothing Then
+            mwRange = DirectCast(REnv.asVector(Of Double)(mol_range), Double())
+        End If
+
+        Dim query As Query()
 
         If ions.isError Then
             ions = pipeline.TryCreatePipeline(Of PeakMs2)(mgf, env)
@@ -301,20 +315,32 @@ Module PlantMAT
                 Return ions.getError
             End If
 
-            Return ions.populates(Of PeakMs2)(env) _
+            query = ions.populates(Of PeakMs2)(env) _
                 .AsParallel _
                 .Select(Function(ion)
                             Return PublicVSCode.QueryFromPeakMs2(ion)
                         End Function) _
                 .ToArray
         Else
-            Return ions.populates(Of Ions)(env) _
+            query = ions.populates(Of Ions)(env) _
                 .AsParallel _
                 .Select(Function(ion)
                             Return PublicVSCode.QueryFromMgf(ion)
                         End Function) _
                 .ToArray
         End If
+
+        If Not mwRange Is Nothing Then
+            If env.globalEnvironment.options.verbose Then
+                Call base.print($"filter query with precursor m/z range: {mwRange.ToString}", env)
+            End If
+
+            query = query _
+                .Where(Function(q) mwRange.IsInside(q.PrecursorIon)) _
+                .ToArray
+        End If
+
+        Return query
     End Function
 
     ''' <summary>
