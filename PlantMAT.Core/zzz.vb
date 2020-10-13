@@ -52,5 +52,10 @@ Public Class zzz
                 SYNOPSIS:=Nothing,
                 write:=App.StdOut
             )
+
+        Call Console.WriteLine("You could modify of the PlantMAT parallel by specific argument when running PlantMAT with R#:")
+        Call Console.WriteLine("")
+        Call Console.WriteLine("    --parallel <n_threads>")
+        Call Console.WriteLine("")
     End Sub
 End Class
