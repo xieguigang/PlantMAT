@@ -1,54 +1,97 @@
 ﻿#Region "Microsoft.VisualBasic::9df25aaa019db733a848e7b906dcadb3, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MS2ATopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: IonMatching, MS2Annotation, MS2ATopDown
-    ' 
-    '         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MS2ATopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: IonMatching, MS2Annotation, MS2ATopDown
+' 
+'         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
 
 Namespace Algorithm
+
+    Public MustInherit Class QueryPopulator
+
+        Public MustOverride Function GetQueries() As IEnumerable(Of Query)
+
+    End Class
+
+    Public Class ArrayPopulator : Inherits QueryPopulator
+
+        Public Property array As Query()
+
+        Public Overrides Function GetQueries() As IEnumerable(Of Query)
+            Return array
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' use cache file for solve memory problem
+    ''' </summary>
+    Public Class CacheFilePopulator : Inherits QueryPopulator
+
+        ReadOnly cacheFile As String
+
+        Sub New(cache As String)
+            cacheFile = cache
+        End Sub
+
+        Public Overrides Iterator Function GetQueries() As IEnumerable(Of Query)
+            Using reader As New BinaryDataReader(cacheFile.Open)
+                Do While Not reader.EndOfStream
+                    Dim size As Long = reader.ReadInt64
+                    Dim buffer As Byte() = reader.ReadBytes(size)
+                    Dim json As JsonObject = BSON.Load(buffer)
+
+                    Yield json.CreateObject(Of Query)
+                Loop
+            End Using
+        End Function
+    End Class
 
     ''' <summary>
     ''' This module performs MS2 annotation
@@ -67,25 +110,35 @@ Namespace Algorithm
             NoiseFilter = settings.NoiseFilter
         End Sub
 
-        Public Function MS2Annotation(queries As Query()) As Query()
+        Public Function MS2Annotation(queries As Query()) As QueryPopulator
             Dim result As Query()
 
             If queries.All(Function(q) q.Candidates.IsNullOrEmpty) Then
                 Console.WriteLine("Please run combinatorial enumeration (MS1) first")
-                result = queries
+                Return New ArrayPopulator With {.array = queries}
             Else
                 Console.WriteLine("Now analyzing ms2 topdown, please wait...")
                 result = MS2ATopDown(queries).ToArray
-
-                Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
-                Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
-                result = New GlycosylSequencing(settings).MS2P(result).ToArray
-
-                Console.WriteLine("Glycosyl sequencing finished")
-                Console.WriteLine("MS2 annotation finished")
             End If
 
-            Return result
+            Dim cacheFile As String = App.GetAppSysTempFile(".cache", App.PID, "plantmat")
+
+            Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
+            Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
+
+            Using writer As New BinaryDataWriter(cacheFile.Open)
+                For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
+                    Dim buffer = GetType(Query).GetJsonElement(query, New JSONSerializerOptions).As(Of JsonObject).DoCall(AddressOf BSON.GetBuffer)
+
+                    Call writer.Write(buffer.Length)
+                    Call writer.Write(buffer.ToArray)
+                Next
+            End Using
+
+            Console.WriteLine("Glycosyl sequencing finished")
+            Console.WriteLine("MS2 annotation finished")
+
+            Return New CacheFilePopulator(cacheFile)
         End Function
 
         ''' <summary>
@@ -186,9 +239,11 @@ Namespace Algorithm
                 Next s
             End If
 
+            aIonList = Nothing
+
             ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
-                .ions = aResult.ToArray,
+                .ions = aResult.PopAll,
                 .aglycone = AglyCheck
             }
         End Sub

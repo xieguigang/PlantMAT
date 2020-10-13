@@ -59,7 +59,19 @@ if (ionMode == 0) {
 }
 
 # use default configuration
-const settings = config(AglyconeMWRange = [400, 800], SearchPPM = 5);
+const settings = config(AglyconeMWRange = [400, 800], SearchPPM = 5,
+	NumofSugarAll = [0,6],
+    NumofAcidAll = [0,1],
+    NumofSugarHex = [0,4],
+    NumofSugarHexA = [0,4],
+    NumofSugardHex = [0,4],
+                              NumofSugarPen = [0,4],
+                              NumofAcidMal = [0,1],
+                              NumofAcidCou = [0,1],
+                              NumofAcidFer = [0,1],
+                              NumofAcidSin = [0,1],
+                              NumofAcidDDMP = [0,1]
+			);
 
 print("view of the configuration values that we used for the analysis:");
 print(settings);
@@ -76,6 +88,11 @@ let result = library_csv
 :> MS1TopDown(settings)
 :> as.object
 :> do.call("MS1CP", query = data_query, ionMode = ionMode)
+;
+
+result :> result.json :> writeLines(`${outputdir}/PlantMAT.MS1TopDown.json`);
+
+result
 :> as.object(MS2ATopDown(settings))$MS2Annotation
 ;
 

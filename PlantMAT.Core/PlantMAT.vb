@@ -345,6 +345,15 @@ Module PlantMAT
         Return json
     End Function
 
+    <ExportAPI("as.stream")>
+    Public Function CacheToStream(<RRawVectorArgument> query As Object, Optional env As Environment = Nothing) As Object
+        If TypeOf query Is QueryPopulator Then
+            Return DirectCast(query, QueryPopulator).GetQueries.DoCall(AddressOf pipeline.CreateFromPopulator)
+        Else
+            Return pipeline.TryCreatePipeline(Of Query)(query, env)
+        End If
+    End Function
+
     ''' <summary>
     ''' run report table output
     ''' </summary>
