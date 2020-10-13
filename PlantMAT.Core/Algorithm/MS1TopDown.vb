@@ -154,7 +154,8 @@ Namespace Algorithm
                 .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                 .Select(Function(query)
                             Return RunMs1Query(query, precursors)
-                        End Function)
+                        End Function) _
+                .IteratesALL
         End Function
 
         ''' <summary>
@@ -179,14 +180,23 @@ Namespace Algorithm
                 Next
             Next
 
+            Dim addSMILES As CandidateResult() = PatternPrediction(candidates).ToArray
+
             For Each query As Query In queryList
+                query.Candidates = addSMILES _
+                    .Select(Function(c)
+                                Return New CandidateResult(c) With {
+                                    .SMILES = c.SMILES _
+                                        .Select(Function(str)
+                                                    Return str.Replace("[*placeholder*]", $"[{query.PeakNO}]")
+                                                End Function) _
+                                        .ToArray
+                                }
+                            End Function) _
+                    .ToArray
+
                 Yield query
             Next
-
-            Query.Candidates = candidates.ToArray
-            Query = PatternPrediction(Query)
-
-            Return Query
         End Function
 
         Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
@@ -312,19 +322,17 @@ Namespace Algorithm
             End If
         End Function
 
-        Private Function PatternPrediction(query As Query) As Query
+        Private Iterator Function PatternPrediction(queryCandidates As IEnumerable(Of CandidateResult)) As IEnumerable(Of CandidateResult)
             ' for each candidate result
-            For m As Integer = 0 To query.Candidates.Length - 1
-                Call PatternPredictionLoop(query.Accession, candidate:=query(m))
+            For Each candidate As CandidateResult In queryCandidates
+                Call PatternPredictionLoop("*placeholder*", candidate:=candidate)
+
+                ' 20201010
+                ' 在这里是否需要过滤掉所有smiles字符串结果为空的candidate？
+                If Not candidate.SMILES.IsNullOrEmpty Then
+                    Yield candidate
+                End If
             Next
-
-            ' 20201010
-            ' 在这里是否需要过滤掉所有smiles字符串结果为空的candidate？
-            query.Candidates = query.Candidates _
-                .Where(Function(a) Not a.SMILES.IsNullOrEmpty) _
-                .ToArray
-
-            Return query
         End Function
 
         Const Hex = "C?C(C(C(C(CO)O?)O)O)O"
@@ -337,7 +345,12 @@ Namespace Algorithm
         Const Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
         Const DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
-        Private Sub PatternPredictionLoop(peakNO As String, candidate As CandidateResult)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="peakNO">apply for ``candidate.smiles``: ["*placeholder*"]</param>
+        ''' <param name="candidate"></param>
+        Private Sub PatternPredictionLoop(peakNO As String, ByRef candidate As CandidateResult)
             ' 1. Find location and number of OH groups in aglycone
             Dim AglyS1 As String, AglyS2 As String
             Dim OH_n As Integer
@@ -596,7 +609,7 @@ AllSugarConnected:
             Dim glycN As String
             Dim sugComb As StringBuilder
             Dim sugComb1 As String
-            Dim predicted_SMILES As New List(Of String)
+            Dim predicted As New List(Of String)
 
             For e As Integer = 1 To s - 1
                 sugComb = New StringBuilder
@@ -625,10 +638,10 @@ AllSugarConnected:
                 glycN = $"[{peakNO}]" & sugComb.ToString
 
                 sugComb.Clear()
-                predicted_SMILES.Add(glycN)
+                predicted.Add(glycN)
             Next
 
-            candidate.SMILES = predicted_SMILES.ToArray
+            candidate.SMILES = predicted.ToArray
         End Sub
     End Class
 End Namespace
