@@ -148,15 +148,13 @@ Namespace Algorithm
                 precursors = Me.Precursors.Where(Function(a) a.precursor_type.Last = "-"c).ToArray
             End If
 
-            Return queries _
-                .GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
-                .ToArray _
-                .AsParallel _
-                .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
-                .Select(Function(query)
-                            Return RunMs1Query(query, precursors)
-                        End Function) _
-                .IteratesALL
+            Dim runParallel = From query
+                              In queries.GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
+                                  .AsParallel _
+                                  .WithDegreeOfParallelism(PublicVSCode.Parallelism)
+                              Select RunMs1Query(query, precursors)
+
+            Return runParallel.IteratesALL
         End Function
 
         ''' <summary>
