@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PlantMAT.Core</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>PlantMAT.Core</AssemblyName>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>netcore5=1</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefineConstants>netcore5=1</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\GCModeller\src\R-sharp\R#\Rsharp-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data\DataFrame\dataframe-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data_science\Mathematica\Math\Math\math-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data_science\Mathematica\SignalProcessing\SignalProcessing\signalprocessing-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Microsoft.VisualBasic.Core\src\Core.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
+    <ProjectReference Include="..\..\mzkit\src\assembly\assembly\assembly-netcore5.vbproj" />
+    <ProjectReference Include="..\..\mzkit\src\mzmath\ms2_math-core\mzmath-netcore5.vbproj" />
+  </ItemGroup>
+
+</Project>
