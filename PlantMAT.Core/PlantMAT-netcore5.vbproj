@@ -5,14 +5,40 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>PlantMAT.Core</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
+    <Product>PlantMAT</Product>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Copyright © PlantMAT 2020</Copyright>
+    <Description>PlantMAT: A Metabolomics Tool for Predicting the Specialized Metabolic Potential of a System and for Large-Scale Metabolite Identifications</Description>
+    <Company>BioNovoGene</Company>
+    <PackageProjectUrl>https://github.com/xieguigang/PlantMAT</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xieguigang/PlantMAT</RepositoryUrl>
+    <PackageId>PlantMAT</PackageId>
+    <PackageReleaseNotes>Plant Metabolite Annotation Toolbox</PackageReleaseNotes>
+    <Authors>Feng Qiu (fengqiu1982); xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)</Authors>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>netcore5=1</DefineConstants>
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DefineConstants>netcore5=1</DefineConstants>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +51,17 @@
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\mime\application%json\JSON-netcore5.vbproj" />
     <ProjectReference Include="..\..\mzkit\src\assembly\assembly\assembly-netcore5.vbproj" />
     <ProjectReference Include="..\..\mzkit\src\mzmath\ms2_math-core\mzmath-netcore5.vbproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\docs\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
