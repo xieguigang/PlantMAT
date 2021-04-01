@@ -1,11 +1,15 @@
 Package: PlantMAT
 Type: Package
-Title: What the Package Does (Title Case)
+Title: PlantMAT: A Metabolomics Tool for Predicting the Specialized Metabolic Potential of a System and for Large-Scale Metabolite Identifications
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+Maintainer: xieguigang <gg.xie@bionovogene.com>
+Description: Custom software entitled Plant Metabolite Annotation Toolbox (PlantMAT) 
+has been developed to address the number one grand challenge in metabolomics, which 
+is the large-scale and confident identification of metabolites. PlantMAT uses informed 
+phytochemical knowledge for the prediction of plant natural products such as saponins 
+and glycosylated flavonoids through combinatorial enumeration of aglycone, glycosyl, 
+and acyl subunits. 
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.1.1
