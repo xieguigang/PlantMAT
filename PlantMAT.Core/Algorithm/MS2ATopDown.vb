@@ -86,7 +86,7 @@ Namespace Algorithm
 
             Dim cacheFile As String = App.GetAppSysTempFile(".cache", App.PID, "plantmat")
 
-            Console.WriteLine("MS2 annotation finished." & vbNewLine & "Continue glycosyl sequencing")
+            Console.WriteLine("MS2 annotation finished." & Environment.NewLine & "Continue glycosyl sequencing")
             Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
 
             Console.WriteLine($"data cache at location: {cacheFile}.")
