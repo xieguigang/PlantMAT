@@ -6,7 +6,7 @@
     <AssemblyName>PlantMAT.Core</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Product>PlantMAT</Product>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright © PlantMAT 2020</Copyright>
