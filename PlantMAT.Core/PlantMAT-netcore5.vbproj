@@ -18,6 +18,7 @@
     <PackageReleaseNotes>Plant Metabolite Annotation Toolbox</PackageReleaseNotes>
     <Authors>Feng Qiu (fengqiu1982); xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)</Authors>
     <PackageIcon>logo.png</PackageIcon>
+    <Configurations>Debug;Release;PlantMAT</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,8 +41,24 @@
     <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|AnyCPU'">
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PlantMAT|x64'">
+    <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <OutputPath>D:\PlantMAT\PlantMAT\assembly\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
