@@ -217,6 +217,14 @@
       <Project>{0c2eb77c-39f2-460d-a3f8-ce905f867637}</Project>
       <Name>R</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GCModeller\src\R-sharp\snowFall\snowFall.vbproj">
+      <Project>{ac523ae1-b6b9-49bd-8f0a-49ebe02dcb65}</Project>
+      <Name>snowFall</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GCModeller\src\runtime\Darwinism\Parallel\Parallel.vbproj">
+      <Project>{085171ca-6a65-494c-9b4a-477d35bcbc90}</Project>
+      <Name>Parallel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data\BinaryData\BinaryData\BinaryData.vbproj">
       <Project>{487d7c92-d05a-4908-bf81-e6baba0bf592}</Project>
       <Name>BinaryData</Name>
@@ -240,6 +248,10 @@
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\mime\application%25json\application.json.vbproj">
       <Project>{32228818-26f1-44df-8d40-347136c743cd}</Project>
       <Name>application.json</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\Microsoft.VisualBasic.Network.vbproj">
+      <Project>{a60240d1-e78b-4b96-85e3-45256571c2cb}</Project>
+      <Name>Microsoft.VisualBasic.Network</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\mzkit\src\assembly\assembly\assembly.vbproj">
       <Project>{95f7d65e-9db1-4605-9fd3-25433277af88}</Project>
