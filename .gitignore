@@ -10,6 +10,8 @@
 *.userosscache
 *.sln.docstates
 
+PlantMAT/assembly/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
