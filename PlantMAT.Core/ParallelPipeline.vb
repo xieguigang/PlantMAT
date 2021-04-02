@@ -47,7 +47,7 @@ Public Module ParallelPipeline
                 .GroupQueryByMz(query) _
                 .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode))) _
                 .ToArray
-
+            PublicVSCode.Parallelism = 1
             runParallel = (Iterator Function() As IEnumerable(Of Query)
                                For Each block As Query() In New ThreadTask(Of Query())(taskList) _
                                    .WithDegreeOfParallelism(PublicVSCode.Parallelism) _

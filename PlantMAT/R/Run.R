@@ -10,13 +10,13 @@ imports "PlantMAT" from "PlantMAT.Core";
 #'
 let predictIons as function(ions, library, ionMode = 1, settings = configDefault()) {
 	# run MS1TopDown
-	const result = library :> MS1TopDown(settings)
-	:> as.object
-	:> do.call("MS1CP", query = ions :> as.query, ionMode = ionMode)
-	;
-
+	ions 
+	:> as.query 
+	:> MS1CP(library, settings, ionMode)
+	
 	# run Ms2 analysis for molecular structure prediction
-	result :> as.object(MS2ATopDown(settings))$MS2Annotation;
+	:> as.object(MS2ATopDown(settings))$MS2Annotation
+	;
 }
 
 #' apply the default configuration
