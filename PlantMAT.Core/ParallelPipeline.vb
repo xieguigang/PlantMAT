@@ -1,10 +1,20 @@
-﻿Imports System.Runtime.CompilerServices
+﻿Imports System.IO
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports Parallel
+Imports Parallel.ThreadTask
 Imports PlantMAT.Core.Models
+Imports snowFall.Protocol
 Imports stdNum = System.Math
 
 Public Module ParallelPipeline
+
+    Private Function MS1CPTask(query As IEnumerable(Of Query), libfile As String, settings As Settings, ionMode As Integer) As Query()
+        Dim snowFall As SlaveTask = Host.CreateSlave
+
+
+    End Function
 
     <Extension>
     Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
@@ -13,19 +23,49 @@ Public Module ParallelPipeline
         Dim elapse As Double
         Dim speed As Double
         Dim ETA As TimeSpan
+        Dim runParallel As IEnumerable(Of Query)
 
         ' Run combinatorial enumeration
         Console.WriteLine("Now analyzing, please wait...")
         Console.WriteLine("Peform combinatorial enumeration and show the calculation progress (MS1CP)")
         Console.WriteLine($" --> {query.Length} queries...")
 
-        Dim runParallel = From group As NamedCollection(Of Query)
-                          In Algorithm.MS1TopDown.GroupQueryByMz(query) _
-                              .AsParallel _
-                              .WithDegreeOfParallelism(PublicVSCode.Parallelism)
-                          Select New Algorithm.MS1TopDown(library, settings).CombinatorialPrediction(group, ionMode)
+        If App.IsMicrosoftPlatform Then
+            runParallel = (Iterator Function() As IEnumerable(Of Query)
+                               For Each block As IEnumerable(Of Query) In From group As NamedCollection(Of Query)
+                                                                          In Algorithm.MS1TopDown.GroupQueryByMz(query) _
+                                                                              .AsParallel _
+                                                                              .WithDegreeOfParallelism(PublicVSCode.Parallelism)
+                                                                          Select Algorithm.MS1TopDown.MS1CP(group, library, settings, ionMode)
+                                   For Each item As Query In block
+                                       Yield item
+                                   Next
+                               Next
+                           End Function)()
+        Else
+            Dim tmp As String = App.GetAppSysTempFile(".table_reflib", App.PID.ToHexString, prefix:="PlantMAT")
+            Dim taskList As Func(Of Query())() = Algorithm.MS1TopDown _
+                .GroupQueryByMz(query) _
+                .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, tmp, settings, ionMode))) _
+                .ToArray
 
-        For Each item As Query In runParallel.IteratesALL
+            Using file As Stream = tmp.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+                Call Models.Library.WriteToStream(library, file)
+            End Using
+
+            runParallel = (Iterator Function() As IEnumerable(Of Query)
+                               For Each block As Query() In New ThreadTask(Of Query())(taskList) _
+                                   .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
+                                   .RunParallel
+
+                                   For Each item As Query In block
+                                       Yield item
+                                   Next
+                               Next
+                           End Function)()
+        End If
+
+        For Each item As Query In runParallel
             If item.Candidates.Length = 0 Then
                 result.Add(Nothing)
             Else

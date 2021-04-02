@@ -103,6 +103,10 @@ Namespace Algorithm
                 .ToArray
         End Sub
 
+        Public Shared Function MS1CP(query As IEnumerable(Of Query), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
+            Return New MS1TopDown(library, settings).CombinatorialPrediction(query, ionMode).ToArray
+        End Function
+
         ''' <summary>
         ''' search for given precursor_type
         ''' </summary>
