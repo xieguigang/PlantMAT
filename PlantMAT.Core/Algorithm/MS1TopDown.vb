@@ -54,7 +54,6 @@ Imports Microsoft.VisualBasic.Math
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
 Imports Info = Microsoft.VisualBasic.Information
-Imports stdNum = System.Math
 Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 
 Namespace Algorithm
@@ -104,43 +103,13 @@ Namespace Algorithm
                 .ToArray
         End Sub
 
-        Public Function MS1CP(query As Query(), Optional ionMode As Integer = 1) As Query()
-            Dim result As New List(Of Query)(query.Length)
-            Dim start = App.NanoTime
-            Dim elapse As Double
-            Dim speed As Double
-            Dim ETA As TimeSpan
-
-            ' Run combinatorial enumeration
-            Console.WriteLine("Now analyzing, please wait...")
-            Console.WriteLine("Peform combinatorial enumeration and show the calculation progress (MS1CP)")
-            Console.WriteLine($" --> {query.Length} queries...")
-
-            For Each item As Query In CombinatorialPrediction(query, ionMode)
-                If item.Candidates.Length = 0 Then
-                    result.Add(Nothing)
-                Else
-                    result.Add(item)
-                End If
-
-                elapse = (App.NanoTime - start) / TimeSpan.TicksPerMillisecond / 1000
-                speed = result.Count / elapse
-                ETA = TimeSpan.FromSeconds((query.Length - result.Count) / speed)
-
-                Console.WriteLine($"[{result.Count}/{query.Length}] [{speed.ToString("F3").PadRight(3, "0")} query/sec, ETA {ETA.FormatTime}] {item.ToString} [{stdNum.Round(result.Count / query.Length * 100)}% done!]")
-            Next
-
-            ' Show the message box after the calculation is finished
-            Console.WriteLine("Substructure prediction finished")
-
-            Return result.Where(Function(a) Not a Is Nothing).ToArray
-        End Function
-
         ''' <summary>
         ''' search for given precursor_type
         ''' </summary>
-        ''' <param name="queries"></param>
-        Private Function CombinatorialPrediction(queries As IEnumerable(Of Query), ionMode As Integer) As IEnumerable(Of Query)
+        ''' <param name="queryGroup">
+        ''' Should be one element from the result of <see cref="GroupQueryByMz(IEnumerable(Of Query), Double)"/>
+        ''' </param>
+        Public Function CombinatorialPrediction(queryGroup As IEnumerable(Of Query), ionMode As Integer) As IEnumerable(Of Query)
             Dim precursors As PrecursorInfo()
 
             If ionMode = 1 Then
@@ -149,13 +118,11 @@ Namespace Algorithm
                 precursors = Me.Precursors.Where(Function(a) a.precursor_type.Last = "-"c).ToArray
             End If
 
-            Dim runParallel = From query As NamedCollection(Of Query)
-                              In queries.GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)) _
-                                  .AsParallel _
-                                  .WithDegreeOfParallelism(PublicVSCode.Parallelism)
-                              Select RunMs1Query(query, precursors).ToArray
+            Return RunMs1Query(queryGroup, precursors).ToArray
+        End Function
 
-            Return runParallel.IteratesALL
+        Public Shared Function GroupQueryByMz(queries As IEnumerable(Of Query), Optional ppm As Double = 1) As NamedCollection(Of Query)()
+            Return queries.GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)).ToArray
         End Function
 
         ''' <summary>

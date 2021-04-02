@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Algorithm\InternalCache.vb" />
     <Compile Include="Models\Ms2Peaks.vb" />
+    <Compile Include="ParallelPipeline.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
     <Compile Include="Algorithm\IonPrediction.vb" />
     <Compile Include="Algorithm\MS1TopDown.vb" />
