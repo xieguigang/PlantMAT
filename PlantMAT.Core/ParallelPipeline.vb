@@ -1,11 +1,8 @@
-﻿Imports System.IO
-Imports System.Runtime.CompilerServices
+﻿Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.application.json
-Imports Microsoft.VisualBasic.MIME.application.json.BSON
-Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Parallel
+Imports Parallel.IpcStream
 Imports Parallel.ThreadTask
 Imports PlantMAT.Core.Models
 Imports snowFall.Protocol
@@ -13,18 +10,9 @@ Imports stdNum = System.Math
 
 Public Module ParallelPipeline
 
-    Private Function MS1CPTask(query As IEnumerable(Of Query), libfile As String, settings As Settings, ionMode As Integer) As Query()
+    Private Function MS1CPTask(query As IEnumerable(Of Query), libfile As SocketRef, settings As Settings, ionMode As Integer) As Query()
         Dim snowFall As SlaveTask = Host.CreateSlave
-        Dim tmp As String = App.GetAppSysTempFile(".query", App.PID.ToHexString, prefix:="PlantMAT")
-
-        Using buffer As Stream = tmp.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-            Call GetType(Query()) _
-                .GetJsonElement(query.ToArray, New JSONSerializerOptions) _
-                .As(Of JsonArray)() _
-                .SafeWriteBuffer(buffer)
-        End Using
-
-        Return snowFall.RunTask(Of Query())(New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP), tmp, libfile, settings, ionMode)
+        Return snowFall.RunTask(Of Query())(New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP), query.ToArray, libfile, settings, ionMode)
     End Function
 
     <Extension>
@@ -54,15 +42,11 @@ Public Module ParallelPipeline
                                Next
                            End Function)()
         Else
-            Dim tmp As String = App.GetAppSysTempFile(".table_reflib", App.PID.ToHexString, prefix:="PlantMAT")
+            Dim socket As SocketRef = SocketRef.WriteBuffer(library)
             Dim taskList As Func(Of Query())() = Algorithm.MS1TopDown _
                 .GroupQueryByMz(query) _
-                .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, tmp, settings, ionMode))) _
+                .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode))) _
                 .ToArray
-
-            Using file As Stream = tmp.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
-                Call Models.Library.WriteToStream(library, file)
-            End Using
 
             runParallel = (Iterator Function() As IEnumerable(Of Query)
                                For Each block As Query() In New ThreadTask(Of Query())(taskList) _
