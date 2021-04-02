@@ -63,6 +63,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
 Imports REnv = SMRUCC.Rsharp.Runtime
 
@@ -214,6 +215,11 @@ Module PlantMAT
     <ExportAPI("MS1TopDown")>
     Public Function MS1TopDown(library As PlantMATlib(), settings As Settings) As MS1TopDown
         Return New MS1TopDown(library, settings)
+    End Function
+
+    <ExportAPI("MS1CP")>
+    Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
+        Return ParallelPipeline.MS1CP(query, library, settings, ionMode)
     End Function
 
     ''' <summary>

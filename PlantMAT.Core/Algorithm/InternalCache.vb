@@ -54,6 +54,8 @@ Namespace Algorithm.InternalCache
                     Dim buffer As Byte() = reader.ReadBytes(size)
                     Dim json As JsonObject = BSON.Load(buffer)
 
+                    Erase buffer
+
                     Yield json.CreateObject(Of Query)
                 Loop
             End Using
