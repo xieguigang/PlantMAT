@@ -10,9 +10,16 @@ Imports stdNum = System.Math
 
 Public Module ParallelPipeline
 
-    Private Function MS1CPTask(query As IEnumerable(Of Query), libfile As SocketRef, settings As Settings, ionMode As Integer) As Query()
+    Private Function MS1CPTask(query As IEnumerable(Of NamedCollection(Of Query)), libfile As SocketRef, settings As Settings, ionMode As Integer) As Query()
         Dim snowFall As SlaveTask = Host.CreateSlave
-        Return snowFall.RunTask(Of Query())(New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP), query.ToArray, libfile, settings, ionMode)
+        Dim api As New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP)
+        Dim allPip As Query() = query _
+            .Select(Function(p) p.AsEnumerable) _
+            .IteratesALL _
+            .ToArray
+        Dim result As Query() = snowFall.RunTask(Of Query())(api, allPip, libfile, settings, ionMode)
+
+        Return result
     End Function
 
     <Extension>
@@ -43,11 +50,15 @@ Public Module ParallelPipeline
                            End Function)()
         Else
             Dim socket As SocketRef = SocketRef.WriteBuffer(library)
-            Dim taskList As Func(Of Query())() = Algorithm.MS1TopDown _
-                .GroupQueryByMz(query) _
+            Dim mzList = Algorithm.MS1TopDown.GroupQueryByMz(query)
+            Dim size As Integer = stdNum.Max(mzList.Length / (PublicVSCode.Parallelism + 1), 1)
+            Dim taskList As Func(Of Query())() = mzList _
+                .Split(size) _
                 .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode))) _
                 .ToArray
-            PublicVSCode.Parallelism = 1
+
+            Call Console.WriteLine($"Run parallel with {size} task elements in {taskList.Length} task queue!")
+
             runParallel = (Iterator Function() As IEnumerable(Of Query)
                                For Each block As Query() In New ThreadTask(Of Query())(taskList) _
                                    .WithDegreeOfParallelism(PublicVSCode.Parallelism) _

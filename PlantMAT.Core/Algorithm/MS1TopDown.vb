@@ -106,7 +106,16 @@ Namespace Algorithm
         End Sub
 
         Public Shared Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
-            Return New MS1TopDown(library, settings).CombinatorialPrediction(query, ionMode).ToArray
+            Dim output As New List(Of Query)
+            Dim mzList = GroupQueryByMz(query)
+
+            For Each block In mzList
+                Call New MS1TopDown(library, settings) _
+                    .CombinatorialPrediction(block, ionMode) _
+                    .DoCall(AddressOf output.AddRange)
+            Next
+
+            Return output.ToArray
         End Function
 
         ''' <summary>
