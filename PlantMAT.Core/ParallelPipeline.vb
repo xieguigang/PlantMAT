@@ -2,6 +2,9 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.MIME.application.json
+Imports Microsoft.VisualBasic.MIME.application.json.BSON
+Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Parallel
 Imports Parallel.ThreadTask
 Imports PlantMAT.Core.Models
@@ -12,8 +15,16 @@ Public Module ParallelPipeline
 
     Private Function MS1CPTask(query As IEnumerable(Of Query), libfile As String, settings As Settings, ionMode As Integer) As Query()
         Dim snowFall As SlaveTask = Host.CreateSlave
+        Dim tmp As String = App.GetAppSysTempFile(".query", App.PID.ToHexString, prefix:="PlantMAT")
 
+        Using buffer As Stream = tmp.Open(FileMode.OpenOrCreate, doClear:=True, [readOnly]:=False)
+            Call GetType(Query()) _
+                .GetJsonElement(query.ToArray, New JSONSerializerOptions) _
+                .As(Of JsonArray)() _
+                .SafeWriteBuffer(buffer)
+        End Using
 
+        Return snowFall.RunTask(Of Query())(New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP), tmp, libfile, settings, ionMode)
     End Function
 
     <Extension>
@@ -36,7 +47,7 @@ Public Module ParallelPipeline
                                                                           In Algorithm.MS1TopDown.GroupQueryByMz(query) _
                                                                               .AsParallel _
                                                                               .WithDegreeOfParallelism(PublicVSCode.Parallelism)
-                                                                          Select Algorithm.MS1TopDown.MS1CP(group, library, settings, ionMode)
+                                                                          Select Algorithm.MS1TopDown.MS1CP(group.ToArray, library, settings, ionMode)
                                    For Each item As Query In block
                                        Yield item
                                    Next

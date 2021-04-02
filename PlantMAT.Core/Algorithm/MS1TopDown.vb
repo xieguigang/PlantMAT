@@ -58,6 +58,8 @@ Imports WorksheetFunction = Microsoft.VisualBasic.Math.VBMath
 
 Namespace Algorithm
 
+    Public Delegate Function IMS1TopDown(query As Query(), library As Library(), settings As Settings, ionMode As Integer) As Query()
+
     ''' <summary>
     ''' This module performs combinatorial enumeration
     ''' </summary>
@@ -103,7 +105,7 @@ Namespace Algorithm
                 .ToArray
         End Sub
 
-        Public Shared Function MS1CP(query As IEnumerable(Of Query), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
+        Public Shared Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
             Return New MS1TopDown(library, settings).CombinatorialPrediction(query, ionMode).ToArray
         End Function
 
