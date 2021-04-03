@@ -115,7 +115,20 @@ Module PlantMAT
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
         Internal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
         Internal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
+        Internal.Object.Converts.makeDataframe.addHandler(GetType(MzAnnotation()), AddressOf ProductAnnotationResultTable)
     End Sub
+
+    Private Function ProductAnnotationResultTable(data As MzAnnotation(), args As list, env As Environment) As dataframe
+        Dim table As New dataframe With {
+            .columns = New Dictionary(Of String, Array)
+        }
+
+        table.columns("m/z") = data.Select(Function(a) a.productMz).ToArray
+        table.columns("annotation") = data.Select(Function(a) a.annotation).ToArray
+        table.rownames = data.Select(Function(a) $"M/Z {a.productMz.ToString("F3")}").ToArray
+
+        Return table
+    End Function
 
     ''' <summary>
     ''' create plantMAT configuration
@@ -419,5 +432,30 @@ Module PlantMAT
     <ExportAPI("read.PlantMAT.report_table")>
     Public Function readPlantMATReportTable(file As String) As Report.Table()
         Return file.LoadCsv(Of Report.Table).ToArray
+    End Function
+
+    <ExportAPI("neutral_loss")>
+    Public Function NeutralLoss(exactMass#, mz#,
+                                Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%,
+                                Optional ionMode% = 1,
+                                Optional commonName$ = "natural product") As MzAnnotation()
+
+        Dim insilicons As New NeutralLossIonPrediction(commonName, exactMass, mz, If(ionMode = 1, "+H]+", "-H]-")) With {
+            .Cou_max = Cou,
+            .DDMP_max = DDMP,
+            .dHex_max = dHex,
+            .Fer_max = Fer,
+            .HexA_max = HexA,
+            .Hex_max = Hex,
+            .Mal_max = Mal,
+            .Pen_max = Pen,
+            .Sin_max = Sin
+        }
+        Dim result As MzAnnotation() = Nothing
+
+        Call insilicons.IonPrediction()
+        Call insilicons.getResult(result)
+
+        Return result
     End Function
 End Module

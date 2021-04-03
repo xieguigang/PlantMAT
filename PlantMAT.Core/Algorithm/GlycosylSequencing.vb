@@ -44,6 +44,7 @@
 
 #End Region
 
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -372,7 +373,7 @@ NextOne:
                     pIonMZ = pIonList(e, h)
                     For s = 0 To eIon_n - 1
                         eIonMZ = eIonList.mz(s)
-                        If Math.Abs(pIonMZ - eIonMZ) / pIonMZ * 1000000 < mzPPM Then
+                        If PPMmethod.PPM(pIonMZ, eIonMZ) < mzPPM Then
                             eIonInt = eIonList.into(s)
                             RawScore = RawScore + Math.Log10(100000 * eIonInt / TotalIonInt)
                             GoTo NextPriIon

@@ -159,7 +159,7 @@
     <Compile Include="Models\Ms2Peaks.vb" />
     <Compile Include="ParallelPipeline.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
-    <Compile Include="Algorithm\IonPrediction.vb" />
+    <Compile Include="Algorithm\NeutralLossIonPrediction.vb" />
     <Compile Include="Algorithm\MS1TopDown.vb" />
     <Compile Include="Algorithm\MS2ATopDown.vb" />
     <Compile Include="Algorithm\GlycosylSequencing.vb" />
