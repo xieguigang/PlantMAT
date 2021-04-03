@@ -41,6 +41,8 @@
 
 #End Region
 
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+
 Namespace Algorithm
 
     ''' <summary>
@@ -51,7 +53,6 @@ Namespace Algorithm
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
         ' Initilize all neutral losses and predicted ions pIonList() to none
-        Dim pIon_n% = 0
         Dim HexLoss$ = ""
         Dim HexALoss$ = ""
         Dim dHexLoss$ = ""
@@ -69,7 +70,7 @@ Namespace Algorithm
         Dim Agly_w#
         Dim AglyN$
 
-        Dim pIonList(0 To 2, 0 To 1) As Object
+        ReadOnly pIonList As New List(Of MzAnnotation)
 
         ''' <summary>
         ''' 
@@ -85,9 +86,8 @@ Namespace Algorithm
             Me.AglyN = AglyN
         End Sub
 
-        Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As Object(,))
-            pIon_n = Me.pIon_n
-            pIonList = Me.pIonList
+        Public Sub getResult(ByRef result As MzAnnotation())
+            result = pIonList.ToArray
         End Sub
 
         Sub IonPrediction()
@@ -197,11 +197,7 @@ Namespace Algorithm
             End If
 
             ' Save the predicted ion mz to data array pIonList()
-            pIon_n = pIon_n + 1
-            ReDim Preserve pIonList(0 To 2, 0 To pIon_n)
-            pIonList(1, pIon_n) = pIonMZ
-            pIonList(2, pIon_n) = pIonNM
-
+            Call pIonList.Add(New MzAnnotation With {.mz = pIonMZ, .annotation = pIonNM})
         End Sub
     End Class
 End Namespace

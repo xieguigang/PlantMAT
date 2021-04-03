@@ -45,6 +45,7 @@
 #End Region
 
 Imports System.IO
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -182,16 +183,15 @@ Namespace Algorithm
                 .Sin_max = Sin_max,
                 .DDMP_max = DDMP_max
             }
-            Dim pIon_n As Integer = 0
-            Dim pIonList As Object(,) = Nothing
+            Dim pIonList As MzAnnotation() = Nothing
 
             Call prediction.IonPrediction()
-            Call prediction.getResult(pIon_n, pIonList)
+            Call prediction.getResult(pIonList)
 
             ' Second, compare the predicted ions with the measured
             Dim aIon_n As Integer = 0
             Dim aIonList(0 To 3, 0 To 1) As Object
-            Dim AglyCheck As Boolean = IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
+            Dim AglyCheck As Boolean = IonMatching(query, pIonList, aIon_n, aIonList)
 
             ' Third, add a dropdown list for each candidate and show the annotation results in the list
             ' Fourth, save the annotation results in the cell
@@ -224,10 +224,9 @@ Namespace Algorithm
         ''' 
         ''' </summary>
         ''' <param name="query"></param>
-        ''' <param name="pIon_n"></param>
         ''' <param name="pIonList"></param>
         ''' <returns>AglyCheck</returns>
-        Private Function IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
+        Private Function IonMatching(query As Query, pIonList As MzAnnotation(), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
             Dim eIonList As Ms2Peaks = query.Ms2Peaks
@@ -241,9 +240,9 @@ Namespace Algorithm
                 Dim eIonMZ As Double = eIonList.mz(s)
                 Dim eIonInt As Double = eIonList.into(s)
 
-                For t As Integer = 1 To pIon_n
-                    Dim pIonMZ As Double = DirectCast(pIonList(1, t), Double)
-                    Dim pIonNM As String = DirectCast(pIonList(2, t), String)
+                For Each t As MzAnnotation In pIonList
+                    Dim pIonMZ As Double = t.mz
+                    Dim pIonNM As String = t.annotation
 
                     If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
                         Dim aIonAbu = eIonInt / TotalIonInt
@@ -260,8 +259,8 @@ Namespace Algorithm
                             End If
                         End If
                     End If
-                Next t
-            Next s
+                Next
+            Next
 
             Return AglyCheck
         End Function
