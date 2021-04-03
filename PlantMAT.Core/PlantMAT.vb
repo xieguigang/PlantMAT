@@ -123,6 +123,10 @@ Module PlantMAT
             .columns = New Dictionary(Of String, Array)
         }
 
+        data = data _
+            .OrderByDescending(Function(a) a.productMz) _
+            .ToArray
+
         table.columns("m/z") = data.Select(Function(a) a.productMz).ToArray
         table.columns("annotation") = data.Select(Function(a) a.annotation).ToArray
         table.rownames = data.Select(Function(a) $"M/Z {a.productMz.ToString("F3")}").ToArray
