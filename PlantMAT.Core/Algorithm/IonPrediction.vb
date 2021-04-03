@@ -152,6 +152,21 @@ Namespace Algorithm
 
         End Sub
 
+        ''' <summary>
+        ''' precursorMz = exactMass - neutral_loss
+        ''' </summary>
+        ''' <param name="Hex_n%"></param>
+        ''' <param name="HexA_n%"></param>
+        ''' <param name="dHex_n%"></param>
+        ''' <param name="Pen_n%"></param>
+        ''' <param name="Mal_n%"></param>
+        ''' <param name="Cou_n%"></param>
+        ''' <param name="Fer_n%"></param>
+        ''' <param name="Sin_n%"></param>
+        ''' <param name="DDMP_n%"></param>
+        ''' <param name="H2O_n%"></param>
+        ''' <param name="CO2_n%"></param>
+        ''' <param name="MIonMZ#"></param>
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss

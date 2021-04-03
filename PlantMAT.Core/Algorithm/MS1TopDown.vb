@@ -547,8 +547,7 @@ AllSugarConnected:
                 Next e
 
                 w = w + 1
-
-            Next v
+            Next
 
             ' 4.3.2 Remove all duplicates regardless of order
             Dim s As Integer = 1
@@ -565,8 +564,8 @@ AllSugarConnected:
                                 c = c + 1
                                 Exit For
                             End If
-                        Next h
-                    Next g
+                        Next
+                    Next
 
                     If c = OH_n Then
                         Exit For
@@ -583,9 +582,9 @@ AllSugarConnected:
                 For r As Integer = 1 To s - 1
                     For h As Integer = 1 To OH_n
                         If Right(u(r, h), 1) = "*" Then u(r, h) = Left(u(r, h), Len(u(r, h)) - 1)
-                    Next h
-                Next r
-            Next e
+                    Next
+                Next
+            Next
 
             ' 5. Attach each sugar/acid combination to aglycone to create all possible glycosides
             Dim glycN As String
