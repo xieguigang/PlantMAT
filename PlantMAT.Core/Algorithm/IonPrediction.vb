@@ -192,15 +192,17 @@ Namespace Algorithm
             If Hex_n = Hex_max AndAlso HexA_n = HexA_max AndAlso dHex_n = dHex_max AndAlso Pen_n = Pen_max AndAlso
                 Mal_n = Mal_max AndAlso Cou_n = Cou_max AndAlso Fer_n = Fer_max AndAlso Sin_n = Sin_max AndAlso DDMP_n = DDMP_max Then
 
-                pIonNM = "[Agly" & H2OLoss & CO2Loss & Rsyb
+                pIonNM = $"[Agly{H2OLoss}{CO2Loss}{Rsyb}"
 
-                If H2OLoss & CO2Loss = "" OrElse (H2OLoss & CO2Loss = "-H2O-CO2" AndAlso (AglyN = "Medicagenic acid" OrElse AglyN = "Zanhic acid")) Then
+                If $"{H2OLoss}{CO2Loss}" = "" OrElse ($"{H2OLoss}{CO2Loss}" = "-H2O-CO2" AndAlso (AglyN = "Medicagenic acid" OrElse AglyN = "Zanhic acid")) Then
                     pIonNM = "*" & pIonNM
                 End If
             Else
-                pIonNM = "[M" & HexLoss & HexALoss & dHexLoss & PenLoss &
-                            MalLoss & CouLoss & FerLoss & SinLoss & DDMPLoss &
-                            H2OLoss & CO2Loss & Rsyb
+                pIonNM = {"[M",
+                    HexLoss, HexALoss, dHexLoss, PenLoss,
+                    MalLoss, CouLoss, FerLoss, SinLoss, DDMPLoss,
+                    H2OLoss, CO2Loss, Rsyb
+                }.JoinBy("")
             End If
 
             ' Save the predicted ion mz to data array pIonList()
