@@ -79,11 +79,10 @@ Namespace Algorithm
         ''' </summary>
         ''' <param name="AglyN">the metabolite common name</param>
         ''' <param name="Agly_w">the exact mass</param>
-        ''' <param name="IonMZ_crc">m/z</param>
-        ''' <param name="Rsyb">precursor type components, value should be ``"-H]-"`` or ``"+H]+"``</param>
-        Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
-            Me.IonMZ_crc = IonMZ_crc
-            Me.Rsyb = Rsyb
+        ''' <param name="IonMZ_crc">precursor type components, value should be ``"-H]-"`` or ``"+H]+"``</param>
+        Sub New(AglyN$, Agly_w#, IonMZ_crc As MzAnnotation)
+            Me.IonMZ_crc = IonMZ_crc.productMz
+            Me.Rsyb = IonMZ_crc.annotation
             Me.Agly_w = Agly_w
             Me.AglyN = AglyN
         End Sub

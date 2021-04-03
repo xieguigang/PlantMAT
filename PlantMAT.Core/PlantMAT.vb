@@ -435,12 +435,13 @@ Module PlantMAT
     End Function
 
     <ExportAPI("neutral_loss")>
-    Public Function NeutralLoss(exactMass#, mz#,
+    Public Function NeutralLoss(exactMass#,
                                 Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%,
                                 Optional ionMode% = 1,
                                 Optional commonName$ = "natural product") As MzAnnotation()
 
-        Dim insilicons As New NeutralLossIonPrediction(commonName, exactMass, mz, If(ionMode = 1, "+H]+", "-H]-")) With {
+        Dim IonMZ_crc As MzAnnotation = Algorithm.MS2ATopDown.IonMZ_crc(If(ionMode > 0, "+", "-"))
+        Dim insilicons As New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc) With {
             .Cou_max = Cou,
             .DDMP_max = DDMP,
             .dHex_max = dHex,

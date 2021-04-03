@@ -65,9 +65,12 @@ Namespace Algorithm
 
         Dim mzPPM As Double
         Dim NoiseFilter As Double
+        Dim ionMode As String
 
-        Sub New(settings As Settings)
+        Sub New(settings As Settings, ionMode As Integer)
             Call MyBase.New(settings)
+
+            Me.ionMode = If(ionMode > 0, "+", "-")
         End Sub
 
         Protected Overrides Sub applySettings()
@@ -127,6 +130,13 @@ Namespace Algorithm
                 .Select(AddressOf MS2Annotation)
         End Function
 
+        ' Find the ion type (pos or neg) based on the setting
+        ' 在二级离子推断注释这里，离子化模式似乎是固定类型的
+        Friend Shared ReadOnly IonMZ_crc As New Dictionary(Of String, MzAnnotation) From {
+            {"+", New MzAnnotation With {.annotation = "+H]+", .productMz = H_w - e_w}},
+            {"-", New MzAnnotation With {.annotation = "-H]-", .productMz = e_w - H_w}}
+        }
+
         ''' <summary>
         ''' Loop through all candidates for each compound
         ''' </summary>
@@ -134,29 +144,14 @@ Namespace Algorithm
         Private Function MS2Annotation(query As Query) As Query
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
-                    ' Read compound serial number and precuror ion mz
-                    Dim IonMZ_crc As Double
-                    Dim Rsyb As String
-                    Dim precursorIonType As String = query(i).precursor_type
-
-                    ' Find the ion type (pos or neg) based on the setting
-                    ' 在二级离子推断注释这里，离子化模式似乎是固定类型的
-                    If Right(precursorIonType, 1) = "-" Then
-                        IonMZ_crc = e_w - H_w
-                        Rsyb = "-H]-"
-                    Else
-                        IonMZ_crc = H_w - e_w
-                        Rsyb = "+H]+"
-                    End If
-
-                    Call MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
+                    Call MS2AnnotationLoop(query, IonMZ_crc(ionMode), i)
                 End If
             Next
 
             Return query
         End Function
 
-        Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
+        Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As MzAnnotation, i As Integer)
             Dim candidate As CandidateResult = query(i)
 
             ' Read the results from combinatorial enumeration
@@ -173,7 +168,7 @@ Namespace Algorithm
             Dim DDMP_max As Integer = CInt(candidate.DDMP)
 
             ' First, predict the ions based on the results from combinatorial enumeration
-            Dim prediction As New NeutralLossIonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
+            Dim prediction As New NeutralLossIonPrediction(AglyN$, Agly_w#, IonMZ_crc) With {
                 .Hex_max = Hex_max,
                 .HexA_max = HexA_max,
                 .dHex_max = dHex_max,
