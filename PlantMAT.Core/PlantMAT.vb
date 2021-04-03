@@ -241,8 +241,8 @@ Module PlantMAT
     ''' <param name="settings"></param>
     ''' <returns></returns>
     <ExportAPI("MS2ATopDown")>
-    Public Function MS2ATopDown(settings As Settings) As MS2ATopDown
-        Return New MS2ATopDown(settings)
+    Public Function MS2ATopDown(settings As Settings, Optional ionMode As Integer = 1) As MS2ATopDown
+        Return New MS2ATopDown(settings, ionMode)
     End Function
 
     ''' <summary>
