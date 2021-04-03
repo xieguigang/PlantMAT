@@ -41,6 +41,7 @@
 
 #End Region
 
+Imports System.Text
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.Linq
 
@@ -54,17 +55,17 @@ Namespace Algorithm
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
         ' Initilize all neutral losses and predicted ions pIonList() to none
-        Dim HexLoss$ = ""
-        Dim HexALoss$ = ""
-        Dim dHexLoss$ = ""
-        Dim PenLoss$ = ""
-        Dim MalLoss$ = ""
-        Dim CouLoss$ = ""
-        Dim FerLoss$ = ""
-        Dim SinLoss$ = ""
-        Dim DDMPLoss$ = ""
-        Dim H2OLoss$ = ""
-        Dim CO2Loss$ = ""
+        Dim HexLoss As New StringBuilder
+        Dim HexALoss As New StringBuilder
+        Dim dHexLoss As New StringBuilder
+        Dim PenLoss As New StringBuilder
+        Dim MalLoss As New StringBuilder
+        Dim CouLoss As New StringBuilder
+        Dim FerLoss As New StringBuilder
+        Dim SinLoss As New StringBuilder
+        Dim DDMPLoss As New StringBuilder
+        Dim H2OLoss As New StringBuilder
+        Dim CO2Loss As New StringBuilder
 
         Dim Rsyb$
         Dim IonMZ_crc#
@@ -101,6 +102,8 @@ Namespace Algorithm
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
                  Total_max * H2O_w + IonMZ_crc
 
+            ' 0 -> 0 for循环会执行一次
+
             ' Do brute force iteration to generate all hypothetical neutral losses
             ' as a combination of different glycosyl and acyl groups, and
             ' for each predicted neutral loss, calcualte the ion mz
@@ -118,39 +121,38 @@ Namespace Algorithm
 
                                                         Call LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
 
-                                                        CO2Loss = CO2Loss & "-CO2"
+                                                        CO2Loss.Append("-CO2")
                                                     Next CO2_n
-                                                    CO2Loss = ""
-                                                    H2OLoss = H2OLoss & "-H2O"
+                                                    CO2Loss.Clear()
+                                                    H2OLoss.Append("-H2O")
                                                 Next H2O_n
-                                                H2OLoss = ""
-                                                DDMPLoss = DDMPLoss & "-DDMP"
+                                                H2OLoss.Clear()
+                                                DDMPLoss.Append("-DDMP")
                                             Next DDMP_n
-                                            DDMPLoss = ""
-                                            SinLoss = SinLoss & "-Sin"
+                                            DDMPLoss.Clear()
+                                            SinLoss.Append("-Sin")
                                         Next Sin_n
-                                        SinLoss = ""
-                                        FerLoss = FerLoss & "-Fer"
+                                        SinLoss.Clear()
+                                        FerLoss.Append("-Fer")
                                     Next Fer_n
-                                    FerLoss = ""
-                                    CouLoss = CouLoss & "-Cou"
+                                    FerLoss.Clear()
+                                    CouLoss.Append("-Cou")
                                 Next Cou_n
-                                CouLoss = ""
-                                MalLoss = MalLoss & "-Mal"
+                                CouLoss.Clear()
+                                MalLoss.Append("-Mal")
                             Next Mal_n
-                            MalLoss = ""
-                            PenLoss = PenLoss & "-Pen"
+                            MalLoss.Clear()
+                            PenLoss.Append("-Pen")
                         Next Pen_n
-                        PenLoss = ""
-                        dHexLoss = dHexLoss & "-dHex"
+                        PenLoss.Clear()
+                        dHexLoss.Append("-dHex")
                     Next dHex_n
-                    dHexLoss = ""
-                    HexALoss = HexALoss & "-HexA"
+                    dHexLoss.Clear()
+                    HexALoss.Append("-HexA")
                 Next HexA_n
-                HexALoss = ""
-                HexLoss = HexLoss & "-Hex"
+                HexALoss.Clear()
+                HexLoss.Append("-Hex")
             Next Hex_n
-
         End Sub
 
         ''' <summary>
@@ -174,6 +176,7 @@ Namespace Algorithm
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
+            ' n * H2O
             Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
             ' Calculate the mass of the predicte neutral loss
