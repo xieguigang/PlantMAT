@@ -241,7 +241,7 @@ Namespace Algorithm
                 Dim eIonInt As Double = eIonList.into(s)
 
                 For Each t As MzAnnotation In pIonList
-                    Dim pIonMZ As Double = t.mz
+                    Dim pIonMZ As Double = t.productMz
                     Dim pIonNM As String = t.annotation
 
                     If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then

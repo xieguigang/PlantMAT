@@ -42,6 +42,7 @@
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports Microsoft.VisualBasic.Linq
 
 Namespace Algorithm
 
@@ -167,6 +168,9 @@ Namespace Algorithm
         ''' <param name="H2O_n%"></param>
         ''' <param name="CO2_n%"></param>
         ''' <param name="MIonMZ#"></param>
+        ''' <remarks>
+        ''' 
+        ''' </remarks>
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
@@ -197,7 +201,10 @@ Namespace Algorithm
             End If
 
             ' Save the predicted ion mz to data array pIonList()
-            Call pIonList.Add(New MzAnnotation With {.mz = pIonMZ, .annotation = pIonNM})
+            Call New MzAnnotation With {
+                .productMz = pIonMZ,
+                .annotation = pIonNM
+            }.DoCall(AddressOf pIonList.Add)
         End Sub
     End Class
 End Namespace
