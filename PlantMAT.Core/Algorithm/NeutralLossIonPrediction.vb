@@ -50,7 +50,7 @@ Namespace Algorithm
     ''' <summary>
     ''' Ms2 ion fragment prediction for natural products.
     ''' </summary>
-    Public Class IonPrediction
+    Public Class NeutralLossIonPrediction
 
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
@@ -92,6 +92,9 @@ Namespace Algorithm
             result = pIonList.ToArray
         End Sub
 
+        ''' <summary>
+        ''' 根据中性丢失的数量组合来生成预测的m/z值以及对应的注释
+        ''' </summary>
         Sub IonPrediction()
 
             ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
@@ -156,7 +159,7 @@ Namespace Algorithm
         End Sub
 
         ''' <summary>
-        ''' precursorMz = exactMass - neutral_loss
+        ''' productMz = exactMass - neutral_loss
         ''' </summary>
         ''' <param name="Hex_n%"></param>
         ''' <param name="HexA_n%"></param>
@@ -171,7 +174,7 @@ Namespace Algorithm
         ''' <param name="CO2_n%"></param>
         ''' <param name="MIonMZ#"></param>
         ''' <remarks>
-        ''' 
+        ''' 根据数量的组合预测计算出不同的二级碎片m/z，以及添加上对应的中性丢失注释
         ''' </remarks>
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
