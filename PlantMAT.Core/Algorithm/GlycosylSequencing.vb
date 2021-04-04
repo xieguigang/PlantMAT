@@ -83,7 +83,7 @@ Namespace Algorithm
         End Function
 
         Private Sub MS2Prediction(query As Query)
-            Dim DHIonMZ = query.PrecursorIon
+            Dim DHIonMZ As Double = query.PrecursorIon
 
             ' Predict MS2
             For i As Integer = 0 To query.Candidates.Length - 1
@@ -97,54 +97,32 @@ Namespace Algorithm
                 End If
 
                 ' Find how many structural possibilites for each peak in 'SMILES' sheet
-                Dim RS(,) As String
+                Dim RS As New List(Of GlycosylPredition)
                 Dim Pred_n = 0
                 Dim Match_n = 0
                 Dim Match_m = 0
 
-                ReDim RS(2, 1)
+                ' Predict MS2 [MSPrediction()] for each structural possibility
+                For Each GlycN As String In query(i).SMILES.SafeQuery
+                    Dim candidate As CandidateResult = query(i)
 
-                ' Create a combbox for MS2 prediction results of each combination possibility
-                Dim comb As New List(Of GlycosylPredition)
-
-                For Each smile As String In query(i).SMILES.SafeQuery
-                    Call MS2PredictionLoop(query, i, smile, MIonMZ, RS, Pred_n, Match_m, Match_n).DoCall(AddressOf comb.AddRange)
+                    ' For Each smiles As SMILES In candidate.SMILES
+                    Pred_n = Pred_n + 1
+                    IonPredictionMatching(query.Ms2Peaks, Match_m, GlycN, MIonMZ).DoCall(AddressOf RS.Add)
                 Next
 
-                If comb.Count > 0 Then
+                If RS.Count > 0 Then
                     query(i).Glycosyl = New Glycosyl With {
                         .Match_m = Match_m,
                         .Pred_n = Pred_n,
-                        .pResult = comb.ToArray,
+                        .pResult = RS.ToArray,
                         .Match_n = Match_n
                     }
                 End If
             Next
         End Sub
 
-        Private Function MS2PredictionLoop(query As Query, i As Integer, smiles As String, MIonMZ As Double, ByRef RS(,) As String, ByRef Pred_n%, ByRef Match_m%, ByRef Match_n%) As IEnumerable(Of GlycosylPredition)
-            Dim candidate As CandidateResult = query(i)
-            ' Predict MS2 [MSPrediction()] for each structural possibility
-            Dim GlycN As String = smiles
-
-            ' For Each smiles As SMILES In candidate.SMILES
-            Pred_n = Pred_n + 1
-            RS = IonPredictionMatching(RS, query.Ms2Peaks, Match_m, Match_n, GlycN, MIonMZ)
-
-            ' Sort RS() in descending order and write new list to combbox and worksheet
-            Dim pResult As New List(Of GlycosylPredition)
-
-            For t As Integer = 1 To Match_n
-                pResult += New GlycosylPredition With {
-                    .score = RS(1, t),
-                    .struct = RS(2, t)
-                }
-            Next
-
-            Return pResult.OrderByDescending(Function(gly) gly.score)
-        End Function
-
-        Private Function IonPredictionMatching(RS As String(,), eIonList As Ms2Peaks, ByRef Match_m As Integer, ByRef Match_n As Integer, GlycN As String, MIonMZ As Double) As String(,)
+        Private Function IonPredictionMatching(eIonList As Ms2Peaks, ByRef Match_m As Integer, GlycN As String, MIonMZ As Double) As GlycosylPredition
             ' 1. Declare variables and assign mass of [M-H2O]
             Dim m(,) As String, u(,) As String, Lt As String
             Dim Loss1 As Double, pIonList(,) As Double
@@ -387,12 +365,10 @@ NextPriIon:
                 Match_m = Match_m + 1
             End If
 
-            Match_n = Match_n + 1
-            ReDim Preserve RS(2, Match_n)
-            RS(1, Match_n) = CStr(RawScore)
-            RS(2, Match_n) = SugComb
-
-            Return RS
+            Return New GlycosylPredition With {
+                .score = RawScore,
+                .struct = SugComb
+            }
         End Function
     End Class
 End Namespace

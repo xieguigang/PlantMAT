@@ -154,6 +154,7 @@ Namespace Algorithm
 
         Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As MzAnnotation, i As Integer)
             Dim candidate As CandidateResult = query(i)
+            Dim pIonList As MzAnnotation() = Nothing
 
             ' Read the results from combinatorial enumeration
             Dim AglyN = candidate.Name
@@ -169,7 +170,7 @@ Namespace Algorithm
             Dim DDMP_max As Integer = CInt(candidate.DDMP)
 
             ' First, predict the ions based on the results from combinatorial enumeration
-            Dim prediction As New NeutralLossIonPrediction(AglyN$, Agly_w#, IonMZ_crc) With {
+            Using insilicons As New NeutralLossIonPrediction(AglyN$, Agly_w#, IonMZ_crc) With {
                 .Hex_max = Hex_max,
                 .HexA_max = HexA_max,
                 .dHex_max = dHex_max,
@@ -180,10 +181,10 @@ Namespace Algorithm
                 .Sin_max = Sin_max,
                 .DDMP_max = DDMP_max
             }
-            Dim pIonList As MzAnnotation() = Nothing
 
-            Call prediction.IonPrediction()
-            Call prediction.getResult(pIonList)
+                Call insilicons.IonPrediction()
+                Call insilicons.getResult(pIonList)
+            End Using
 
             ' Second, compare the predicted ions with the measured
             Dim aIonList As New List(Of IonAnnotation)
