@@ -52,6 +52,7 @@ Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
+Imports Parallel.IpcStream
 Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
@@ -89,14 +90,14 @@ Namespace Algorithm
                 result = MS2ATopDown(queries).ToArray
             End If
 
-            Dim cacheFile As String = App.GetAppSysTempFile(".cache", App.PID, "plantmat")
+            Dim cacheFile As SocketRef = SocketRef.CreateReference
 
             Console.WriteLine("MS2 annotation finished." & Environment.NewLine & "Continue glycosyl sequencing")
             Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
 
             Console.WriteLine($"data cache at location: {cacheFile}.")
 
-            Using writer As New BinaryDataWriter(cacheFile.Open)
+            Using writer As New BinaryDataWriter(cacheFile.address.Open)
                 For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
                     Dim json As JsonObject = GetType(Query) _
                         .GetJsonElement(query, New JSONSerializerOptions) _

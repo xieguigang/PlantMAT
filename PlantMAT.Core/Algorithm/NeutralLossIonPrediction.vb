@@ -50,7 +50,7 @@ Namespace Algorithm
     ''' <summary>
     ''' Ms2 ion fragment prediction for natural products.
     ''' </summary>
-    Public Class NeutralLossIonPrediction
+    Public Class NeutralLossIonPrediction : Implements IDisposable
 
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
@@ -71,6 +71,8 @@ Namespace Algorithm
         Dim IonMZ_crc#
         Dim Agly_w#
         Dim AglyN$
+
+        Private disposedValue As Boolean
 
         ReadOnly pIonList As New List(Of MzAnnotation)
 
@@ -212,6 +214,44 @@ Namespace Algorithm
                 .productMz = pIonMZ,
                 .annotation = pIonNM
             }.DoCall(AddressOf pIonList.Add)
+        End Sub
+
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: dispose managed state (managed objects)
+                    Call pIonList.Clear()
+
+                    Call HexLoss.Clear()
+                    Call HexALoss.Clear()
+                    Call dHexLoss.Clear()
+                    Call PenLoss.Clear()
+                    Call MalLoss.Clear()
+                    Call CouLoss.Clear()
+                    Call FerLoss.Clear()
+                    Call SinLoss.Clear()
+                    Call DDMPLoss.Clear()
+                    Call H2OLoss.Clear()
+                    Call CO2Loss.Clear()
+                End If
+
+                ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ' TODO: set large fields to null
+                disposedValue = True
+            End If
+        End Sub
+
+        ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+        ' Protected Overrides Sub Finalize()
+        '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
         End Sub
     End Class
 End Namespace
