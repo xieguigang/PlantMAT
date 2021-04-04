@@ -35,6 +35,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DocumentationFile>PlantMAT.Core.xml</DocumentationFile>
+    <OutputPath>D:\PlantMAT\Apps\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
