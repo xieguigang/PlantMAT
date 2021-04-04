@@ -45,11 +45,14 @@
 #End Region
 
 Imports System.IO
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.MIME.application.json.Javascript
+Imports Parallel.IpcStream
 Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
 Imports PlantMAT.Core.Models.AnnotationResult
@@ -63,9 +66,12 @@ Namespace Algorithm
 
         Dim mzPPM As Double
         Dim NoiseFilter As Double
+        Dim ionMode As String
 
-        Sub New(settings As Settings)
+        Sub New(settings As Settings, ionMode As Integer)
             Call MyBase.New(settings)
+
+            Me.ionMode = If(ionMode > 0, "+", "-")
         End Sub
 
         Protected Overrides Sub applySettings()
@@ -84,14 +90,14 @@ Namespace Algorithm
                 result = MS2ATopDown(queries).ToArray
             End If
 
-            Dim cacheFile As String = App.GetAppSysTempFile(".cache", App.PID, "plantmat")
+            Dim cacheFile As SocketRef = SocketRef.CreateReference
 
             Console.WriteLine("MS2 annotation finished." & Environment.NewLine & "Continue glycosyl sequencing")
             Console.WriteLine("Now analyzing glycosyl sequencing, please wait...")
 
             Console.WriteLine($"data cache at location: {cacheFile}.")
 
-            Using writer As New BinaryDataWriter(cacheFile.Open)
+            Using writer As New BinaryDataWriter(cacheFile.address.Open)
                 For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
                     Dim json As JsonObject = GetType(Query) _
                         .GetJsonElement(query, New JSONSerializerOptions) _
@@ -125,6 +131,13 @@ Namespace Algorithm
                 .Select(AddressOf MS2Annotation)
         End Function
 
+        ' Find the ion type (pos or neg) based on the setting
+        ' 在二级离子推断注释这里，离子化模式似乎是固定类型的
+        Friend Shared ReadOnly IonMZ_crc As New Dictionary(Of String, MzAnnotation) From {
+            {"+", New MzAnnotation With {.annotation = "+H]+", .productMz = H_w - e_w}},
+            {"-", New MzAnnotation With {.annotation = "-H]-", .productMz = e_w - H_w}}
+        }
+
         ''' <summary>
         ''' Loop through all candidates for each compound
         ''' </summary>
@@ -132,30 +145,16 @@ Namespace Algorithm
         Private Function MS2Annotation(query As Query) As Query
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
-                    ' Read compound serial number and precuror ion mz
-                    Dim IonMZ_crc As Double
-                    Dim Rsyb As String
-                    Dim precursorIonType As String = query(i).precursor_type
-
-                    ' Find the ion type (pos or neg) based on the setting
-                    ' 在二级离子推断注释这里，离子化模式似乎是固定类型的
-                    If Right(precursorIonType, 1) = "-" Then
-                        IonMZ_crc = e_w - H_w
-                        Rsyb = "-H]-"
-                    Else
-                        IonMZ_crc = H_w - e_w
-                        Rsyb = "+H]+"
-                    End If
-
-                    Call MS2AnnotationLoop(query, IonMZ_crc, Rsyb, i)
+                    Call MS2AnnotationLoop(query, IonMZ_crc(ionMode), i)
                 End If
             Next
 
             Return query
         End Function
 
-        Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As Double, Rsyb As String, i As Integer)
+        Private Sub MS2AnnotationLoop(query As Query, IonMZ_crc As MzAnnotation, i As Integer)
             Dim candidate As CandidateResult = query(i)
+            Dim pIonList As MzAnnotation() = Nothing
 
             ' Read the results from combinatorial enumeration
             Dim AglyN = candidate.Name
@@ -171,7 +170,7 @@ Namespace Algorithm
             Dim DDMP_max As Integer = CInt(candidate.DDMP)
 
             ' First, predict the ions based on the results from combinatorial enumeration
-            Dim prediction As New IonPrediction(AglyN$, Agly_w#, IonMZ_crc, Rsyb) With {
+            Using insilicons As New NeutralLossIonPrediction(AglyN$, Agly_w#, IonMZ_crc) With {
                 .Hex_max = Hex_max,
                 .HexA_max = HexA_max,
                 .dHex_max = dHex_max,
@@ -182,40 +181,18 @@ Namespace Algorithm
                 .Sin_max = Sin_max,
                 .DDMP_max = DDMP_max
             }
-            Dim pIon_n As Integer = 0
-            Dim pIonList As Object(,) = Nothing
 
-            Call prediction.IonPrediction()
-            Call prediction.getResult(pIon_n, pIonList)
+                Call insilicons.IonPrediction()
+                Call insilicons.getResult(pIonList)
+            End Using
 
             ' Second, compare the predicted ions with the measured
-            Dim aIon_n As Integer = 0
-            Dim aIonList(0 To 3, 0 To 1) As Object
-            Dim AglyCheck As Boolean = IonMatching(query, pIon_n, pIonList, aIon_n, aIonList)
-
-            ' Third, add a dropdown list for each candidate and show the annotation results in the list
-            ' Fourth, save the annotation results in the cell
-            Dim aResult As New List(Of IonAnnotation)
-
-            If aIon_n > 0 Then
-                For s As Integer = 1 To aIon_n
-                    Dim aIonMZ = aIonList(1, s)
-                    Dim aIonAbu As Double = DirectCast(aIonList(2, s), Double)
-                    Dim aIonNM As String = DirectCast(aIonList(3, s), String)
-
-                    aResult += New IonAnnotation With {
-                        .productMz = aIonMZ,
-                        .ionAbu = aIonAbu * 100,
-                        .annotation = aIonNM
-                    }
-                Next s
-            End If
-
-            aIonList = Nothing
+            Dim aIonList As New List(Of IonAnnotation)
+            Dim AglyCheck As Boolean = IonMatching(query.Ms2Peaks, pIonList, aIonList)
 
             ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
-                .ions = aResult.PopAll,
+                .ions = aIonList.PopAll,
                 .aglycone = AglyCheck
             }
         End Sub
@@ -223,14 +200,12 @@ Namespace Algorithm
         ''' <summary>
         ''' 
         ''' </summary>
-        ''' <param name="query"></param>
-        ''' <param name="pIon_n"></param>
-        ''' <param name="pIonList"></param>
+        ''' <param name="eIonList">the ms2 matrix data from the raw sample</param>
+        ''' <param name="pIonList">product mz ion predicts</param>
         ''' <returns>AglyCheck</returns>
-        Private Function IonMatching(query As Query, pIon_n%, pIonList As Object(,), ByRef aIon_n As Integer, ByRef aIonList As Object(,)) As Boolean
+        Private Function IonMatching(eIonList As Ms2Peaks, pIonList As MzAnnotation(), ByRef aIonList As List(Of IonAnnotation)) As Boolean
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
-            Dim eIonList As Ms2Peaks = query.Ms2Peaks
             Dim eIon_n As Integer = eIonList.fragments
             Dim TotalIonInt As Double = eIonList.TotalIonInt
 
@@ -241,27 +216,27 @@ Namespace Algorithm
                 Dim eIonMZ As Double = eIonList.mz(s)
                 Dim eIonInt As Double = eIonList.into(s)
 
-                For t As Integer = 1 To pIon_n
-                    Dim pIonMZ As Double = DirectCast(pIonList(1, t), Double)
-                    Dim pIonNM As String = DirectCast(pIonList(2, t), String)
+                For Each t As MzAnnotation In pIonList
+                    Dim pIonMZ As Double = t.productMz
+                    Dim pIonNM As String = t.annotation
 
-                    If Math.Abs((eIonMZ - pIonMZ) / pIonMZ) * 1000000 <= mzPPM Then
+                    If PPMmethod.PPM(eIonMZ, pIonMZ) <= mzPPM Then
                         Dim aIonAbu = eIonInt / TotalIonInt
 
                         If aIonAbu * 100 >= NoiseFilter Then
-                            aIon_n = aIon_n + 1
-                            ReDim Preserve aIonList(0 To 3, 0 To aIon_n)
-                            aIonList(1, aIon_n) = eIonMZ
-                            aIonList(2, aIon_n) = aIonAbu
-                            aIonList(3, aIon_n) = pIonNM
+                            Call New IonAnnotation With {
+                                .productMz = eIonMZ,
+                                .ionAbu = aIonAbu * 100,
+                                .annotation = pIonNM
+                            }.DoCall(AddressOf aIonList.Add)
 
                             If Left(pIonNM, 1) = "*" Then
                                 AglyCheck = True
                             End If
                         End If
                     End If
-                Next t
-            Next s
+                Next
+            Next
 
             Return AglyCheck
         End Function

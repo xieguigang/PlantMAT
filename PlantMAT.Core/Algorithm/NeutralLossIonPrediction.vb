@@ -41,55 +41,61 @@
 
 #End Region
 
+Imports System.Text
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports Microsoft.VisualBasic.Linq
+
 Namespace Algorithm
 
     ''' <summary>
     ''' Ms2 ion fragment prediction for natural products.
     ''' </summary>
-    Public Class IonPrediction
+    Public Class NeutralLossIonPrediction : Implements IDisposable
 
         Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
 
         ' Initilize all neutral losses and predicted ions pIonList() to none
-        Dim pIon_n% = 0
-        Dim HexLoss$ = ""
-        Dim HexALoss$ = ""
-        Dim dHexLoss$ = ""
-        Dim PenLoss$ = ""
-        Dim MalLoss$ = ""
-        Dim CouLoss$ = ""
-        Dim FerLoss$ = ""
-        Dim SinLoss$ = ""
-        Dim DDMPLoss$ = ""
-        Dim H2OLoss$ = ""
-        Dim CO2Loss$ = ""
+        Dim HexLoss As New StringBuilder
+        Dim HexALoss As New StringBuilder
+        Dim dHexLoss As New StringBuilder
+        Dim PenLoss As New StringBuilder
+        Dim MalLoss As New StringBuilder
+        Dim CouLoss As New StringBuilder
+        Dim FerLoss As New StringBuilder
+        Dim SinLoss As New StringBuilder
+        Dim DDMPLoss As New StringBuilder
+        Dim H2OLoss As New StringBuilder
+        Dim CO2Loss As New StringBuilder
 
         Dim Rsyb$
         Dim IonMZ_crc#
         Dim Agly_w#
         Dim AglyN$
 
-        Dim pIonList(0 To 2, 0 To 1) As Object
+        Private disposedValue As Boolean
+
+        ReadOnly pIonList As New List(Of MzAnnotation)
 
         ''' <summary>
         ''' 
         ''' </summary>
         ''' <param name="AglyN">the metabolite common name</param>
         ''' <param name="Agly_w">the exact mass</param>
-        ''' <param name="IonMZ_crc">m/z</param>
-        ''' <param name="Rsyb">precursor type</param>
-        Sub New(AglyN$, Agly_w#, IonMZ_crc#, Rsyb$)
-            Me.IonMZ_crc = IonMZ_crc
-            Me.Rsyb = Rsyb
+        ''' <param name="IonMZ_crc">precursor type components, value should be ``"-H]-"`` or ``"+H]+"``</param>
+        Sub New(AglyN$, Agly_w#, IonMZ_crc As MzAnnotation)
+            Me.IonMZ_crc = IonMZ_crc.productMz
+            Me.Rsyb = IonMZ_crc.annotation
             Me.Agly_w = Agly_w
             Me.AglyN = AglyN
         End Sub
 
-        Public Sub getResult(ByRef pIon_n As Integer, ByRef pIonList As Object(,))
-            pIon_n = Me.pIon_n
-            pIonList = Me.pIonList
+        Public Sub getResult(ByRef result As MzAnnotation())
+            result = pIonList.ToArray
         End Sub
 
+        ''' <summary>
+        ''' 根据中性丢失的数量组合来生成预测的m/z值以及对应的注释
+        ''' </summary>
         Sub IonPrediction()
 
             ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
@@ -99,6 +105,8 @@ Namespace Algorithm
             Dim MIonMZ = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
                  Total_max * H2O_w + IonMZ_crc
+
+            ' 0 -> 0 for循环会执行一次
 
             ' Do brute force iteration to generate all hypothetical neutral losses
             ' as a combination of different glycosyl and acyl groups, and
@@ -117,44 +125,62 @@ Namespace Algorithm
 
                                                         Call LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
 
-                                                        CO2Loss = CO2Loss & "-CO2"
+                                                        CO2Loss.Append("-CO2")
                                                     Next CO2_n
-                                                    CO2Loss = ""
-                                                    H2OLoss = H2OLoss & "-H2O"
+                                                    CO2Loss.Clear()
+                                                    H2OLoss.Append("-H2O")
                                                 Next H2O_n
-                                                H2OLoss = ""
-                                                DDMPLoss = DDMPLoss & "-DDMP"
+                                                H2OLoss.Clear()
+                                                DDMPLoss.Append("-DDMP")
                                             Next DDMP_n
-                                            DDMPLoss = ""
-                                            SinLoss = SinLoss & "-Sin"
+                                            DDMPLoss.Clear()
+                                            SinLoss.Append("-Sin")
                                         Next Sin_n
-                                        SinLoss = ""
-                                        FerLoss = FerLoss & "-Fer"
+                                        SinLoss.Clear()
+                                        FerLoss.Append("-Fer")
                                     Next Fer_n
-                                    FerLoss = ""
-                                    CouLoss = CouLoss & "-Cou"
+                                    FerLoss.Clear()
+                                    CouLoss.Append("-Cou")
                                 Next Cou_n
-                                CouLoss = ""
-                                MalLoss = MalLoss & "-Mal"
+                                CouLoss.Clear()
+                                MalLoss.Append("-Mal")
                             Next Mal_n
-                            MalLoss = ""
-                            PenLoss = PenLoss & "-Pen"
+                            MalLoss.Clear()
+                            PenLoss.Append("-Pen")
                         Next Pen_n
-                        PenLoss = ""
-                        dHexLoss = dHexLoss & "-dHex"
+                        PenLoss.Clear()
+                        dHexLoss.Append("-dHex")
                     Next dHex_n
-                    dHexLoss = ""
-                    HexALoss = HexALoss & "-HexA"
+                    dHexLoss.Clear()
+                    HexALoss.Append("-HexA")
                 Next HexA_n
-                HexALoss = ""
-                HexLoss = HexLoss & "-Hex"
+                HexALoss.Clear()
+                HexLoss.Append("-Hex")
             Next Hex_n
-
         End Sub
 
+        ''' <summary>
+        ''' productMz = exactMass - neutral_loss
+        ''' </summary>
+        ''' <param name="Hex_n%"></param>
+        ''' <param name="HexA_n%"></param>
+        ''' <param name="dHex_n%"></param>
+        ''' <param name="Pen_n%"></param>
+        ''' <param name="Mal_n%"></param>
+        ''' <param name="Cou_n%"></param>
+        ''' <param name="Fer_n%"></param>
+        ''' <param name="Sin_n%"></param>
+        ''' <param name="DDMP_n%"></param>
+        ''' <param name="H2O_n%"></param>
+        ''' <param name="CO2_n%"></param>
+        ''' <param name="MIonMZ#"></param>
+        ''' <remarks>
+        ''' 根据数量的组合预测计算出不同的二级碎片m/z，以及添加上对应的中性丢失注释
+        ''' </remarks>
         Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
 
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
+            ' n * H2O
             Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
 
             ' Calculate the mass of the predicte neutral loss
@@ -170,23 +196,62 @@ Namespace Algorithm
             If Hex_n = Hex_max AndAlso HexA_n = HexA_max AndAlso dHex_n = dHex_max AndAlso Pen_n = Pen_max AndAlso
                 Mal_n = Mal_max AndAlso Cou_n = Cou_max AndAlso Fer_n = Fer_max AndAlso Sin_n = Sin_max AndAlso DDMP_n = DDMP_max Then
 
-                pIonNM = "[Agly" & H2OLoss & CO2Loss & Rsyb
+                pIonNM = $"[Agly{H2OLoss}{CO2Loss}{Rsyb}"
 
-                If H2OLoss & CO2Loss = "" OrElse (H2OLoss & CO2Loss = "-H2O-CO2" AndAlso (AglyN = "Medicagenic acid" OrElse AglyN = "Zanhic acid")) Then
+                If $"{H2OLoss}{CO2Loss}" = "" OrElse ($"{H2OLoss}{CO2Loss}" = "-H2O-CO2" AndAlso (AglyN = "Medicagenic acid" OrElse AglyN = "Zanhic acid")) Then
                     pIonNM = "*" & pIonNM
                 End If
             Else
-                pIonNM = "[M" & HexLoss & HexALoss & dHexLoss & PenLoss &
-                            MalLoss & CouLoss & FerLoss & SinLoss & DDMPLoss &
-                            H2OLoss & CO2Loss & Rsyb
+                pIonNM = {"[M",
+                    HexLoss, HexALoss, dHexLoss, PenLoss,
+                    MalLoss, CouLoss, FerLoss, SinLoss, DDMPLoss,
+                    H2OLoss, CO2Loss, Rsyb
+                }.JoinBy("")
             End If
 
             ' Save the predicted ion mz to data array pIonList()
-            pIon_n = pIon_n + 1
-            ReDim Preserve pIonList(0 To 2, 0 To pIon_n)
-            pIonList(1, pIon_n) = pIonMZ
-            pIonList(2, pIon_n) = pIonNM
+            Call New MzAnnotation With {
+                .productMz = pIonMZ,
+                .annotation = pIonNM
+            }.DoCall(AddressOf pIonList.Add)
+        End Sub
 
+        Protected Overridable Sub Dispose(disposing As Boolean)
+            If Not disposedValue Then
+                If disposing Then
+                    ' TODO: dispose managed state (managed objects)
+                    Call pIonList.Clear()
+
+                    Call HexLoss.Clear()
+                    Call HexALoss.Clear()
+                    Call dHexLoss.Clear()
+                    Call PenLoss.Clear()
+                    Call MalLoss.Clear()
+                    Call CouLoss.Clear()
+                    Call FerLoss.Clear()
+                    Call SinLoss.Clear()
+                    Call DDMPLoss.Clear()
+                    Call H2OLoss.Clear()
+                    Call CO2Loss.Clear()
+                End If
+
+                ' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ' TODO: set large fields to null
+                disposedValue = True
+            End If
+        End Sub
+
+        ' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+        ' Protected Overrides Sub Finalize()
+        '     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+        '     Dispose(disposing:=False)
+        '     MyBase.Finalize()
+        ' End Sub
+
+        Public Sub Dispose() Implements IDisposable.Dispose
+            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+            Dispose(disposing:=True)
+            GC.SuppressFinalize(Me)
         End Sub
     End Class
 End Namespace
