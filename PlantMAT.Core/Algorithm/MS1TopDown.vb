@@ -137,7 +137,13 @@ Namespace Algorithm
         End Function
 
         Public Shared Function GroupQueryByMz(queries As IEnumerable(Of Query), Optional ppm As Double = 1) As NamedCollection(Of Query)()
-            Return queries.GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(1)).ToArray
+            ' shuffle is required for avoid the large mz stays in one threads problem
+            ' due to the reason of groupBy is always reorder mz in asc orders
+            '
+            Return queries _
+                .GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(ppm)) _
+                .Shuffles _
+                .ToArray
         End Function
 
         ''' <summary>
