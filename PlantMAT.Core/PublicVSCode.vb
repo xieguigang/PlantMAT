@@ -49,7 +49,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
 
-Module PublicVSCode
+Public Module PublicVSCode
 
     Public db_SugarAcid As db_SugarAcid()
     Public db_PrecursorIon As db_PrecursorIon()
