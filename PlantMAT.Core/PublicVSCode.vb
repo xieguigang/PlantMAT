@@ -49,6 +49,8 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
 
+<Assembly: InternalsVisibleTo("NPSearch")>
+
 Public Module PublicVSCode
 
     Public db_SugarAcid As db_SugarAcid()
