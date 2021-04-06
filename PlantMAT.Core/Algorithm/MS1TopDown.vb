@@ -74,13 +74,12 @@ Namespace Algorithm
         Dim AglyconeSource As db_AglyconeSource = db_AglyconeSource.All
         Dim SearchPPM As Double
         Dim Precursors As PrecursorInfo()
-        Dim neutralLossSearch As NeutralLossSearch
 
         Public Sub New(library As Library(), settings As Settings)
             MyBase.New(settings)
 
+            ' load metabolite reference library
             Me.library = library
-            Me.neutralLossSearch = New NeutralLossSearch(settings)
         End Sub
 
         Protected Friend Overrides Sub applySettings()
@@ -92,8 +91,6 @@ Namespace Algorithm
                 .PrecursorIonType _
                 .GetPrecursorIons _
                 .ToArray
-
-            Call neutralLossSearch.applySettings()
         End Sub
 
         Public Shared Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
@@ -182,71 +179,27 @@ Namespace Algorithm
         ''' <param name="precursorIon">ion m/z of the precursor</param>
         ''' <returns></returns>
         Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of CandidateResult)
+            Dim neutralLossSearch As New NeutralLossSearch(settings)
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
-            Dim neutralLoss As New NeutralLoss
 
-            ' invali exact mass that calculated from the precursor ion
-            If M_w <= 0 OrElse M_w > 2000 Then
-                Return
-            End If
+            Call neutralLossSearch.applySettings()
 
-            ' 暴力枚举的方法来搜索代谢物信息
-            For Hex_n = NumHexMin To NumHexMax
-                For HexA_n = NumHexAMin To NumHexAMax
-                    For dHex_n = NumdHexMin To NumdHexMax
-                        For Pen_n = NumPenMin To NumPenMax
-                            For Mal_n = NumMalMin To NumMalMax
-                                For Cou_n = NumCouMin To NumCouMax
-                                    For Fer_n = NumFerMin To NumFerMax
-                                        For Sin_n = NumSinMin To NumSinMax
-                                            For DDMP_n = NumDDMPMin To NumDDMPMax
-
-                                                For Each checked In RestrictionCheck(rt_e, neutralLoss.SetLoess(Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n), M_w, PrecursorIonMZ, PrecursorIonN)
-                                                    Yield checked
-                                                Next
-
-                                            Next DDMP_n
-                                        Next Sin_n
-                                    Next Fer_n
-                                Next Cou_n
-                            Next Mal_n
-                        Next Pen_n
-                    Next dHex_n
-                Next HexA_n
-            Next Hex_n
-        End Function
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        ''' <param name="RT_E#"></param>
-        ''' <param name="neutralLoss"></param>
-        ''' <param name="M_w">exact mass</param>
-        ''' <param name="PrecursorIonMZ">precursor m/z</param>
-        ''' <param name="PrecursorIonN"></param>
-        ''' <returns></returns>
-        Private Iterator Function RestrictionCheck(RT_E#, neutralLoss As NeutralLoss, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
-            Dim Sugar_n As Integer = neutralLoss.Sugar_n
-            Dim Acid_n As Integer = neutralLoss.Acid_n
-
-            If Sugar_n >= NumSugarMin AndAlso Sugar_n <= NumSugarMax AndAlso Acid_n >= NumAcidMin AndAlso Acid_n <= NumAcidMax Then
+            For Each neutralLoss As NeutralLoss In neutralLossSearch.NeutralLosses(precursorIon, precursor)
+                Dim Sugar_n As Integer = neutralLoss.Sugar_n
+                Dim Acid_n As Integer = neutralLoss.Acid_n
                 Dim Attn_w As Double = neutralLoss.Attn_w
                 Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
                 Dim Bal = neutralLoss.AglyconeExactMass(M_w)
 
-                ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
-                If settings.AglyconeExactMassInRange(Bal) Then
-                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss)
-                        candidate.Theoretical_ExactMass = M_w
-                        candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
+                For Each candidate In RunDatabaseSearch(RT_E:=rt_e, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss)
+                    candidate.Theoretical_ExactMass = M_w
+                    candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
 
-                        Yield candidate
-                    Next
-                End If
-
-            End If
+                    Yield candidate
+                Next
+            Next
         End Function
 
         Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss As NeutralLoss) As IEnumerable(Of CandidateResult)

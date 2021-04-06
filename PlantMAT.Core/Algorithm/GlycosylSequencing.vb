@@ -61,7 +61,7 @@ Namespace Algorithm
             Call MyBase.New(settings)
         End Sub
 
-        Protected Overrides Sub applySettings()
+        Protected Friend Overrides Sub applySettings()
             mzPPM = settings.mzPPM
         End Sub
 

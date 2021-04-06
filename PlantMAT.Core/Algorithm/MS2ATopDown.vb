@@ -74,7 +74,7 @@ Namespace Algorithm
             Me.ionMode = If(ionMode > 0, "+", "-")
         End Sub
 
-        Protected Overrides Sub applySettings()
+        Protected Friend Overrides Sub applySettings()
             mzPPM = settings.mzPPM
             NoiseFilter = settings.NoiseFilter
         End Sub
