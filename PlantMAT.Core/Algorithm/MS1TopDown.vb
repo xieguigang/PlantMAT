@@ -189,6 +189,7 @@ Namespace Algorithm
 
         Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
             Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
+            Dim neutralLoss As New NeutralLoss
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
@@ -206,7 +207,7 @@ Namespace Algorithm
                                         For Sin_n = NumSinMin To NumSinMax
                                             For DDMP_n = NumDDMPMin To NumDDMPMax
 
-                                                For Each checked In RestrictionCheck(rt_e, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n, M_w, PrecursorIonMZ, PrecursorIonN)
+                                                For Each checked In RestrictionCheck(rt_e, neutralLoss.SetLoess(Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n), M_w, PrecursorIonMZ, PrecursorIonN)
                                                     Yield checked
                                                 Next
 
@@ -221,18 +222,27 @@ Namespace Algorithm
             Next Hex_n
         End Function
 
-        Private Iterator Function RestrictionCheck(RT_E#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
-            Dim Sugar_n = Hex_n + HexA_n + dHex_n + Pen_n
-            Dim Acid_n = Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="RT_E#"></param>
+        ''' <param name="neutralLoss"></param>
+        ''' <param name="M_w">exact mass</param>
+        ''' <param name="PrecursorIonMZ">precursor m/z</param>
+        ''' <param name="PrecursorIonN"></param>
+        ''' <returns></returns>
+        Private Iterator Function RestrictionCheck(RT_E#, neutralLoss As NeutralLoss, M_w As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
+            Dim Sugar_n As Integer = neutralLoss.Sugar_n
+            Dim Acid_n As Integer = neutralLoss.Acid_n
 
             If Sugar_n >= NumSugarMin AndAlso Sugar_n <= NumSugarMax AndAlso Acid_n >= NumAcidMin AndAlso Acid_n <= NumAcidMax Then
-                Dim Attn_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w + Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w
+                Dim Attn_w As Double = neutralLoss.Attn_w
                 Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
-                Dim Bal = M_w + nH2O_w - Attn_w
+                Dim Bal = neutralLoss.AglyconeExactMass(M_w)
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
-                If Bal >= settings.AglyconeMWRange(0) AndAlso Bal <= settings.AglyconeMWRange(1) Then
-                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%)
+                If settings.AglyconeExactMassInRange(Bal) Then
+                    For Each candidate In RunDatabaseSearch(RT_E:=RT_E, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss)
                         candidate.Theoretical_ExactMass = M_w
                         candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
 
@@ -243,7 +253,7 @@ Namespace Algorithm
             End If
         End Function
 
-        Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function RunDatabaseSearch(RT_E#, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss As NeutralLoss) As IEnumerable(Of CandidateResult)
             For Each ref As Library In library
                 For Each candidate As CandidateResult In DatabaseSearch(
                     xref:=ref.Xref,
@@ -256,15 +266,7 @@ Namespace Algorithm
                     M_w:=M_w,
                     Attn_w:=Attn_w,
                     nH2O_w:=nH2O_w,
-                    Hex_n%,
-                    HexA_n%,
-                    dHex_n%,
-                    Pen_n%,
-                    Mal_n%,
-                    Cou_n%,
-                    Fer_n%,
-                    Sin_n%,
-                    DDMP_n%,
+                    neutralLoss,
                     Sugar_n%,
                     Acid_n%
                 )
@@ -273,7 +275,7 @@ Namespace Algorithm
             Next
         End Function
 
-        Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
+        Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, neutralLoss As NeutralLoss, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
             If AglyT = AglyconeType.ToString OrElse AglyconeType = db_AglyconeType.All Then
                 If AglyO = AglyconeSource.ToString OrElse AglyconeSource = db_AglyconeSource.All Then
                     Dim err1 = Math.Abs((M_w - (AglyW + Attn_w - nH2O_w)) / (AglyW + Attn_w - nH2O_w)) * 1000000
@@ -285,17 +287,17 @@ Namespace Algorithm
                         Yield New CandidateResult With {
                             .ExactMass = AglyW,
                             .Name = AglyN,
-                            .Hex = Hex_n,
-                            .HexA = HexA_n,
-                            .dHex = dHex_n,
-                            .Pen = Pen_n,
-                            .Mal = Mal_n,
+                            .Hex = neutralLoss.Hex,
+                            .HexA = neutralLoss.HexA,
+                            .dHex = neutralLoss.dHex,
+                            .Pen = neutralLoss.Pen,
+                            .Mal = neutralLoss.Mal,
                             .Err = err1,
                             .SubstructureAgly = AglyS,
-                            .Cou = Cou_n,
-                            .DDMP = DDMP_n,
-                            .Fer = Fer_n,
-                            .Sin = Sin_n,
+                            .Cou = neutralLoss.Cou,
+                            .DDMP = neutralLoss.DDMP,
+                            .Fer = neutralLoss.Fer,
+                            .Sin = neutralLoss.Sin,
                             .RT = RT_P,
                             .RTErr = RT_P - RT_E,
                             .Acid_n = Acid_n,
