@@ -162,10 +162,7 @@ Namespace Algorithm
             Dim precursorIon = Aggregate query As Query In queryList Into Average(query.PrecursorIon)
 
             For Each type As PrecursorInfo In precursors
-                Dim PrecursorIonMZ = type.adduct
-                Dim PrecursorIonN = type.M
-
-                For Each item As CandidateResult In CombinatorialPrediction(0, precursorIon, PrecursorIonMZ, PrecursorIonN)
+                For Each item As CandidateResult In CombinatorialPrediction(0, precursorIon, precursor:=type)
                     item.precursor_type = type.precursor_type
                     ' add the common candidate result
                     candidates.Add(item)
@@ -191,7 +188,15 @@ Namespace Algorithm
             Next
         End Function
 
-        Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, PrecursorIonMZ As Double, PrecursorIonN As Integer) As IEnumerable(Of CandidateResult)
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="rt_e"></param>
+        ''' <param name="precursorIon">ion m/z of the precursor</param>
+        ''' <returns></returns>
+        Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of CandidateResult)
+            Dim PrecursorIonMZ As Double = precursor.adduct
+            Dim PrecursorIonN As Double = precursor.M
             Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim neutralLoss As New NeutralLoss
 
