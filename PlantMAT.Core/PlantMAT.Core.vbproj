@@ -155,7 +155,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Algorithm\InternalCache.vb" />
+    <Compile Include="Algorithm\InternalCache\CacheFileWriter.vb" />
+    <Compile Include="Algorithm\InternalCache\CacheFilePopulator.vb" />
+    <Compile Include="Algorithm\InternalCache\ArrayPopulator.vb" />
+    <Compile Include="Algorithm\InternalCache\InternalCache.vb" />
+    <Compile Include="Algorithm\NeutralLoss.vb" />
+    <Compile Include="Algorithm\NeutralLossSearch.vb" />
     <Compile Include="Models\Ms2Peaks.vb" />
     <Compile Include="ParallelPipeline.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
