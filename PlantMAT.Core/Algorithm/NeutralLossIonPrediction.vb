@@ -1,43 +1,43 @@
-﻿#Region "Microsoft.VisualBasic::ea4e9f219648a787e5e9bf272ac8b85b, PlantMAT.Core\Algorithm\IonPrediction.vb"
+﻿#Region "Microsoft.VisualBasic::f8401a83199e13aa50bf83272d81b73b, PlantMAT.Core\Algorithm\NeutralLossIonPrediction.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class IonPrediction
-' 
-'         Constructor: (+1 Overloads) Sub New
-'         Sub: getResult, IonPrediction, LossCombination
-' 
-' 
-' /********************************************************************************/
+    '     Class NeutralLossIonPrediction
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    '         Sub: (+2 Overloads) Dispose, getResult, IonPrediction, LossCombination
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

@@ -1,46 +1,46 @@
-﻿#Region "Microsoft.VisualBasic::9df25aaa019db733a848e7b906dcadb3, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
+﻿#Region "Microsoft.VisualBasic::ad96fbf0ebe64bc41a62fb29187774f5, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class MS2ATopDown
-' 
-'         Constructor: (+1 Overloads) Sub New
-' 
-'         Function: IonMatching, MS2Annotation, MS2ATopDown
-' 
-'         Sub: applySettings, MS2Annotation, MS2AnnotationLoop
-' 
-' 
-' /********************************************************************************/
+    '     Class MS2ATopDown
+    ' 
+    '         Constructor: (+1 Overloads) Sub New
+    ' 
+    '         Function: IonMatching, (+2 Overloads) MS2Annotation, MS2ATopDown
+    ' 
+    '         Sub: applySettings, MS2AnnotationLoop
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 

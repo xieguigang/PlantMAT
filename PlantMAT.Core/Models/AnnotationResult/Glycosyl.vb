@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::3c7a6a6c4d528b9b0ae7ad4927fa6f38, PlantMAT.Core\Models\AnnotationResult\Glycosyl.vb"
+﻿#Region "Microsoft.VisualBasic::8173a843dc4876d8ec86920f2637a0ec, PlantMAT.Core\Models\AnnotationResult\Glycosyl.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class Glycosyl
     ' 
-    '         Properties: Best_n, Match_m, Match_n, Pred_n, pResult
+    '         Properties: Match_m, Match_n, Pred_n, pResult
     ' 
     '         Function: ToString
     ' 

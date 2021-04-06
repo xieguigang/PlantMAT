@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7b5198d305a0d29e4869e1ba266792a6, PlantMAT.Core\Models\Ms2Peaks.vb"
+﻿#Region "Microsoft.VisualBasic::0ed2776c18a7db47dc82bc9b36a36996, PlantMAT.Core\Models\Ms2Peaks.vb"
 
     ' Author:
     ' 
@@ -33,7 +33,7 @@
 
     '     Class Ms2Peaks
     ' 
-    '         Properties: into, mz, TotalIonInt
+    '         Properties: fragments, into, mz, TotalIonInt
     ' 
     '         Function: ParseMs2
     ' 

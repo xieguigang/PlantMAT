@@ -1,4 +1,48 @@
-﻿
+﻿#Region "Microsoft.VisualBasic::7f9db99db9268a6f816dda0c55ae41cf, PlantMAT.Core\Algorithm\NeutralLoss.vb"
+
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
+
+
+
+    ' /********************************************************************************/
+
+    ' Summaries:
+
+    '     Class NeutralLoss
+    ' 
+    '         Properties: Acid_n, Attn_w, nH2O_w, Sugar_n
+    ' 
+    '         Function: AglyconeExactMass, SetLoess, ToString
+    ' 
+    ' 
+    ' /********************************************************************************/
+
+#End Region
+
+
 Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Algorithm

@@ -1,48 +1,50 @@
-﻿#Region "Microsoft.VisualBasic::136e43619d0aa9fe59bb46b71d116bb2, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
+﻿#Region "Microsoft.VisualBasic::246ad58724fc9026cc406ecde2ec3b55, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
 
-' Author:
-' 
-'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-' 
-' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' 
-' Apache 2.0 License
-' 
-' 
-' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-' 
-' Licensed under the Apache License, Version 2.0 (the "License");
-' you may not use this file except in compliance with the License.
-' You may obtain a copy of the License at
-' 
-'     http://www.apache.org/licenses/LICENSE-2.0
-' 
-' Unless required by applicable law or agreed to in writing, software
-' distributed under the License is distributed on an "AS IS" BASIS,
-' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-' See the License for the specific language governing permissions and
-' limitations under the License.
+    ' Author:
+    ' 
+    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+    ' 
+    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' 
+    ' Apache 2.0 License
+    ' 
+    ' 
+    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+    ' 
+    ' Licensed under the Apache License, Version 2.0 (the "License");
+    ' you may not use this file except in compliance with the License.
+    ' You may obtain a copy of the License at
+    ' 
+    '     http://www.apache.org/licenses/LICENSE-2.0
+    ' 
+    ' Unless required by applicable law or agreed to in writing, software
+    ' distributed under the License is distributed on an "AS IS" BASIS,
+    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ' See the License for the specific language governing permissions and
+    ' limitations under the License.
 
 
 
-' /********************************************************************************/
+    ' /********************************************************************************/
 
-' Summaries:
+    ' Summaries:
 
-'     Class CandidateResult
-' 
-'         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
-'                     Err, ExactMass, Fer, Glycosyl, Hex
-'                     HexA, Mal, Ms2Anno, Name, nH2O_w
-'                     Pen, precursor_type, RT, RTErr, Sin
-'                     SMILES, SubstructureAgly, Sugar_n
-' 
-'         Function: GetSug_nStatic
-' 
-' 
-' /********************************************************************************/
+    '     Class CandidateResult
+    ' 
+    '         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
+    '                     Err, ExactMass, Fer, Glycosyl, Hex
+    '                     HexA, Mal, Ms2Anno, Name, nH2O_w
+    '                     Pen, precursor_type, RT, RTErr, Sin
+    '                     SMILES, SubstructureAgly, Sugar_n, Theoretical_ExactMass, Theoretical_PrecursorMz
+    '                     xref
+    ' 
+    '         Constructor: (+2 Overloads) Sub New
+    '         Function: GetSug_nStatic
+    ' 
+    ' 
+    ' /********************************************************************************/
 
 #End Region
 
