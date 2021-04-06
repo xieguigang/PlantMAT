@@ -48,6 +48,6 @@ Public MustInherit Class PlantMATAlgorithm
         Me.applySettings()
     End Sub
 
-    Protected MustOverride Sub applySettings()
+    Protected Friend MustOverride Sub applySettings()
 
 End Class

@@ -70,35 +70,20 @@ Namespace Algorithm
     Public Class MS1TopDown : Inherits PlantMATAlgorithm
 
         Dim library As Library()
-        Dim NumHexMin, NumHexMax, NumHexAMin, NumHexAMax, NumdHexMin, NumdHexMax, NumPenMin, NumPenMax, NumMalMin, NumMalMax, NumCouMin, NumCouMax, NumFerMin, NumFerMax, NumSinMin, NumSinMax, NumDDMPMin, NumDDMPMax As Integer
-        Dim NumSugarMin, NumSugarMax, NumAcidMin, NumAcidMax As Integer
         Dim AglyconeType As db_AglyconeType = db_AglyconeType.All
         Dim AglyconeSource As db_AglyconeSource = db_AglyconeSource.All
         Dim SearchPPM As Double
         Dim Precursors As PrecursorInfo()
+        Dim neutralLossSearch As NeutralLossSearch
 
         Public Sub New(library As Library(), settings As Settings)
             MyBase.New(settings)
+
             Me.library = library
+            Me.neutralLossSearch = New NeutralLossSearch(settings)
         End Sub
 
-        Protected Overrides Sub applySettings()
-            Const min = 0
-            Const max = 1
-
-            NumHexMin = settings.NumofSugarHex(min) : NumHexMax = settings.NumofSugarHex(max)
-            NumHexAMin = settings.NumofSugarHexA(min) : NumHexAMax = settings.NumofSugarHexA(max)
-            NumdHexMin = settings.NumofSugardHex(min) : NumdHexMax = settings.NumofSugardHex(max)
-            NumPenMin = settings.NumofSugarPen(min) : NumPenMax = settings.NumofSugarPen(max)
-            NumMalMin = settings.NumofAcidMal(min) : NumMalMax = settings.NumofAcidMal(max)
-            NumCouMin = settings.NumofAcidCou(min) : NumCouMax = settings.NumofAcidCou(max)
-            NumFerMin = settings.NumofAcidFer(min) : NumFerMax = settings.NumofAcidFer(max)
-            NumSinMin = settings.NumofAcidSin(min) : NumSinMax = settings.NumofAcidSin(max)
-            NumDDMPMin = settings.NumofAcidDDMP(min) : NumDDMPMax = settings.NumofAcidDDMP(max)
-
-            NumSugarMin = settings.NumofSugarAll(min) : NumSugarMax = settings.NumofSugarAll(max)
-            NumAcidMin = settings.NumofAcidAll(min) : NumAcidMax = settings.NumofAcidAll(max)
-
+        Protected Friend Overrides Sub applySettings()
             AglyconeType = settings.AglyconeType
             AglyconeSource = settings.AglyconeSource
 
@@ -107,6 +92,8 @@ Namespace Algorithm
                 .PrecursorIonType _
                 .GetPrecursorIons _
                 .ToArray
+
+            Call neutralLossSearch.applySettings()
         End Sub
 
         Public Shared Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
