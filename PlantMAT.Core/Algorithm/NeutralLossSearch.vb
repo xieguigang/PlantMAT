@@ -44,7 +44,7 @@ Namespace Algorithm
         Public Iterator Function NeutralLosses(precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of NeutralLoss)
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
-            Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
+            Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim neutralLoss As New NeutralLoss
 
             ' invali exact mass that calculated from the precursor ion
@@ -53,15 +53,15 @@ Namespace Algorithm
             End If
 
             ' 暴力枚举的方法来搜索代谢物信息
-            For Hex_n = NumHexMin To NumHexMax
-                For HexA_n = NumHexAMin To NumHexAMax
-                    For dHex_n = NumdHexMin To NumdHexMax
-                        For Pen_n = NumPenMin To NumPenMax
-                            For Mal_n = NumMalMin To NumMalMax
-                                For Cou_n = NumCouMin To NumCouMax
-                                    For Fer_n = NumFerMin To NumFerMax
-                                        For Sin_n = NumSinMin To NumSinMax
-                                            For DDMP_n = NumDDMPMin To NumDDMPMax
+            For Hex_n As Integer = NumHexMin To NumHexMax
+                For HexA_n As Integer = NumHexAMin To NumHexAMax
+                    For dHex_n As Integer = NumdHexMin To NumdHexMax
+                        For Pen_n As Integer = NumPenMin To NumPenMax
+                            For Mal_n As Integer = NumMalMin To NumMalMax
+                                For Cou_n As Integer = NumCouMin To NumCouMax
+                                    For Fer_n As Integer = NumFerMin To NumFerMax
+                                        For Sin_n As Integer = NumSinMin To NumSinMax
+                                            For DDMP_n As Integer = NumDDMPMin To NumDDMPMax
 
                                                 If RestrictionCheck(
                                                     neutralLoss:=neutralLoss.SetLoess(Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n),
@@ -104,8 +104,8 @@ Namespace Algorithm
 
             If Sugar_n >= NumSugarMin AndAlso Sugar_n <= NumSugarMax AndAlso Acid_n >= NumAcidMin AndAlso Acid_n <= NumAcidMax Then
                 Dim Attn_w As Double = neutralLoss.Attn_w
-                Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
-                Dim Bal = neutralLoss.AglyconeExactMass(M_w)
+                Dim nH2O_w As Double = (Sugar_n + Acid_n) * H2O_w
+                Dim Bal As Double = neutralLoss.AglyconeExactMass(M_w)
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
                 If settings.AglyconeExactMassInRange(Bal) Then
