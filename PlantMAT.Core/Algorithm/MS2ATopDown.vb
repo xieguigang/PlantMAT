@@ -97,18 +97,9 @@ Namespace Algorithm
 
             Console.WriteLine($"data cache at location: {cacheFile}.")
 
-            Using writer As New BinaryDataWriter(cacheFile.address.Open)
+            Using writer As New CacheFileWriter(cacheFile)
                 For Each query As Query In New GlycosylSequencing(settings).MS2P(result)
-                    Dim json As JsonObject = GetType(Query) _
-                        .GetJsonElement(query, New JSONSerializerOptions) _
-                        .As(Of JsonObject)
-
-                    Using buffer As MemoryStream = BSON.GetBuffer(json)
-                        Call writer.Write(buffer.Length)
-                        Call writer.Write(buffer.ToArray)
-                    End Using
-
-                    Call json.Dispose()
+                    Call writer.AddQuery(query)
                     Call Console.WriteLine(query.ToString)
                 Next
             End Using
