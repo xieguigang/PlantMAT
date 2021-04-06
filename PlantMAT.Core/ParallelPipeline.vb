@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::49d21ac2ac8e4bf55715b1dff659180a, PlantMAT.Core\ParallelPipeline.vb"
+﻿#Region "Microsoft.VisualBasic::711ac2ee952da1c06d0fa34d866f02c2, PlantMAT.Core\ParallelPipeline.vb"
 
     ' Author:
     ' 
@@ -132,4 +132,3 @@ Public Module ParallelPipeline
         Return result.Where(Function(a) Not a Is Nothing).ToArray
     End Function
 End Module
-

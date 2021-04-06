@@ -1,4 +1,4 @@
-﻿#Region "Microsoft.VisualBasic::7f9db99db9268a6f816dda0c55ae41cf, PlantMAT.Core\Algorithm\NeutralLoss.vb"
+﻿#Region "Microsoft.VisualBasic::19f3d754942ed24973624556aae4c62e, PlantMAT.Core\Algorithm\NeutralLoss.vb"
 
     ' Author:
     ' 
@@ -41,7 +41,6 @@
     ' /********************************************************************************/
 
 #End Region
-
 
 Imports Microsoft.VisualBasic.Serialization.JSON
 
