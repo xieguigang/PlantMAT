@@ -48,7 +48,15 @@ Namespace Algorithm
 
     Public Class NeutralLoss
 
-        Public Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%
+        Public Property Hex As Integer
+        Public Property HexA As Integer
+        Public Property dHex As Integer
+        Public Property Pen As Integer
+        Public Property Mal As Integer
+        Public Property Cou As Integer
+        Public Property Fer As Integer
+        Public Property Sin As Integer
+        Public Property DDMP As Integer
 
         Public ReadOnly Property Sugar_n As Integer
             Get
