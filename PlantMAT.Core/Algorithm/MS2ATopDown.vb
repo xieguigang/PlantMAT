@@ -1,57 +1,53 @@
 ﻿#Region "Microsoft.VisualBasic::b8629e28472caa4c6269a675eb77a340, PlantMAT.Core\Algorithm\MS2ATopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class MS2ATopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: IonMatching, (+2 Overloads) MS2Annotation, MS2ATopDown
-    ' 
-    '         Sub: applySettings, MS2AnnotationLoop
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class MS2ATopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: IonMatching, (+2 Overloads) MS2Annotation, MS2ATopDown
+' 
+'         Sub: applySettings, MS2AnnotationLoop
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
-Imports System.IO
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
-Imports Microsoft.VisualBasic.Data.IO
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.MIME.application.json
-Imports Microsoft.VisualBasic.MIME.application.json.Javascript
 Imports Parallel.IpcStream
 Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
@@ -179,7 +175,7 @@ Namespace Algorithm
 
             ' Second, compare the predicted ions with the measured
             Dim aIonList As New List(Of IonAnnotation)
-            Dim AglyCheck As Boolean = IonMatching(query.Ms2Peaks, pIonList, aIonList)
+            Dim AglyCheck As Boolean = IonMatching(query.Ms2Peaks, pIonList, aIonList, mzPPM, NoiseFilter)
 
             ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
@@ -193,8 +189,13 @@ Namespace Algorithm
         ''' </summary>
         ''' <param name="eIonList">the ms2 matrix data from the raw sample</param>
         ''' <param name="pIonList">product mz ion predicts</param>
-        ''' <returns>AglyCheck</returns>
-        Private Function IonMatching(eIonList As Ms2Peaks, pIonList As MzAnnotation(), ByRef aIonList As List(Of IonAnnotation)) As Boolean
+        ''' <returns>a logical result value of AglyCheck</returns>
+        Public Shared Function IonMatching(eIonList As Ms2Peaks,
+                                           pIonList As MzAnnotation(),
+                                           ByRef aIonList As List(Of IonAnnotation),
+                                           mzPPM As Double,
+                                           noiseFilter As Double) As Boolean
+
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
             Dim eIon_n As Integer = eIonList.fragments
@@ -214,7 +215,7 @@ Namespace Algorithm
                     If PPMmethod.PPM(eIonMZ, pIonMZ) <= mzPPM Then
                         Dim aIonAbu = eIonInt / TotalIonInt
 
-                        If aIonAbu * 100 >= NoiseFilter Then
+                        If aIonAbu * 100 >= noiseFilter Then
                             Call New IonAnnotation With {
                                 .productMz = eIonMZ,
                                 .ionAbu = aIonAbu * 100,

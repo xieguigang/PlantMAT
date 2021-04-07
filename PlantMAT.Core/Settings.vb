@@ -149,7 +149,7 @@ Public Class Settings
             .PrecursorIonType = {"[M]+", "[M]-", "[M+H]+", "[M-H]-"},
             .SearchPPM = 10,
             .NoiseFilter = 0.05,
-            .mzPPM = 15
+            .mzPPM = 30
         }
     End Function
 End Class

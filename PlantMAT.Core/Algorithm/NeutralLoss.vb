@@ -1,62 +1,63 @@
 ﻿#Region "Microsoft.VisualBasic::19f3d754942ed24973624556aae4c62e, PlantMAT.Core\Algorithm\NeutralLoss.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class NeutralLoss
-    ' 
-    '         Properties: Acid_n, Attn_w, nH2O_w, Sugar_n
-    ' 
-    '         Function: AglyconeExactMass, SetLoess, ToString
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class NeutralLoss
+' 
+'         Properties: Acid_n, Attn_w, nH2O_w, Sugar_n
+' 
+'         Function: AglyconeExactMass, SetLoess, ToString
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Serialization.JSON
 
 Namespace Algorithm
 
     Public Class NeutralLoss
 
-        Public Property Hex As Integer
-        Public Property HexA As Integer
-        Public Property dHex As Integer
-        Public Property Pen As Integer
-        Public Property Mal As Integer
-        Public Property Cou As Integer
-        Public Property Fer As Integer
-        Public Property Sin As Integer
-        Public Property DDMP As Integer
+        <XmlAttribute> Public Property Hex As Integer
+        <XmlAttribute> Public Property HexA As Integer
+        <XmlAttribute> Public Property dHex As Integer
+        <XmlAttribute> Public Property Pen As Integer
+        <XmlAttribute> Public Property Mal As Integer
+        <XmlAttribute> Public Property Cou As Integer
+        <XmlAttribute> Public Property Fer As Integer
+        <XmlAttribute> Public Property Sin As Integer
+        <XmlAttribute> Public Property DDMP As Integer
 
         Public ReadOnly Property Sugar_n As Integer
             Get

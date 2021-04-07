@@ -1,55 +1,56 @@
 ﻿#Region "Microsoft.VisualBasic::6e958d9242d0c5d62684d6ef1a48de8f, PlantMAT.Core\Algorithm\MS1TopDown.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Delegate Function
-    ' 
-    ' 
-    '     Class MS1TopDown
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, GroupQueryByMz, MS1CP, PatternPrediction
-    '                   RunDatabaseSearch, RunMs1Query
-    ' 
-    '         Sub: applySettings, PatternPredictionLoop
-    ' 
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Delegate Function
+' 
+' 
+'     Class MS1TopDown
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: (+2 Overloads) CombinatorialPrediction, DatabaseSearch, GroupQueryByMz, MS1CP, PatternPrediction
+'                   RunDatabaseSearch, RunMs1Query
+' 
+'         Sub: applySettings, PatternPredictionLoop
+' 
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Text
+Imports BioNovoGene.Analytical.MassSpectrometry.Math
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
@@ -110,7 +111,7 @@ Namespace Algorithm
         ''' search for given precursor_type
         ''' </summary>
         ''' <param name="queryGroup">
-        ''' Should be one element from the result of <see cref="GroupQueryByMz(IEnumerable(Of Query), Double)"/>
+        ''' Should be one element from the result of <see cref="GroupQueryByMz"/>
         ''' </param>
         Public Function CombinatorialPrediction(queryGroup As IEnumerable(Of Query), ionMode As Integer) As IEnumerable(Of Query)
             Dim precursors As PrecursorInfo()
@@ -124,12 +125,12 @@ Namespace Algorithm
             Return RunMs1Query(queryGroup, precursors).ToArray
         End Function
 
-        Public Shared Function GroupQueryByMz(queries As IEnumerable(Of Query), Optional ppm As Double = 1) As NamedCollection(Of Query)()
+        Public Shared Function GroupQueryByMz(Of Query As IMs1)(queries As IEnumerable(Of Query), Optional ppm As Double = 1) As NamedCollection(Of Query)()
             ' shuffle is required for avoid the large mz stays in one threads problem
             ' due to the reason of groupBy is always reorder mz in asc orders
             '
             Return queries _
-                .GroupBy(Function(a) a.PrecursorIon, Tolerance.PPM(ppm)) _
+                .GroupBy(Function(a) a.mz, Tolerance.PPM(ppm)) _
                 .Shuffles _
                 .ToArray
         End Function

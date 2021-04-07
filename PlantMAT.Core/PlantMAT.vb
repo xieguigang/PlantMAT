@@ -182,7 +182,7 @@ Module PlantMAT
                               <RRawVectorArgument(GetType(String))> Optional PrecursorIonType As Object = "[M]+|[M]-|[M+H]+|[M-H]-",
                               Optional SearchPPM As Double = 10,
                               Optional NoiseFilter As Double = 0.05,
-                              Optional mzPPM As Double = 15) As Settings
+                              Optional mzPPM As Double = 30) As Settings
 
         Return New Settings With {
             .AglyconeMWRange = DirectCast(AglyconeMWRange, Double()),
@@ -204,6 +204,12 @@ Module PlantMAT
             .PrecursorIonType = PrecursorIonType,
             .SearchPPM = SearchPPM
         }
+    End Function
+
+    <ExportAPI("precursor_types")>
+    Public Function SetPrecursorType(settings As Settings, precursor_types As String()) As Settings
+        settings.PrecursorIonType = precursor_types
+        Return settings
     End Function
 
     ''' <summary>
