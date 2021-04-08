@@ -454,7 +454,7 @@ Module PlantMAT
 
         Dim IonMZ_crc As MzAnnotation = Algorithm.MS2ATopDown.IonMZ_crc(If(ionMode > 0, "+", "-"))
 
-        Using insilicons As New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc) With {
+        Using insilicons As New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc, {}) With {
             .Cou_max = Cou,
             .DDMP_max = DDMP,
             .dHex_max = dHex,
