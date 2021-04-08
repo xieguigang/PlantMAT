@@ -52,17 +52,19 @@ Namespace Models
             }
         End Function
 
-        Public Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(), iteration As Func(Of NeutralGroupHit(), T)) As IEnumerable(Of T)
+        Public Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(),
+                                                                   iteration As Func(Of NeutralGroupHit(), T),
+                                                                   Optional finalize As Action(Of NeutralGroupHit()) = Nothing) As IEnumerable(Of T)
             If defines.IsNullOrEmpty Then
                 Return
             Else
-                For Each item In BruteForceIterations(defines, loops:={}, iteration:=iteration)
+                For Each item In BruteForceIterations(defines, loops:={}, iteration:=iteration, finalize:=finalize)
                     Yield item
                 Next
             End If
         End Function
 
-        Private Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(), loops As NeutralGroupHit(), iteration As Func(Of NeutralGroupHit(), T)) As IEnumerable(Of T)
+        Private Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(), loops As NeutralGroupHit(), iteration As Func(Of NeutralGroupHit(), T), finalize As Action(Of NeutralGroupHit())) As IEnumerable(Of T)
             Dim external As NeutralGroup = defines(Scan0)
             Dim pop As NeutralGroup() = defines.Skip(1).ToArray
             Dim it As NeutralGroupHit = NeutralGroupHit.FromDefine(external)
@@ -79,10 +81,14 @@ Namespace Models
                 For i As Integer = external.min To external.max
                     it.nHit = i
 
-                    For Each item In BruteForceIterations(pop, loops, iteration)
+                    For Each item In BruteForceIterations(pop, loops, iteration, finalize)
                         Yield item
                     Next
                 Next
+            End If
+
+            If Not finalize Is Nothing Then
+                Call finalize(loops)
             End If
         End Function
     End Class

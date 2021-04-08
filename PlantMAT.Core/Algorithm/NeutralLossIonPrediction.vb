@@ -145,7 +145,26 @@ Namespace Algorithm
                                                             .Sin = Sin_n
                                                         }
 
-                                                        Call LossCombination(neutralLoess, H2O_n%, CO2_n%, MIonMZ)
+                                                        Dim nH2O = H2O_n
+                                                        Dim nCO2 = CO2_n
+
+                                                        For Each check In NeutralGroupHit.BruteForceIterations(
+                                                            externals, Function(list)
+                                                                           Dim last = list.Last.aglycone
+
+                                                                           Call neutralLoess.SetExternalCount(counts:=list)
+                                                                           Call LossCombination(neutralLoess, nH2O, nCO2, MIonMZ)
+
+                                                                           Call externalLoss(last).Append("-").Append(last)
+
+                                                                           Return Nothing
+                                                                       End Function,
+                                                            finalize:=Sub(list)
+                                                                          Call externalLoss(list.Last.aglycone).Clear()
+                                                                      End Sub)
+
+                                                            ' do nothing
+                                                        Next
 
                                                         CO2Loss.Append("-CO2")
                                                     Next CO2_n
