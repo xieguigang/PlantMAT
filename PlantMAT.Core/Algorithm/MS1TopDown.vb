@@ -180,7 +180,7 @@ Namespace Algorithm
         ''' <param name="precursorIon">ion m/z of the precursor</param>
         ''' <returns></returns>
         Private Iterator Function CombinatorialPrediction(rt_e As Double, precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of CandidateResult)
-            Dim neutralLossSearch As New NeutralLossSearch(settings)
+            Dim neutralLossSearch As New NeutralLossSearch(settings, {})
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN

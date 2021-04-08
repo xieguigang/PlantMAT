@@ -1,49 +1,51 @@
 ﻿#Region "Microsoft.VisualBasic::f8401a83199e13aa50bf83272d81b73b, PlantMAT.Core\Algorithm\NeutralLossIonPrediction.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class NeutralLossIonPrediction
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    '         Sub: (+2 Overloads) Dispose, getResult, IonPrediction, LossCombination
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class NeutralLossIonPrediction
+' 
+'         Constructor: (+1 Overloads) Sub New
+'         Sub: (+2 Overloads) Dispose, getResult, IonPrediction, LossCombination
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Text
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
 Imports Microsoft.VisualBasic.Linq
+Imports PlantMAT.Core.Models
 
 Namespace Algorithm
 
@@ -75,6 +77,9 @@ Namespace Algorithm
         Private disposedValue As Boolean
 
         ReadOnly pIonList As New List(Of MzAnnotation)
+        ReadOnly externals As NeutralGroup()
+        ReadOnly externalLoss As Dictionary(Of String, StringBuilder)
+        ReadOnly maxnExternals As Dictionary(Of String, Integer)
 
         ''' <summary>
         ''' 
@@ -82,11 +87,14 @@ Namespace Algorithm
         ''' <param name="AglyN">the metabolite common name</param>
         ''' <param name="Agly_w">the exact mass</param>
         ''' <param name="IonMZ_crc">precursor type components, value should be ``"-H]-"`` or ``"+H]+"``</param>
-        Sub New(AglyN$, Agly_w#, IonMZ_crc As MzAnnotation)
+        Sub New(AglyN$, Agly_w#, IonMZ_crc As MzAnnotation, externals As NeutralGroup())
             Me.IonMZ_crc = IonMZ_crc.productMz
             Me.Rsyb = IonMZ_crc.annotation
             Me.Agly_w = Agly_w
             Me.AglyN = AglyN
+            Me.externals = externals
+            Me.externalLoss = externals.ToDictionary(Function(a) a.aglycone, Function(any) New StringBuilder)
+            Me.maxnExternals = externals.ToDictionary(Function(a) a.aglycone, Function(a) a.max)
         End Sub
 
         Public Sub getResult(ByRef result As MzAnnotation())
@@ -99,12 +107,14 @@ Namespace Algorithm
         Sub IonPrediction()
 
             ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
-            Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max
+            Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max + (Aggregate item In externals Into Sum(item.max))
+            Dim TotalExternalMass As Double = Aggregate item In externals Into Sum(item.max * FormulaScanner.ScanFormula(item.formula).ExactMass)
 
             ' Calculate the the mass of precursor ion
             Dim MIonMZ = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
-                 Total_max * H2O_w + IonMZ_crc
+                 Total_max * H2O_w + IonMZ_crc +
+                 TotalExternalMass
 
             ' 0 -> 0 for循环会执行一次
 
@@ -123,7 +133,19 @@ Namespace Algorithm
                                                 For H2O_n = 0 To 1
                                                     For CO2_n = 0 To 1
 
-                                                        Call LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ)
+                                                        Dim neutralLoess As New NeutralLoss With {
+                                                            .Cou = Cou_n,
+                                                            .DDMP = DDMP_n,
+                                                            .dHex = dHex_n,
+                                                            .Fer = Fer_n,
+                                                            .Hex = Hex_n,
+                                                            .HexA = HexA_n,
+                                                            .Mal = Mal_n,
+                                                            .Pen = Pen_n,
+                                                            .Sin = Sin_n
+                                                        }
+
+                                                        Call LossCombination(neutralLoess, H2O_n%, CO2_n%, MIonMZ)
 
                                                         CO2Loss.Append("-CO2")
                                                     Next CO2_n
@@ -162,39 +184,34 @@ Namespace Algorithm
         ''' <summary>
         ''' productMz = exactMass - neutral_loss
         ''' </summary>
-        ''' <param name="Hex_n%"></param>
-        ''' <param name="HexA_n%"></param>
-        ''' <param name="dHex_n%"></param>
-        ''' <param name="Pen_n%"></param>
-        ''' <param name="Mal_n%"></param>
-        ''' <param name="Cou_n%"></param>
-        ''' <param name="Fer_n%"></param>
-        ''' <param name="Sin_n%"></param>
-        ''' <param name="DDMP_n%"></param>
         ''' <param name="H2O_n%"></param>
         ''' <param name="CO2_n%"></param>
         ''' <param name="MIonMZ#"></param>
         ''' <remarks>
         ''' 根据数量的组合预测计算出不同的二级碎片m/z，以及添加上对应的中性丢失注释
         ''' </remarks>
-        Sub LossCombination(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, H2O_n%, CO2_n%, MIonMZ#)
-
+        Sub LossCombination(neutralLoess As NeutralLoss, H2O_n%, CO2_n%, MIonMZ#)
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
             ' n * H2O
-            Dim Total_n = Hex_n + HexA_n + dHex_n + Pen_n + Mal_n + Cou_n + Fer_n + Sin_n + DDMP_n
-
+            Dim Total_n = neutralLoess.Acid_n + neutralLoess.Sugar_n
             ' Calculate the mass of the predicte neutral loss
-            Dim Loss_w = Hex_n * Hex_w + HexA_n * HexA_w + dHex_n * dHex_w + Pen_n * Pen_w +
-                 Mal_n * Mal_w + Cou_n * Cou_w + Fer_n * Fer_w + Sin_n * Sin_w + DDMP_n * DDMP_w -
-                 Total_n * H2O_w + H2O_n * H2O_w + CO2_n * CO2_w
+            Dim Loss_w = neutralLoess.Attn_w - Total_n * H2O_w + H2O_n * H2O_w + CO2_n * CO2_w
 
             ' Calculate the precuror ion mz based on the calcualted loss mass
             Dim pIonMZ As Double = MIonMZ - Loss_w
             Dim pIonNM As String
 
             ' Find if the ion is related to the H2O/CO2 loss from aglycone
-            If Hex_n = Hex_max AndAlso HexA_n = HexA_max AndAlso dHex_n = dHex_max AndAlso Pen_n = Pen_max AndAlso
-                Mal_n = Mal_max AndAlso Cou_n = Cou_max AndAlso Fer_n = Fer_max AndAlso Sin_n = Sin_max AndAlso DDMP_n = DDMP_max Then
+            If neutralLoess.Hex = Hex_max AndAlso
+                neutralLoess.HexA = HexA_max AndAlso
+                neutralLoess.dHex = dHex_max AndAlso
+                neutralLoess.Pen = Pen_max AndAlso
+                neutralLoess.Mal = Mal_max AndAlso
+                neutralLoess.Cou = Cou_max AndAlso
+                neutralLoess.Fer = Fer_max AndAlso
+                neutralLoess.Sin = Sin_max AndAlso
+                neutralLoess.DDMP = DDMP_max AndAlso
+                neutralLoess.externals.All(Function(a) maxnExternals(a.aglycone) = a.nHit) Then
 
                 pIonNM = $"[Agly{H2OLoss}{CO2Loss}{Rsyb}"
 
@@ -204,9 +221,10 @@ Namespace Algorithm
             Else
                 pIonNM = {"[M",
                     HexLoss, HexALoss, dHexLoss, PenLoss,
-                    MalLoss, CouLoss, FerLoss, SinLoss, DDMPLoss,
-                    H2OLoss, CO2Loss, Rsyb
-                }.JoinBy("")
+                    MalLoss, CouLoss, FerLoss, SinLoss, DDMPLoss
+                }.JoinIterates(externalLoss.Values) _
+                 .JoinIterates({H2OLoss, CO2Loss, Rsyb}) _
+                 .JoinBy("")
             End If
 
             ' Save the predicted ion mz to data array pIonList()
@@ -233,6 +251,12 @@ Namespace Algorithm
                     Call DDMPLoss.Clear()
                     Call H2OLoss.Clear()
                     Call CO2Loss.Clear()
+
+                    For Each item In externalLoss
+                        item.Value.Clear()
+                    Next
+
+                    externalLoss.Clear()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override finalizer

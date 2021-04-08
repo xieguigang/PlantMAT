@@ -1,50 +1,52 @@
 ﻿#Region "Microsoft.VisualBasic::e8a9006e5b4a7809c043ce4295cdf795, PlantMAT.Core\Algorithm\NeutralLossSearch.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class NeutralLossSearch
-    ' 
-    '         Constructor: (+1 Overloads) Sub New
-    ' 
-    '         Function: NeutralLosses, RestrictionCheck
-    ' 
-    '         Sub: applySettings
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class NeutralLossSearch
+' 
+'         Constructor: (+1 Overloads) Sub New
+' 
+'         Function: NeutralLosses, RestrictionCheck
+' 
+'         Sub: applySettings
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports Microsoft.VisualBasic.Language
+Imports PlantMAT.Core.Models
 
 Namespace Algorithm
 
@@ -55,8 +57,12 @@ Namespace Algorithm
         Dim NumSugarMin, NumSugarMax, NumAcidMin, NumAcidMax As Integer
 #End Region
 
-        Public Sub New(settings As Settings)
+        ReadOnly externalDefines As NeutralGroup()
+
+        Public Sub New(settings As Settings, externalDefines As NeutralGroup())
             MyBase.New(settings)
+
+            Me.externalDefines = externalDefines
         End Sub
 
         Protected Friend Overrides Sub applySettings()
@@ -92,6 +98,7 @@ Namespace Algorithm
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim neutralLoss As New NeutralLoss
+            Dim checkLoss As New Value(Of NeutralLoss)
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
@@ -109,23 +116,44 @@ Namespace Algorithm
                                         For Sin_n As Integer = NumSinMin To NumSinMax
                                             For DDMP_n As Integer = NumDDMPMin To NumDDMPMax
 
-                                                If RestrictionCheck(
-                                                    neutralLoss:=neutralLoss.SetLoess(Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n),
-                                                    M_w:=M_w
-                                                ) Then
+                                                Dim nHex = Hex_n
+                                                Dim nHexA = HexA_n
+                                                Dim ndHex = dHex_n
+                                                Dim nPen = Pen_n
+                                                Dim nMal = Mal_n
+                                                Dim nCou = Cou_n
+                                                Dim nFer = Fer_n
+                                                Dim nSin = Sin_n
+                                                Dim nDDMP = DDMP_n
 
-                                                    Yield New NeutralLoss With {
-                                                        .Cou = Cou_n,
-                                                        .DDMP = DDMP_n,
-                                                        .dHex = dHex_n,
-                                                        .Fer = Fer_n,
-                                                        .Hex = Hex_n,
-                                                        .HexA = HexA_n,
-                                                        .Mal = Mal_n,
-                                                        .Pen = Pen_n,
-                                                        .Sin = Sin_n
-                                                    }
-                                                End If
+                                                For Each check As NeutralLoss In NeutralGroupHit.BruteForceIterations(
+                                                    externalDefines, Function(hits)
+                                                                         If RestrictionCheck(
+                                                                             neutralLoss:=neutralLoss.SetLoess(nHex, nHexA, ndHex, nPen, nMal, nCou, nFer, nSin, nDDMP, hits),
+                                                                             M_w:=M_w
+                                                                         ) Then
+
+                                                                             Return New NeutralLoss With {
+                                                                                 .Cou = nCou,
+                                                                                 .DDMP = nDDMP,
+                                                                                 .dHex = ndHex,
+                                                                                 .Fer = nFer,
+                                                                                 .Hex = nHex,
+                                                                                 .HexA = nHexA,
+                                                                                 .Mal = nMal,
+                                                                                 .Pen = nPen,
+                                                                                 .Sin = nSin,
+                                                                                 .externals = hits.Select(Function(a) a.Clone).ToArray
+                                                                             }
+                                                                         Else
+                                                                             Return Nothing
+                                                                         End If
+                                                                     End Function)
+
+                                                    If Not checkLoss = check Is Nothing Then
+                                                        Yield checkLoss
+                                                    End If
+                                                Next
 
                                             Next DDMP_n
                                         Next Sin_n

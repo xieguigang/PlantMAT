@@ -43,7 +43,9 @@
 #End Region
 
 Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports PlantMAT.Core.Models
 
 Namespace Algorithm
 
@@ -59,21 +61,27 @@ Namespace Algorithm
         <XmlAttribute> Public Property Sin As Integer
         <XmlAttribute> Public Property DDMP As Integer
 
+        Public Property externals As NeutralGroupHit()
+
         Public ReadOnly Property Sugar_n As Integer
             Get
-                Return Hex + HexA + dHex + Pen
+                Return Hex + HexA + dHex + Pen + nCount(is_acid:=False)
             End Get
         End Property
 
         Public ReadOnly Property Acid_n As Integer
             Get
-                Return Mal + Cou + Fer + Sin + DDMP
+                Return Mal + Cou + Fer + Sin + DDMP + nCount(is_acid:=True)
             End Get
         End Property
 
+        ''' <summary>
+        ''' Sum(X * n(X))
+        ''' </summary>
+        ''' <returns></returns>
         Public ReadOnly Property Attn_w As Double
             Get
-                Return Hex * Hex_w + HexA * HexA_w + dHex * dHex_w + Pen * Pen_w + Mal * Mal_w + Cou * Cou_w + Fer * Fer_w + Sin * Sin_w + DDMP * DDMP_w
+                Return Hex * Hex_w + HexA * HexA_w + dHex * dHex_w + Pen * Pen_w + Mal * Mal_w + Cou * Cou_w + Fer * Fer_w + Sin * Sin_w + DDMP * DDMP_w + weightPlus()
             End Get
         End Property
 
@@ -83,7 +91,15 @@ Namespace Algorithm
             End Get
         End Property
 
-        Friend Function SetLoess(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As NeutralLoss
+        Private Function weightPlus() As Double
+            Return Aggregate item In externals.SafeQuery Into Sum(item.MassTotal)
+        End Function
+
+        Private Function nCount(is_acid As Boolean) As Integer
+            Return Aggregate item In externals.SafeQuery Where item.is_acid = is_acid Into Sum(item.nHit)
+        End Function
+
+        Friend Function SetLoess(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, externals As NeutralGroupHit()) As NeutralLoss
             Hex = Hex_n
             HexA = HexA_n
             dHex = dHex_n
@@ -93,6 +109,8 @@ Namespace Algorithm
             Fer = Fer_n
             Sin = Sin_n
             DDMP = DDMP_n
+
+            Me.externals = externals.Select(Function(a) a.Clone).ToArray
 
             Return Me
         End Function
