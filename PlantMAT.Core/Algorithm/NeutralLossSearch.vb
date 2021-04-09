@@ -159,7 +159,7 @@ Namespace Algorithm
                 Dim Bal As Double = neutralLoss.AglyconeExactMass(M_w)
 
                 ' "Aglycone MW Range" Then AglyconeMWLL = minValue : AglyconeMWUL = maxValue
-                If settings.AglyconeExactMassInRange(Bal) Then
+                If Bal > 0 AndAlso settings.AglyconeExactMassInRange(Bal) Then
                     Return True
                 End If
             End If

@@ -49,7 +49,7 @@ Namespace Models
         End Function
 
         Public Overrides Function ToString() As String
-            Return aglycone
+            Return $"{aglycone} [{nHit}] {MassTotal}"
         End Function
 
         Public Shared Function CopyVector(vec As IEnumerable(Of NeutralGroupHit)) As NeutralGroupHit()
