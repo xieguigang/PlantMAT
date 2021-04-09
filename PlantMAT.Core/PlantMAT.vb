@@ -453,10 +453,22 @@ Module PlantMAT
                                 Optional commonName$ = "natural product") As MzAnnotation()
 
         Dim IonMZ_crc As MzAnnotation = Algorithm.MS2ATopDown.IonMZ_crc(If(ionMode > 0, "+", "-"))
+        Dim maxMz As Double = New NeutralLoss With {
+            .Cou = Cou,
+            .DDMP = DDMP,
+            .dHex = dHex,
+            .Fer = Fer,
+            .Hex = Hex,
+            .HexA = HexA,
+            .Mal = Mal,
+            .Pen = Pen,
+            .Sin = Sin
+        }.Attn_w + exactMass
 
-        Using insilicons = New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc, {}).SetPredictedMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%)
+        Using insilicons As New NeutralLossIonPrediction(maxMz, commonName, exactMass, IonMZ_crc, {})
             Dim result As MzAnnotation() = Nothing
 
+            Call insilicons.SetPredictedMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%)
             Call insilicons.IonPrediction()
             Call insilicons.getResult(result)
 
