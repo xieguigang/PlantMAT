@@ -12,6 +12,10 @@ Namespace Models
         Public Property min As Integer
         Public Property max As Integer Implements INeutralGroupHit.nHit
 
+        Public Overrides Function ToString() As String
+            Return aglycone
+        End Function
+
     End Structure
 
     Friend Interface INeutralGroupHit
