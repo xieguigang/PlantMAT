@@ -99,7 +99,7 @@ Namespace Algorithm
             Return Aggregate item In externals.SafeQuery Into Sum(item.MassTotal)
         End Function
 
-        Private Shared Function nCount(Of T As INeutralGroupHit)(externals As T(), is_acid As Boolean) As Integer
+        Friend Shared Function nCount(Of T As INeutralGroupHit)(externals As T(), is_acid As Boolean) As Integer
             Return Aggregate item In externals.SafeQuery Where item.is_acid = is_acid Into Sum(item.nHit)
         End Function
 

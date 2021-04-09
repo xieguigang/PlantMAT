@@ -21,6 +21,19 @@ Namespace Algorithm
         End Sub
 
         Public Iterator Function BruteForceIterations(Of T)(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, iteration As Iteration(Of T)) As IEnumerable(Of T)
+            Yield New NeutralLoss With {
+                .Cou = Cou_n,
+                .DDMP = DDMP_n,
+                .dHex = dHex_n,
+                .externals = {},
+                .Fer = Fer_n,
+                .Hex = Hex_n,
+                .HexA = HexA_n,
+                .Mal = Mal_n,
+                .Pen = Pen_n,
+                .Sin = Sin_n
+            }.DoCall(Function(x) iteration(x))
+
             If _defines.IsNullOrEmpty Then
                 Return
             Else
