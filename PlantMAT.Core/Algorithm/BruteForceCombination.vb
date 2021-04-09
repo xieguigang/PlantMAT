@@ -58,7 +58,10 @@ Namespace Algorithm
                 .Mal = loess.Mal,
                 .Pen = loess.Pen,
                 .Sin = loess.Sin,
-                .externals = NeutralGroupHit.CopyVector(loess.externals).JoinIterates(it).ToArray
+                .externals = NeutralGroupHit _
+                    .CopyVector(loess.externals) _
+                    .JoinIterates(it) _
+                    .ToArray
             }
 
             If pop.Length = 0 Then
@@ -73,6 +76,8 @@ Namespace Algorithm
 
                     If loess.Sugar_n > NumSugarMax OrElse loess.Acid_n > NumAcidMax Then
                         Exit For
+                    Else
+                        Yield iteration(loess)
                     End If
 
                     For Each item In BruteForceIterations(pop, loess, iteration)

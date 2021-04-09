@@ -97,7 +97,7 @@ Namespace Algorithm
             Me.Rsyb = IonMZ_crc.annotation
             Me.Agly_w = Agly_w
             Me.AglyN = AglyN
-            Me.externals = externals
+            Me.externals = externals.Where(Function(ng) ng.max > 0).ToArray
             Me.externalLoss = externals.ToDictionary(Function(a) a.aglycone, Function(any) New StringBuilder)
             Me.maxnExternals = externals.ToDictionary(Function(a) a.aglycone, Function(a) a.max)
         End Sub
