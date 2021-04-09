@@ -97,8 +97,8 @@ Namespace Algorithm
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
-            Dim neutralLoss As New NeutralLoss
             Dim checkLoss As New Value(Of NeutralLoss)
+            Dim combination As New BruteForceCombination(externalDefines, settings)
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
@@ -116,41 +116,18 @@ Namespace Algorithm
                                         For Sin_n As Integer = NumSinMin To NumSinMax
                                             For DDMP_n As Integer = NumDDMPMin To NumDDMPMax
 
-                                                Dim nHex = Hex_n
-                                                Dim nHexA = HexA_n
-                                                Dim ndHex = dHex_n
-                                                Dim nPen = Pen_n
-                                                Dim nMal = Mal_n
-                                                Dim nCou = Cou_n
-                                                Dim nFer = Fer_n
-                                                Dim nSin = Sin_n
-                                                Dim nDDMP = DDMP_n
+                                                For Each check As NeutralLoss In combination.BruteForceIterations(
+                                                    Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
+ _
+                                                    iteration:=Function(loss)
+                                                                   If RestrictionCheck(neutralLoss:=loss, M_w:=M_w) Then
+                                                                       Return loss
+                                                                   Else
+                                                                       Return Nothing
+                                                                   End If
+                                                               End Function)
 
-                                                For Each check As NeutralLoss In NeutralGroupHit.BruteForceIterations(
-                                                    externalDefines, Function(hits)
-                                                                         If RestrictionCheck(
-                                                                             neutralLoss:=neutralLoss.SetLoess(nHex, nHexA, ndHex, nPen, nMal, nCou, nFer, nSin, nDDMP, hits),
-                                                                             M_w:=M_w
-                                                                         ) Then
-
-                                                                             Return New NeutralLoss With {
-                                                                                 .Cou = nCou,
-                                                                                 .DDMP = nDDMP,
-                                                                                 .dHex = ndHex,
-                                                                                 .Fer = nFer,
-                                                                                 .Hex = nHex,
-                                                                                 .HexA = nHexA,
-                                                                                 .Mal = nMal,
-                                                                                 .Pen = nPen,
-                                                                                 .Sin = nSin,
-                                                                                 .externals = hits.Select(Function(a) a.Clone).ToArray
-                                                                             }
-                                                                         Else
-                                                                             Return Nothing
-                                                                         End If
-                                                                     End Function)
-
-                                                    If Not checkLoss = check Is Nothing Then
+                                                    If Not (checkLoss = check) Is Nothing Then
                                                         Yield checkLoss
                                                     End If
                                                 Next

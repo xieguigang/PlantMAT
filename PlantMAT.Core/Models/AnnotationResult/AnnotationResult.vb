@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::246ad58724fc9026cc406ecde2ec3b55, PlantMAT.Core\Models\AnnotationResult\AnnotationResult.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    '     Class CandidateResult
-    ' 
-    '         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
-    '                     Err, ExactMass, Fer, Glycosyl, Hex
-    '                     HexA, Mal, Ms2Anno, Name, nH2O_w
-    '                     Pen, precursor_type, RT, RTErr, Sin
-    '                     SMILES, SubstructureAgly, Sugar_n, Theoretical_ExactMass, Theoretical_PrecursorMz
-    '                     xref
-    ' 
-    '         Constructor: (+2 Overloads) Sub New
-    '         Function: GetSug_nStatic
-    ' 
-    ' 
-    ' /********************************************************************************/
+'     Class CandidateResult
+' 
+'         Properties: Acid_n, Attn_w, Cou, DDMP, dHex
+'                     Err, ExactMass, Fer, Glycosyl, Hex
+'                     HexA, Mal, Ms2Anno, Name, nH2O_w
+'                     Pen, precursor_type, RT, RTErr, Sin
+'                     SMILES, SubstructureAgly, Sugar_n, Theoretical_ExactMass, Theoretical_PrecursorMz
+'                     xref
+' 
+'         Constructor: (+2 Overloads) Sub New
+'         Function: GetSug_nStatic
+' 
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -79,47 +79,47 @@ Namespace Models.AnnotationResult
         ''' 3
         ''' </summary>
         ''' <returns></returns>
-        Public Property Hex As Double
+        Public Property Hex As Integer
         ''' <summary>
         ''' 4
         ''' </summary>
         ''' <returns></returns>
-        Public Property HexA As Double
+        Public Property HexA As Integer
         ''' <summary>
         ''' 5
         ''' </summary>
         ''' <returns></returns>
-        Public Property dHex As Double
+        Public Property dHex As Integer
         ''' <summary>
         ''' 6
         ''' </summary>
         ''' <returns></returns>
-        Public Property Pen As Double
+        Public Property Pen As Integer
         ''' <summary>
         ''' 7
         ''' </summary>
         ''' <returns></returns>
-        Public Property Mal As Double
+        Public Property Mal As Integer
         ''' <summary>
         ''' 8
         ''' </summary>
         ''' <returns></returns>
-        Public Property Cou As Double
+        Public Property Cou As Integer
         ''' <summary>
         ''' 9
         ''' </summary>
         ''' <returns></returns>
-        Public Property Fer As Double
+        Public Property Fer As Integer
         ''' <summary>
         ''' 10
         ''' </summary>
         ''' <returns></returns>
-        Public Property Sin As Double
+        Public Property Sin As Integer
         ''' <summary>
         ''' 11
         ''' </summary>
         ''' <returns></returns>
-        Public Property DDMP As Double
+        Public Property DDMP As Integer
         ''' <summary>
         ''' 12 mass error on ms1 ion
         ''' </summary>
@@ -195,7 +195,15 @@ Namespace Models.AnnotationResult
             Me.xref = clone.xref
         End Sub
 
-        Public Function GetSug_nStatic() As Double()
+        ''' <summary>
+        ''' returns a count vector in order of
+        ''' 
+        ''' ```
+        ''' Hex, HexA, dHex, Pen, Mal, Cou, Fer, Sin, DDMP
+        ''' ```
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetSug_nStatic() As Integer()
             ' 3 - 11
             Return {Hex, HexA, dHex, Pen, Mal, Cou, Fer, Sin, DDMP}
         End Function

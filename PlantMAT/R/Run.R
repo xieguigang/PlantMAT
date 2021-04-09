@@ -22,7 +22,7 @@ let predictIons as function(ions, library, ionMode = 1, settings = configDefault
 #' apply the default configuration
 #'
 let configDefault as function(mzPPM = 30) {
-	config(AglyconeMWRange = [400, 1600], SearchPPM = 5, mzPPM = mzPPM, NoiseFilter = 0.01,
+	config(AglyconeMWRange = [200, 1200], SearchPPM = 5, mzPPM = mzPPM, NoiseFilter = 0.01,
 		NumofSugarAll  = [0,6],
 		NumofAcidAll   = [0,1],
 		NumofSugarHex  = [0,6],

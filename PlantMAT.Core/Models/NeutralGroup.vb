@@ -42,6 +42,10 @@ Namespace Models
             Return aglycone
         End Function
 
+        Public Shared Function CopyVector(vec As IEnumerable(Of NeutralGroupHit)) As NeutralGroupHit()
+            Return vec.Select(Function(n) n.Clone).ToArray
+        End Function
+
         Public Shared Function FromDefine(define As NeutralGroup) As NeutralGroupHit
             Return New NeutralGroupHit With {
                 .aglycone = define.aglycone,
@@ -50,46 +54,6 @@ Namespace Models
                 .nHit = 0,
                 .exact_mass = FormulaScanner.ScanFormula(.formula).ExactMass
             }
-        End Function
-
-        Public Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(),
-                                                                   iteration As Func(Of NeutralGroupHit(), T),
-                                                                   Optional finalize As Action(Of NeutralGroupHit()) = Nothing) As IEnumerable(Of T)
-            If defines.IsNullOrEmpty Then
-                Return
-            Else
-                For Each item In BruteForceIterations(defines, loops:={}, iteration:=iteration, finalize:=finalize)
-                    Yield item
-                Next
-            End If
-        End Function
-
-        Private Shared Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(), loops As NeutralGroupHit(), iteration As Func(Of NeutralGroupHit(), T), finalize As Action(Of NeutralGroupHit())) As IEnumerable(Of T)
-            Dim external As NeutralGroup = defines(Scan0)
-            Dim pop As NeutralGroup() = defines.Skip(1).ToArray
-            Dim it As NeutralGroupHit = NeutralGroupHit.FromDefine(external)
-
-            loops = loops.JoinIterates(it).ToArray
-
-            If pop.Length = 0 Then
-                For i As Integer = external.min To external.max
-                    it.nHit = i
-
-                    Yield iteration(loops)
-                Next
-            Else
-                For i As Integer = external.min To external.max
-                    it.nHit = i
-
-                    For Each item In BruteForceIterations(pop, loops, iteration, finalize)
-                        Yield item
-                    Next
-                Next
-            End If
-
-            If Not finalize Is Nothing Then
-                Call finalize(loops)
-            End If
         End Function
     End Class
 

@@ -52,9 +52,14 @@ Namespace Algorithm
     ''' <summary>
     ''' Ms2 ion fragment prediction for natural products.
     ''' </summary>
-    Public Class NeutralLossIonPrediction : Implements IDisposable
+    Public Class NeutralLossIonPrediction
+        Implements IDisposable
 
-        Public Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
+        ''' <summary>
+        ''' predicted result
+        ''' </summary>
+        Dim Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
+        Dim settings As Settings
 
         ' Initilize all neutral losses and predicted ions pIonList() to none
         Dim HexLoss As New StringBuilder
@@ -97,6 +102,45 @@ Namespace Algorithm
             Me.maxnExternals = externals.ToDictionary(Function(a) a.aglycone, Function(a) a.max)
         End Sub
 
+        ''' <summary>
+        ''' set max number from the MS1TopDown analysis
+        ''' </summary>
+        ''' <param name="Hex_max%"></param>
+        ''' <param name="HexA_max%"></param>
+        ''' <param name="dHex_max%"></param>
+        ''' <param name="Pen_max%"></param>
+        ''' <param name="Mal_max%"></param>
+        ''' <param name="Cou_max%"></param>
+        ''' <param name="Fer_max%"></param>
+        ''' <param name="Sin_max%"></param>
+        ''' <param name="DDMP_max%"></param>
+        ''' <returns></returns>
+        Public Function SetPredictedMax(Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%) As NeutralLossIonPrediction
+            settings = New Settings With {
+                .NumofSugarPen = {0, Pen_max},
+                .NumofAcidCou = {0, Cou_max},
+                .NumofAcidFer = {0, Fer_max},
+                .NumofAcidDDMP = {0, DDMP_max},
+                .NumofAcidMal = {0, Mal_max},
+                .NumofAcidSin = {0, Sin_max},
+                .NumofSugardHex = {0, dHex_max},
+                .NumofSugarHex = {0, Hex_max},
+                .NumofSugarHexA = {0, HexA_max}
+            }
+
+            Me.Hex_max = Hex_max%
+            Me.HexA_max = HexA_max%
+            Me.dHex_max = dHex_max%
+            Me.Pen_max = Pen_max%
+            Me.Mal_max = Mal_max%
+            Me.Cou_max = Cou_max%
+            Me.Fer_max = Fer_max%
+            Me.Sin_max = Sin_max%
+            Me.DDMP_max = DDMP_max%
+
+            Return Me
+        End Function
+
         Public Sub getResult(ByRef result As MzAnnotation())
             result = pIonList.ToArray
         End Sub
@@ -104,7 +148,7 @@ Namespace Algorithm
         ''' <summary>
         ''' 根据中性丢失的数量组合来生成预测的m/z值以及对应的注释
         ''' </summary>
-        Sub IonPrediction()
+        Public Sub IonPrediction()
 
             ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
             Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max + (Aggregate item In externals Into Sum(item.max))
@@ -115,6 +159,8 @@ Namespace Algorithm
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
                  Total_max * H2O_w + IonMZ_crc +
                  TotalExternalMass
+
+            Dim combination As New BruteForceCombination(externals, settings, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
 
             ' 0 -> 0 for循环会执行一次
 
@@ -133,35 +179,20 @@ Namespace Algorithm
                                                 For H2O_n = 0 To 1
                                                     For CO2_n = 0 To 1
 
-                                                        Dim neutralLoess As New NeutralLoss With {
-                                                            .Cou = Cou_n,
-                                                            .DDMP = DDMP_n,
-                                                            .dHex = dHex_n,
-                                                            .Fer = Fer_n,
-                                                            .Hex = Hex_n,
-                                                            .HexA = HexA_n,
-                                                            .Mal = Mal_n,
-                                                            .Pen = Pen_n,
-                                                            .Sin = Sin_n
-                                                        }
-
                                                         Dim nH2O = H2O_n
                                                         Dim nCO2 = CO2_n
 
-                                                        For Each check In NeutralGroupHit.BruteForceIterations(
-                                                            externals, Function(list)
-                                                                           Dim last = list.Last.aglycone
-
-                                                                           Call neutralLoess.SetExternalCount(counts:=list)
-                                                                           Call LossCombination(neutralLoess, nH2O, nCO2, MIonMZ)
-
-                                                                           Call externalLoss(last).Append("-").Append(last)
+                                                        For Each check In combination.BruteForceIterations(
+                                                            Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, _
+ _
+                                                            iteration:=Function(neutralLoss)
+                                                                           Call LossCombination(neutralLoss, nH2O, nCO2, MIonMZ)
+                                                                           Call externalLoss(neutralLoss.externals.Last.aglycone) _
+                                                                               .Append("-") _
+                                                                               .Append(neutralLoss.externals.Last.aglycone)
 
                                                                            Return Nothing
-                                                                       End Function,
-                                                            finalize:=Sub(list)
-                                                                          Call externalLoss(list.Last.aglycone).Clear()
-                                                                      End Sub)
+                                                                       End Function)
 
                                                             ' do nothing
                                                         Next
@@ -209,7 +240,7 @@ Namespace Algorithm
         ''' <remarks>
         ''' 根据数量的组合预测计算出不同的二级碎片m/z，以及添加上对应的中性丢失注释
         ''' </remarks>
-        Sub LossCombination(neutralLoess As NeutralLoss, H2O_n%, CO2_n%, MIonMZ#)
+        Private Sub LossCombination(neutralLoess As NeutralLoss, H2O_n%, CO2_n%, MIonMZ#)
             ' Calculate the total number of glycosyl and acyl groups in the predicted neutral loss
             ' n * H2O
             Dim Total_n = neutralLoess.Acid_n + neutralLoess.Sugar_n

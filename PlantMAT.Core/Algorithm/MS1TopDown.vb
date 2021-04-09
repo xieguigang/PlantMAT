@@ -336,7 +336,7 @@ Namespace Algorithm
             Dim Sug_p(,) As String
             Dim l As Integer
 
-            Sug_n = CLng(candidate.GetSug_nStatic.Sum)
+            Sug_n = candidate.GetSug_nStatic.Sum
 
             If Sug_n = 0 Then
                 Return
@@ -346,10 +346,10 @@ Namespace Algorithm
 
             l = 1
 
-            Dim candidateSug_nStatic = candidate.GetSug_nStatic.ToArray
+            Dim candidateSug_nStatic = candidate.GetSug_nStatic
 
             For e As Integer = 3 To 11
-                Dim g = CInt(candidateSug_nStatic(CInt(e - 3)))
+                Dim g As Integer = candidateSug_nStatic(e - 3)
 
                 If g > 0 Then
                     If e = 3 Then Sug = Hex

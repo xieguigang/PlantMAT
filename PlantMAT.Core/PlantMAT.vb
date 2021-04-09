@@ -1,48 +1,48 @@
 ﻿#Region "Microsoft.VisualBasic::608ed936bb71b4a9d5489cba2a638460, PlantMAT.Core\PlantMAT.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module PlantMAT
-    ' 
-    '     Constructor: (+1 Overloads) Sub New
-    ' 
-    '     Function: CacheToStream, GetConfig, joinMs2Query, MS1CP, ms1Err
-    '               ms1Query, MS1TopDown, MS2ATopDown, NeutralLoss, ParseConfig
-    '               ProductAnnotationResultTable, QueryFromMgf, readLibrary, readPlantMATReportTable, readResultJSON
-    '               reportTable, toResultJSON
-    ' 
-    '     Sub: delete
-    ' 
-    ' /********************************************************************************/
+' Module PlantMAT
+' 
+'     Constructor: (+1 Overloads) Sub New
+' 
+'     Function: CacheToStream, GetConfig, joinMs2Query, MS1CP, ms1Err
+'               ms1Query, MS1TopDown, MS2ATopDown, NeutralLoss, ParseConfig
+'               ProductAnnotationResultTable, QueryFromMgf, readLibrary, readPlantMATReportTable, readResultJSON
+'               reportTable, toResultJSON
+' 
+'     Sub: delete
+' 
+' /********************************************************************************/
 
 #End Region
 
@@ -454,17 +454,7 @@ Module PlantMAT
 
         Dim IonMZ_crc As MzAnnotation = Algorithm.MS2ATopDown.IonMZ_crc(If(ionMode > 0, "+", "-"))
 
-        Using insilicons As New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc, {}) With {
-            .Cou_max = Cou,
-            .DDMP_max = DDMP,
-            .dHex_max = dHex,
-            .Fer_max = Fer,
-            .HexA_max = HexA,
-            .Hex_max = Hex,
-            .Mal_max = Mal,
-            .Pen_max = Pen,
-            .Sin_max = Sin
-        }
+        Using insilicons = New NeutralLossIonPrediction(commonName, exactMass, IonMZ_crc, {}).SetPredictedMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%)
             Dim result As MzAnnotation() = Nothing
 
             Call insilicons.IonPrediction()

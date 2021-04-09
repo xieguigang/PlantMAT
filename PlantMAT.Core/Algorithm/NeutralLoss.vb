@@ -99,7 +99,7 @@ Namespace Algorithm
             Return Aggregate item In externals.SafeQuery Where item.is_acid = is_acid Into Sum(item.nHit)
         End Function
 
-        Friend Function SetLoess(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, externals As NeutralGroupHit()) As NeutralLoss
+        Friend Function SetLoess(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As NeutralLoss
             Hex = Hex_n
             HexA = HexA_n
             dHex = dHex_n
@@ -110,14 +110,13 @@ Namespace Algorithm
             Sin = Sin_n
             DDMP = DDMP_n
 
-            Me.externals = externals.Select(Function(a) a.Clone).ToArray
-
             Return Me
         End Function
 
-        Friend Sub SetExternalCount(counts As NeutralGroupHit())
-            Me.externals = counts.Select(Function(a) a.Clone).ToArray
-        End Sub
+        Friend Function SetExternalCount(counts As IEnumerable(Of NeutralGroupHit)) As NeutralLoss
+            Me.externals = NeutralGroupHit.CopyVector(counts)
+            Return Me
+        End Function
 
         Public Function AglyconeExactMass(exactMass As Double) As Double
             Return exactMass + nH2O_w - Attn_w
