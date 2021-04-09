@@ -3,24 +3,30 @@ Imports Microsoft.VisualBasic.Linq
 
 Namespace Models
 
-    Public Structure NeutralGroup
+    Public Structure NeutralGroup : Implements INeutralGroupHit
 
         Public Property name As String
         Public Property formula As String
-        Public Property aglycone As String
-        Public Property is_acid As Boolean
+        Public Property aglycone As String Implements INeutralGroupHit.aglycone
+        Public Property is_acid As Boolean Implements INeutralGroupHit.is_acid
         Public Property min As Integer
-        Public Property max As Integer
+        Public Property max As Integer Implements INeutralGroupHit.nHit
 
     End Structure
 
-    Public Class NeutralGroupHit
+    Friend Interface INeutralGroupHit
+        Property aglycone As String
+        Property nHit As Integer
+        Property is_acid As Boolean
+    End Interface
 
-        Public Property aglycone As String
+    Public Class NeutralGroupHit : Implements INeutralGroupHit
+
+        Public Property aglycone As String Implements INeutralGroupHit.aglycone
         Public Property formula As String
         Public Property exact_mass As Double
-        Public Property is_acid As Boolean
-        Public Property nHit As Integer
+        Public Property is_acid As Boolean Implements INeutralGroupHit.is_acid
+        Public Property nHit As Integer Implements INeutralGroupHit.nHit
 
         Public ReadOnly Property MassTotal As Double
             Get

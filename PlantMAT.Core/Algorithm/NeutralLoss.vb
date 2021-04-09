@@ -65,15 +65,19 @@ Namespace Algorithm
 
         Public ReadOnly Property Sugar_n As Integer
             Get
-                Return Hex + HexA + dHex + Pen + nCount(is_acid:=False)
+                Return Hex + HexA + dHex + Pen + nCount(externals, is_acid:=False)
             End Get
         End Property
 
         Public ReadOnly Property Acid_n As Integer
             Get
-                Return Mal + Cou + Fer + Sin + DDMP + nCount(is_acid:=True)
+                Return Mal + Cou + Fer + Sin + DDMP + nCount(externals, is_acid:=True)
             End Get
         End Property
+
+        Public Shared Function nMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%, externals As NeutralGroup()) As (sugarMax%, acidMax%)
+            Return (Hex + HexA + dHex + Pen + nCount(externals, is_acid:=False), Mal + Cou + Fer + Sin + DDMP + nCount(externals, is_acid:=True))
+        End Function
 
         ''' <summary>
         ''' Sum(X * n(X))
@@ -95,7 +99,7 @@ Namespace Algorithm
             Return Aggregate item In externals.SafeQuery Into Sum(item.MassTotal)
         End Function
 
-        Private Function nCount(is_acid As Boolean) As Integer
+        Private Shared Function nCount(Of T As INeutralGroupHit)(externals As T(), is_acid As Boolean) As Integer
             Return Aggregate item In externals.SafeQuery Where item.is_acid = is_acid Into Sum(item.nHit)
         End Function
 

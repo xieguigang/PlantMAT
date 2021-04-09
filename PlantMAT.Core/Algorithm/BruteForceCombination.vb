@@ -6,20 +6,18 @@ Namespace Algorithm
     Public Delegate Function Iteration(Of T)(neutralLoss As NeutralLoss) As T
     Public Delegate Sub Finalize(last As NeutralGroupHit)
 
-    Public Class BruteForceCombination : Inherits PlantMATAlgorithm
+    Public Class BruteForceCombination
 
         ReadOnly _defines As NeutralGroup()
         ReadOnly _finalize As Finalize
 
-        Public Sub New(defines As NeutralGroup(), settings As Settings, Optional finalize As Finalize = Nothing)
-            MyBase.New(settings)
+        Dim NumSugarMax, NumAcidMax As Integer
 
+        Public Sub New(defines As NeutralGroup(), NumSugarMax%, NumAcidMax%, Optional finalize As Finalize = Nothing)
+            Me.NumAcidMax = NumAcidMax
+            Me.NumSugarMax = NumSugarMax
             Me._defines = defines
             Me._finalize = finalize
-        End Sub
-
-        Protected Friend Overrides Sub applySettings()
-
         End Sub
 
         Public Iterator Function BruteForceIterations(Of T)(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, iteration As Iteration(Of T)) As IEnumerable(Of T)
@@ -72,6 +70,10 @@ Namespace Algorithm
             Else
                 For i As Integer = external.min To external.max
                     it.nHit = i
+
+                    If loess.Sugar_n > NumSugarMax OrElse loess.Acid_n > NumAcidMax Then
+                        Exit For
+                    End If
 
                     For Each item In BruteForceIterations(pop, loess, iteration)
                         Yield item

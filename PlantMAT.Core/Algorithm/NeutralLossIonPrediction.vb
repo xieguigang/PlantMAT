@@ -59,7 +59,7 @@ Namespace Algorithm
         ''' predicted result
         ''' </summary>
         Dim Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%
-        Dim settings As Settings
+        Dim NumSugarMax%, NumAcidMax%
 
         ' Initilize all neutral losses and predicted ions pIonList() to none
         Dim HexLoss As New StringBuilder
@@ -116,18 +116,6 @@ Namespace Algorithm
         ''' <param name="DDMP_max%"></param>
         ''' <returns></returns>
         Public Function SetPredictedMax(Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%) As NeutralLossIonPrediction
-            settings = New Settings With {
-                .NumofSugarPen = {0, Pen_max},
-                .NumofAcidCou = {0, Cou_max},
-                .NumofAcidFer = {0, Fer_max},
-                .NumofAcidDDMP = {0, DDMP_max},
-                .NumofAcidMal = {0, Mal_max},
-                .NumofAcidSin = {0, Sin_max},
-                .NumofSugardHex = {0, dHex_max},
-                .NumofSugarHex = {0, Hex_max},
-                .NumofSugarHexA = {0, HexA_max}
-            }
-
             Me.Hex_max = Hex_max%
             Me.HexA_max = HexA_max%
             Me.dHex_max = dHex_max%
@@ -137,6 +125,11 @@ Namespace Algorithm
             Me.Fer_max = Fer_max%
             Me.Sin_max = Sin_max%
             Me.DDMP_max = DDMP_max%
+
+            With NeutralLoss.nMax(Hex_max%, HexA_max%, dHex_max%, Pen_max%, Mal_max%, Cou_max%, Fer_max%, Sin_max%, DDMP_max%, externals)
+                NumAcidMax = .acidMax
+                NumSugarMax = .sugarMax
+            End With
 
             Return Me
         End Function
@@ -160,7 +153,7 @@ Namespace Algorithm
                  Total_max * H2O_w + IonMZ_crc +
                  TotalExternalMass
 
-            Dim combination As New BruteForceCombination(externals, settings, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
+            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
 
             ' 0 -> 0 for循环会执行一次
 
