@@ -180,9 +180,17 @@ Namespace Algorithm
  _
                                                             iteration:=Function(neutralLoss)
                                                                            Call LossCombination(neutralLoss, nH2O, nCO2, MIonMZ)
-                                                                           Call externalLoss(neutralLoss.externals.Last.aglycone) _
-                                                                               .Append("-") _
-                                                                               .Append(neutralLoss.externals.Last.aglycone)
+
+                                                                           If neutralLoss.externals.Length > 0 Then
+                                                                               Dim lastAglycone As String = neutralLoss _
+                                                                                  .externals _
+                                                                                  .Last _
+                                                                                  .aglycone
+
+                                                                               Call externalLoss(lastAglycone) _
+                                                                                   .Append("-") _
+                                                                                   .Append(lastAglycone)
+                                                                           End If
 
                                                                            Return Nothing
                                                                        End Function)
