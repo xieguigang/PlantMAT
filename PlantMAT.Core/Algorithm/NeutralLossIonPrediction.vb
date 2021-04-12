@@ -155,7 +155,7 @@ Namespace Algorithm
                  Total_max * H2O_w + IonMZ_crc +
                  TotalExternalMass
 
-            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
+            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Double.MaxValue, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
 
             ' 0 -> 0 for循环会执行一次
 

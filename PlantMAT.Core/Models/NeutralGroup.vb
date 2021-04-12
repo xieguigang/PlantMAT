@@ -63,7 +63,7 @@ Namespace Models
                 .formula = define.formula,
                 .is_acid = define.is_acid,
                 .nHit = 0,
-                .exact_mass = FormulaScanner.ScanFormula(.formula).ExactMass
+                .exact_mass = FormulaScanner.EvaluateExactMass(.formula)
             }
         End Function
     End Class

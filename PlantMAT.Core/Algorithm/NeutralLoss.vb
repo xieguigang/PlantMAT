@@ -123,6 +123,11 @@ Namespace Algorithm
             Return Me
         End Function
 
+        ''' <summary>
+        ''' exactMass + nH2O_w - Attn_w
+        ''' </summary>
+        ''' <param name="exactMass"></param>
+        ''' <returns></returns>
         Public Function AglyconeExactMass(exactMass As Double) As Double
             Return exactMass + nH2O_w - Attn_w
         End Function
