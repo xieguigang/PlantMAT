@@ -1,4 +1,5 @@
 ﻿Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
+Imports Microsoft.VisualBasic.Data.IO.MessagePack.Serialization
 Imports Microsoft.VisualBasic.Linq
 
 Namespace Models
@@ -26,11 +27,11 @@ Namespace Models
 
     Public Class NeutralGroupHit : Implements INeutralGroupHit
 
-        Public Property aglycone As String Implements INeutralGroupHit.aglycone
-        Public Property formula As String
-        Public Property exact_mass As Double
-        Public Property is_acid As Boolean Implements INeutralGroupHit.is_acid
-        Public Property nHit As Integer Implements INeutralGroupHit.nHit
+        <MessagePackMember(0)> Public Property aglycone As String Implements INeutralGroupHit.aglycone
+        <MessagePackMember(1)> Public Property formula As String
+        <MessagePackMember(2)> Public Property exact_mass As Double
+        <MessagePackMember(3)> Public Property is_acid As Boolean Implements INeutralGroupHit.is_acid
+        <MessagePackMember(4)> Public Property nHit As Integer Implements INeutralGroupHit.nHit
 
         Public ReadOnly Property MassTotal As Double
             Get

@@ -43,6 +43,7 @@
 #End Region
 
 Imports System.Xml.Serialization
+Imports Microsoft.VisualBasic.Data.IO.MessagePack.Serialization
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports PlantMAT.Core.Models
@@ -51,16 +52,16 @@ Namespace Algorithm
 
     Public Class NeutralLoss
 
-        <XmlAttribute> Public Property Hex As Integer
-        <XmlAttribute> Public Property HexA As Integer
-        <XmlAttribute> Public Property dHex As Integer
-        <XmlAttribute> Public Property Pen As Integer
-        <XmlAttribute> Public Property Mal As Integer
-        <XmlAttribute> Public Property Cou As Integer
-        <XmlAttribute> Public Property Fer As Integer
-        <XmlAttribute> Public Property Sin As Integer
-        <XmlAttribute> Public Property DDMP As Integer
-
+        <MessagePackMember(0)> <XmlAttribute> Public Property Hex As Integer
+        <MessagePackMember(1)> <XmlAttribute> Public Property HexA As Integer
+        <MessagePackMember(2)> <XmlAttribute> Public Property dHex As Integer
+        <MessagePackMember(3)> <XmlAttribute> Public Property Pen As Integer
+        <MessagePackMember(4)> <XmlAttribute> Public Property Mal As Integer
+        <MessagePackMember(5)> <XmlAttribute> Public Property Cou As Integer
+        <MessagePackMember(6)> <XmlAttribute> Public Property Fer As Integer
+        <MessagePackMember(7)> <XmlAttribute> Public Property Sin As Integer
+        <MessagePackMember(8)> <XmlAttribute> Public Property DDMP As Integer
+        <MessagePackMember(9)>
         Public Property externals As NeutralGroupHit()
 
         Public ReadOnly Property Sugar_n As Integer
