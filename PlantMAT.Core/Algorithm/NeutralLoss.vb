@@ -133,7 +133,7 @@ Namespace Algorithm
         End Function
 
         Public Overrides Function ToString() As String
-            Return Me.GetJson
+            Return $"X + {nH2O_w} - {Attn_w}"
         End Function
 
     End Class
