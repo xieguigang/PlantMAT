@@ -13,14 +13,14 @@ Namespace Algorithm
         ReadOnly _finalize As Finalize
 
         Dim NumSugarMax, NumAcidMax As Integer
-        Dim MaxAglyconeExactMass As Double
+        Dim MinAglyconeExactMass As Double
 
-        Public Sub New(defines As NeutralGroup(), NumSugarMax%, NumAcidMax%, MaxAglyconeExactMass#, Optional finalize As Finalize = Nothing)
+        Public Sub New(defines As NeutralGroup(), NumSugarMax%, NumAcidMax%, MinAglyconeExactMass#, Optional finalize As Finalize = Nothing)
             Me.NumAcidMax = NumAcidMax
             Me.NumSugarMax = NumSugarMax
             Me._defines = defines
             Me._finalize = finalize
-            Me.MaxAglyconeExactMass = MaxAglyconeExactMass
+            Me.MinAglyconeExactMass = MinAglyconeExactMass
         End Sub
 
         Public Iterator Function BruteForceIterations(Of T)(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
@@ -94,7 +94,7 @@ Namespace Algorithm
 
                     If loss.Sugar_n > NumSugarMax OrElse loss.Acid_n > NumAcidMax Then
                         Exit For
-                    ElseIf loss.AglyconeExactMass(M_w) > MaxAglyconeExactMass Then
+                    ElseIf loss.AglyconeExactMass(M_w) < MinAglyconeExactMass Then
                         Exit For
                     Else
                         Yield iteration(loss)

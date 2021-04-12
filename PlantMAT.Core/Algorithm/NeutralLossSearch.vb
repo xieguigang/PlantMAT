@@ -98,7 +98,7 @@ Namespace Algorithm
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim checkLoss As New Value(Of NeutralLoss)
-            Dim combination As New BruteForceCombination(externalDefines, NumSugarMax:=NumSugarMax, NumAcidMax:=NumAcidMax, settings.AglyconeMWRange(1))
+            Dim combination As New BruteForceCombination(externalDefines, NumSugarMax:=NumSugarMax, NumAcidMax:=NumAcidMax, settings.AglyconeMWRange(0))
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
