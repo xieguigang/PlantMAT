@@ -187,6 +187,19 @@ Namespace Algorithm
                                                     iteration:=Function(loss)
                                                                    For Each type As NamedValue(Of Double) In allAglycones
                                                                        If TargetMassRestrictionCheck(loss, totalMass(type.Name)) Then
+                                                                           loss = New NeutralLoss With {
+                                                                               .Cou = loss.Cou,
+                                                                               .DDMP = loss.DDMP,
+                                                                               .dHex = loss.dHex,
+                                                                               .Fer = loss.Fer,
+                                                                               .Hex = loss.Hex,
+                                                                               .HexA = loss.HexA,
+                                                                               .Mal = loss.Mal,
+                                                                               .Pen = loss.Pen,
+                                                                               .Sin = loss.Sin,
+                                                                               .externals = NeutralGroupHit.CopyVector(loss.externals)
+                                                                           }
+
                                                                            Return New NamedValue(Of NeutralLoss)(type.Name, loss)
                                                                        End If
                                                                    Next
