@@ -452,7 +452,7 @@ Module PlantMAT
                                 Optional ionMode% = 1,
                                 Optional commonName$ = "natural product") As MzAnnotation()
 
-        Dim IonMZ_crc As MzAnnotation = Algorithm.MS2ATopDown.IonMZ_crc(If(ionMode > 0, "+", "-"))
+        Dim IonMZ_crc As MzAnnotation = Algorithm.IonMZ_crc.GetIonMZ_crc(If(ionMode > 0, "+", "-"))
         Dim maxMz As Double = New NeutralLoss With {
             .Cou = Cou,
             .DDMP = DDMP,

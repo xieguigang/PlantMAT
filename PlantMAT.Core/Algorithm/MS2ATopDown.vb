@@ -118,13 +118,6 @@ Namespace Algorithm
                 .Select(AddressOf MS2Annotation)
         End Function
 
-        ' Find the ion type (pos or neg) based on the setting
-        ' 在二级离子推断注释这里，离子化模式似乎是固定类型的
-        Friend Shared ReadOnly IonMZ_crc As New Dictionary(Of String, MzAnnotation) From {
-            {"+", New MzAnnotation With {.annotation = "+H]+", .productMz = H_w - e_w}},
-            {"-", New MzAnnotation With {.annotation = "-H]-", .productMz = e_w - H_w}}
-        }
-
         ''' <summary>
         ''' Loop through all candidates for each compound
         ''' </summary>
@@ -132,7 +125,7 @@ Namespace Algorithm
         Private Function MS2Annotation(query As Query) As Query
             For i As Integer = 0 To query.Candidates.Count - 1
                 If Not query.Ms2Peaks Is Nothing Then
-                    Call MS2AnnotationLoop(query, IonMZ_crc(ionMode), i)
+                    Call MS2AnnotationLoop(query, IonMZ_crc.GetIonMZ_crc(ionMode), i)
                 End If
             Next
 
