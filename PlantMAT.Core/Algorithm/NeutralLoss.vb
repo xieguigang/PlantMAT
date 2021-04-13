@@ -66,18 +66,21 @@ Namespace Algorithm
 
         Public ReadOnly Property Sugar_n As Integer
             Get
-                Return Hex + HexA + dHex + Pen + nCount(externals, is_acid:=False)
+                Return Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.suger)
             End Get
         End Property
 
         Public ReadOnly Property Acid_n As Integer
             Get
-                Return Mal + Cou + Fer + Sin + DDMP + nCount(externals, is_acid:=True)
+                Return Mal + Cou + Fer + Sin + DDMP + nCount(externals, type:=NeutralTypes.acid)
             End Get
         End Property
 
         Public Shared Function nMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%, externals As NeutralGroup()) As (sugarMax%, acidMax%)
-            Return (Hex + HexA + dHex + Pen + nCount(externals, is_acid:=False), Mal + Cou + Fer + Sin + DDMP + nCount(externals, is_acid:=True))
+            Dim sugarMax = Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.suger)
+            Dim acidMax = Mal + Cou + Fer + Sin + DDMP + nCount(externals, type:=NeutralTypes.acid)
+
+            Return (sugarMax, acidMax)
         End Function
 
         ''' <summary>
@@ -100,8 +103,8 @@ Namespace Algorithm
             Return Aggregate item In externals.SafeQuery Into Sum(item.MassTotal)
         End Function
 
-        Friend Shared Function nCount(Of T As INeutralGroupHit)(externals As T(), is_acid As Boolean) As Integer
-            Return Aggregate item In externals.SafeQuery Where item.is_acid = is_acid Into Sum(item.nHit)
+        Friend Shared Function nCount(Of T As INeutralGroupHit)(externals As T(), type As NeutralTypes) As Integer
+            Return Aggregate item In externals.SafeQuery Where item.type = type Into Sum(item.nHit)
         End Function
 
         Friend Function SetLoess(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%) As NeutralLoss
