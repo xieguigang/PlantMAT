@@ -81,7 +81,7 @@ Namespace Algorithm
 
         Private disposedValue As Boolean
 
-        ReadOnly pIonList As New List(Of MzAnnotation)
+        ReadOnly pIonList As New Dictionary(Of String, MzAnnotation)
         ReadOnly externals As NeutralGroup()
         ReadOnly externalLoss As Dictionary(Of String, StringBuilder)
         ReadOnly maxnExternals As Dictionary(Of String, Integer)
@@ -137,7 +137,7 @@ Namespace Algorithm
         End Function
 
         Public Sub getResult(ByRef result As MzAnnotation())
-            result = pIonList.ToArray
+            result = pIonList.Values.ToArray
         End Sub
 
         ''' <summary>
@@ -162,10 +162,10 @@ Namespace Algorithm
 
             ' 0 -> 0 for循环会执行一次
 
-            Call New MzAnnotation With {
+            pIonList($"[M]{Rsyb.Last}") = New MzAnnotation With {
                 .productMz = MIonMZ,
                 .annotation = $"[M]{Rsyb.Last}"
-            }.DoCall(AddressOf pIonList.Add)
+            }
 
             ' Do brute force iteration to generate all hypothetical neutral losses
             ' as a combination of different glycosyl and acyl groups, and
@@ -276,7 +276,7 @@ Namespace Algorithm
                 neutralLoess.Fer = Fer_max AndAlso
                 neutralLoess.Sin = Sin_max AndAlso
                 neutralLoess.DDMP = DDMP_max AndAlso
-                neutralLoess.externals.All(Function(a) maxnExternals(a.aglycone) = a.nHit) Then
+                ((Not neutralLoess.externals.IsNullOrEmpty) AndAlso neutralLoess.externals.All(Function(a) maxnExternals(a.aglycone) = a.nHit)) Then
 
                 Dim part As String = $"{H2OLoss}{CO2Loss}"
 
@@ -295,10 +295,10 @@ Namespace Algorithm
             End If
 
             ' Save the predicted ion mz to data array pIonList()
-            Call New MzAnnotation With {
+            pIonList(pIonNM) = New MzAnnotation With {
                 .productMz = pIonMZ,
                 .annotation = pIonNM
-            }.DoCall(AddressOf pIonList.Add)
+            }
         End Sub
 
         Protected Overridable Sub Dispose(disposing As Boolean)
