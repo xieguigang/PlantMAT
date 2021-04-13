@@ -86,7 +86,13 @@ Namespace Algorithm
                 For i As Integer = external.min To external.max
                     it.nHit = i
 
-                    Yield iteration(loss)
+                    If loss.Sugar_n > NumSugarMax OrElse loss.Acid_n > NumAcidMax Then
+                        Exit For
+                    ElseIf loss.AglyconeExactMass(M_w) < 0 Then ' MinAglyconeExactMass
+                        Exit For
+                    Else
+                        Yield iteration(loss)
+                    End If
                 Next
             Else
                 For i As Integer = external.min To external.max
@@ -94,7 +100,7 @@ Namespace Algorithm
 
                     If loss.Sugar_n > NumSugarMax OrElse loss.Acid_n > NumAcidMax Then
                         Exit For
-                    ElseIf loss.AglyconeExactMass(M_w) < MinAglyconeExactMass Then
+                    ElseIf loss.AglyconeExactMass(M_w) < 0 Then ' MinAglyconeExactMass
                         Exit For
                     Else
                         Yield iteration(loss)

@@ -192,14 +192,15 @@ Namespace Algorithm
                                                                            Call LossCombination(neutralLoss, nH2O, nCO2, MIonMZ)
 
                                                                            If neutralLoss.externals.Length > 0 Then
-                                                                               Dim lastAglycone As String = neutralLoss _
+                                                                               Dim lastAglycone As NeutralGroupHit = neutralLoss _
                                                                                   .externals _
-                                                                                  .Last _
-                                                                                  .aglycone
+                                                                                  .Last
 
-                                                                               Call externalLoss(lastAglycone) _
-                                                                                   .Append("-") _
-                                                                                   .Append(lastAglycone)
+                                                                               If lastAglycone.nHit > 0 Then
+                                                                                   Call externalLoss(lastAglycone.aglycone) _
+                                                                                       .Append("-") _
+                                                                                       .Append(lastAglycone)
+                                                                               End If
                                                                            End If
 
                                                                            Return Nothing
