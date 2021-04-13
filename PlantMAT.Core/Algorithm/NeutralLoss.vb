@@ -124,12 +124,26 @@ Namespace Algorithm
         End Function
 
         ''' <summary>
-        ''' exactMass + nH2O_w - Attn_w
+        ''' AglyconeExactMass = exactMass + nH2O_w - Attn_w
         ''' </summary>
         ''' <param name="exactMass"></param>
         ''' <returns></returns>
         Public Function AglyconeExactMass(exactMass As Double) As Double
             Return exactMass + nH2O_w - Attn_w
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="aglyconeExactMass"></param>
+        ''' <param name="exactMass"></param>
+        ''' <returns>
+        ''' returns the value of ``nH2O_w - Attn_w``
+        ''' </returns>
+        Public Shared Function TargetMass(aglyconeExactMass As Double, exactMass As Double) As Double
+            ' aglyconeExactMass = exactMass + nH2O_w - Attn_w
+            ' nH2O_w - Attn_w = aglyconeExactMass - exactMass
+            Return aglyconeExactMass - exactMass
         End Function
 
         Public Overrides Function ToString() As String

@@ -44,9 +44,12 @@
 
 #End Region
 
+Imports System.Runtime.CompilerServices
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
+Imports stdNum = System.Math
 
 Namespace Algorithm
 
@@ -98,7 +101,7 @@ Namespace Algorithm
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
             Dim checkLoss As New Value(Of NeutralLoss)
-            Dim combination As New BruteForceCombination(externalDefines, NumSugarMax:=NumSugarMax, NumAcidMax:=NumAcidMax, settings.AglyconeMWRange(0))
+            Dim combination As BruteForceCombination = createAlgorithm()
 
             ' invali exact mass that calculated from the precursor ion
             If M_w <= 0 OrElse M_w > 2000 Then
@@ -142,6 +145,83 @@ Namespace Algorithm
                     Next dHex_n
                 Next HexA_n
             Next Hex_n
+        End Function
+
+        Private Function createAlgorithm() As BruteForceCombination
+            Return New BruteForceCombination(externalDefines, NumSugarMax:=NumSugarMax, NumAcidMax:=NumAcidMax, settings.AglyconeMWRange(0))
+        End Function
+
+        Public Iterator Function SearchAny(aglycones As IEnumerable(Of NamedValue(Of Double)), precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of NamedValue(Of NeutralLoss))
+            Dim PrecursorIonMZ As Double = precursor.adduct
+            Dim PrecursorIonN As Double = precursor.M
+            Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
+            Dim checkLoss As New Value(Of NamedValue(Of NeutralLoss))
+            Dim combination As BruteForceCombination = createAlgorithm()
+            Dim allAglycones As NamedValue(Of Double)() = aglycones.ToArray
+            Dim totalMass As Dictionary(Of String, Double) = allAglycones _
+                .ToDictionary(Function(a) a.Name,
+                              Function(a)
+                                  Return NeutralLoss.TargetMass(a.Value, M_w)
+                              End Function)
+
+            ' invali exact mass that calculated from the precursor ion
+            If M_w <= 0 OrElse M_w > 2000 Then
+                Return
+            End If
+
+            ' 暴力枚举的方法来搜索代谢物信息
+            For Hex_n As Integer = NumHexMin To NumHexMax
+                For HexA_n As Integer = NumHexAMin To NumHexAMax
+                    For dHex_n As Integer = NumdHexMin To NumdHexMax
+                        For Pen_n As Integer = NumPenMin To NumPenMax
+                            For Mal_n As Integer = NumMalMin To NumMalMax
+                                For Cou_n As Integer = NumCouMin To NumCouMax
+                                    For Fer_n As Integer = NumFerMin To NumFerMax
+                                        For Sin_n As Integer = NumSinMin To NumSinMax
+                                            For DDMP_n As Integer = NumDDMPMin To NumDDMPMax
+
+                                                For Each check As NamedValue(Of NeutralLoss) In combination.BruteForceIterations(
+                                                    Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
+ _
+                                                    M_w:=M_w,
+                                                    iteration:=Function(loss)
+                                                                   For Each type As NamedValue(Of Double) In allAglycones
+                                                                       If TargetMassRestrictionCheck(loss, totalMass(type.Name)) Then
+                                                                           Return New NamedValue(Of NeutralLoss)(type.Name, loss)
+                                                                       End If
+                                                                   Next
+
+                                                                   Return Nothing
+                                                               End Function)
+
+                                                    If Not (checkLoss = check).IsEmpty Then
+                                                        Yield checkLoss
+                                                    End If
+                                                Next
+
+                                            Next DDMP_n
+                                        Next Sin_n
+                                    Next Fer_n
+                                Next Cou_n
+                            Next Mal_n
+                        Next Pen_n
+                    Next dHex_n
+                Next HexA_n
+            Next Hex_n
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="neutralLoss"></param>
+        ''' <param name="totalMass">
+        ''' <see cref="NeutralLoss.TargetMass(Double, Double)"/>
+        ''' </param>
+        ''' <returns></returns>
+        ''' 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Private Function TargetMassRestrictionCheck(neutralLoss As NeutralLoss, totalMass As Double) As Boolean
+            Return stdNum.Abs(totalMass - (neutralLoss.nH2O_w - neutralLoss.Attn_w)) <= 0.005
         End Function
 
         ''' <summary>
