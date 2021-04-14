@@ -125,18 +125,19 @@ Namespace Algorithm
                                                     M_w:=M_w,
                                                     iteration:=Function(loss)
                                                                    If RestrictionCheck(neutralLoss:=loss, M_w:=M_w) Then
-                                                                        loss = New NeutralLoss With {
-                                                                               .Cou = loss.Cou,
-                                                                               .DDMP = loss.DDMP,
-                                                                               .dHex = loss.dHex,
-                                                                               .Fer = loss.Fer,
-                                                                               .Hex = loss.Hex,
-                                                                               .HexA = loss.HexA,
-                                                                               .Mal = loss.Mal,
-                                                                               .Pen = loss.Pen,
-                                                                               .Sin = loss.Sin,
-                                                                               .externals = NeutralGroupHit.CopyVector(loss.externals)
-                                                                           }
+                                                                       loss = New NeutralLoss With {
+                                                                           .Cou = loss.Cou,
+                                                                           .DDMP = loss.DDMP,
+                                                                           .dHex = loss.dHex,
+                                                                           .Fer = loss.Fer,
+                                                                           .Hex = loss.Hex,
+                                                                           .HexA = loss.HexA,
+                                                                           .Mal = loss.Mal,
+                                                                           .Pen = loss.Pen,
+                                                                           .Sin = loss.Sin,
+                                                                           .externals = NeutralGroupHit.CopyVector(loss.externals)
+                                                                       }
+
                                                                        Return loss
                                                                    Else
                                                                        Return Nothing
