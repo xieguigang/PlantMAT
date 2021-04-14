@@ -149,19 +149,19 @@ Namespace Algorithm
         Public Sub IonPrediction()
 
             ' Calcualte the total number of glycosyl and acyl groups allowed in the brute iteration
-            Dim Total_max = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max + (Aggregate item In externals Into Sum(item.max))
+            Dim Total_max As Integer = Hex_max + HexA_max + dHex_max + Pen_max + Mal_max + Cou_max + Fer_max + Sin_max + DDMP_max + (Aggregate item In externals Into Sum(item.max))
             Dim TotalExternalMass As Double = Aggregate item As NeutralGroup
                                               In externals
                                               Let exactMass As Double = FormulaScanner.ScanFormula(item.formula).ExactMass
                                               Into Sum(item.max * exactMass)
 
             ' Calculate the the mass of precursor ion
-            Dim MIonMZ = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
+            Dim MIonMZ As Double = Agly_w + Hex_max * Hex_w + HexA_max * HexA_w + dHex_max * dHex_w + Pen_max * Pen_w +
                  Mal_max * Mal_w + Cou_max * Cou_w + Fer_max * Fer_w + Sin_max * Sin_w + DDMP_max * DDMP_w -
                  Total_max * H2O_w + IonMZ_crc +
                  TotalExternalMass
 
-            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Double.MaxValue, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
+            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Double.MinValue, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
 
             ' 0 -> 0 for循环会执行一次
 
@@ -203,7 +203,7 @@ Namespace Algorithm
                                                                                If lastAglycone.nHit > 0 Then
                                                                                    Call externalLoss(lastAglycone.aglycone) _
                                                                                        .Append("-") _
-                                                                                       .Append(lastAglycone)
+                                                                                       .Append(lastAglycone.aglycone)
                                                                                End If
                                                                            End If
 

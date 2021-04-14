@@ -1,6 +1,5 @@
-﻿Imports PlantMAT.Core.Models
-Imports Microsoft.VisualBasic.Linq
-Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+﻿Imports Microsoft.VisualBasic.Linq
+Imports PlantMAT.Core.Models
 
 Namespace Algorithm
 
@@ -24,8 +23,8 @@ Namespace Algorithm
         End Sub
 
         Public Iterator Function BruteForceIterations(Of T)(Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
-                                                            iteration As Iteration(Of T),
-                                                            Optional M_w# = Nothing) As IEnumerable(Of T)
+                                                            M_w#,
+                                                            iteration As Iteration(Of T)) As IEnumerable(Of T)
             Yield New NeutralLoss With {
                 .Cou = Cou_n,
                 .DDMP = DDMP_n,
@@ -88,7 +87,7 @@ Namespace Algorithm
 
                     If loss.Sugar_n > NumSugarMax OrElse loss.Acid_n > NumAcidMax Then
                         Exit For
-                    ElseIf loss.AglyconeExactMass(M_w) < 0 Then ' MinAglyconeExactMass
+                    ElseIf loss.AglyconeExactMass(M_w) < MinAglyconeExactMass Then ' MinAglyconeExactMass
                         Exit For
                     Else
                         Yield iteration(loss)
@@ -100,7 +99,7 @@ Namespace Algorithm
 
                     If loss.Sugar_n > NumSugarMax OrElse loss.Acid_n > NumAcidMax Then
                         Exit For
-                    ElseIf loss.AglyconeExactMass(M_w) < 0 Then ' MinAglyconeExactMass
+                    ElseIf loss.AglyconeExactMass(M_w) < MinAglyconeExactMass Then ' MinAglyconeExactMass
                         Exit For
                     Else
                         Yield iteration(loss)
