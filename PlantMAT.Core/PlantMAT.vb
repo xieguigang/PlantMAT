@@ -449,10 +449,10 @@ Module PlantMAT
     <ExportAPI("neutral_loss")>
     Public Function NeutralLoss(exactMass#,
                                 Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%,
-                                Optional ionMode% = 1,
+                                Optional precurosr$ = "[M+H]+",
                                 Optional commonName$ = "natural product") As MzAnnotation()
 
-        Dim IonMZ_crc As MzAnnotation = Algorithm.IonMZ_crc.GetIonMZ_crc(If(ionMode > 0, "+", "-"))
+        Dim IonMZ_crc As MzAnnotation = Algorithm.IonMZ_crc.GetIonMZ_crc(precurosr)
         Dim maxMz As Double = New NeutralLoss With {
             .Cou = Cou,
             .DDMP = DDMP,
@@ -465,7 +465,7 @@ Module PlantMAT
             .Sin = Sin
         }.Attn_w + exactMass
 
-        Using insilicons As New NeutralLossIonPrediction(maxMz, commonName, exactMass, IonMZ_crc, {})
+        Using insilicons As New NeutralLossIonPrediction(maxMz, commonName, exactMass, IonMZ_crc, {}, PublicVSCode.GetPrecursorInfo(precurosr))
             Dim result As MzAnnotation() = Nothing
 
             Call insilicons.SetPredictedMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%)

@@ -42,6 +42,7 @@
 #End Region
 
 Imports System.Text
+Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
 Imports Microsoft.VisualBasic.Linq
@@ -86,6 +87,7 @@ Namespace Algorithm
         ReadOnly externalLoss As Dictionary(Of String, StringBuilder)
         ReadOnly maxnExternals As Dictionary(Of String, Integer)
         ReadOnly precursorMz As Double
+        ReadOnly M_w As Double
 
         ''' <summary>
         ''' 
@@ -93,7 +95,7 @@ Namespace Algorithm
         ''' <param name="AglyN">the metabolite common name</param>
         ''' <param name="Agly_w">the exact mass</param>
         ''' <param name="IonMZ_crc">precursor type components, value should be ``"-H]-"`` or ``"+H]+"``</param>
-        Sub New(precursorMz As Double, AglyN$, Agly_w#, IonMZ_crc As MzAnnotation, externals As NeutralGroup())
+        Sub New(precursorMz As Double, AglyN$, Agly_w#, IonMZ_crc As MzAnnotation, externals As NeutralGroup(), precursor As PrecursorInfo)
             Me.IonMZ_crc = IonMZ_crc.productMz
             Me.Rsyb = IonMZ_crc.annotation
             Me.Agly_w = Agly_w
@@ -102,6 +104,7 @@ Namespace Algorithm
             Me.externalLoss = externals.ToDictionary(Function(a) a.aglycone, Function(any) New StringBuilder)
             Me.maxnExternals = externals.ToDictionary(Function(a) a.aglycone, Function(a) a.max)
             Me.precursorMz = precursorMz
+            Me.M_w = (precursorMz - precursor.adduct) / precursor.M
         End Sub
 
         ''' <summary>
@@ -188,6 +191,7 @@ Namespace Algorithm
                                                         For Each check In combination.BruteForceIterations(
                                                             Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, _
  _
+                                                            M_w:=M_w,
                                                             iteration:=Function(neutralLoss)
                                                                            Call LossCombination(neutralLoss, nH2O, nCO2, MIonMZ)
 

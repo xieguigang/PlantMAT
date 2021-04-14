@@ -150,7 +150,7 @@ Namespace Algorithm
             Dim DDMP_max As Integer = CInt(candidate.DDMP)
 
             ' First, predict the ions based on the results from combinatorial enumeration
-            Using insilicons As New NeutralLossIonPrediction(query.PrecursorIon, AglyN$, Agly_w#, IonMZ_crc, {})
+            Using insilicons As New NeutralLossIonPrediction(query.PrecursorIon, AglyN$, Agly_w#, IonMZ_crc, {}, PublicVSCode.GetPrecursorInfo(candidate.precursor_type))
 
                 Call insilicons.SetPredictedMax(
                     Hex_max:=Hex_max,
