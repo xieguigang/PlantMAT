@@ -46,6 +46,7 @@
 
 Imports System.Runtime.CompilerServices
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
+Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
@@ -247,7 +248,10 @@ Namespace Algorithm
         ''' 
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Private Function TargetMassRestrictionCheck(neutralLoss As NeutralLoss, totalMass As Double) As Boolean
-            Return stdNum.Abs(totalMass - (neutralLoss.nH2O_w - neutralLoss.Attn_w)) <= 0.005
+            ' 20210414
+            ' 0.1 da is good
+            ' too small will loss too much true result
+            Return stdNum.Abs(totalMass - (neutralLoss.nH2O_w - neutralLoss.Attn_w)) <= 0.1
         End Function
 
         ''' <summary>
