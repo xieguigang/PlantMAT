@@ -170,7 +170,7 @@ Namespace Algorithm
 
             ' Second, compare the predicted ions with the measured
             Dim aIonList As New List(Of IonAnnotation)
-            Dim AglyCheck As Boolean = IonMatching(query.Ms2Peaks, pIonList, aIonList, mzPPM, NoiseFilter)
+            Dim AglyCheck As Boolean = IonMatching(query.Ms2Peaks, pIonList, aIonList, Tolerance.PPM(mzPPM), NoiseFilter)
 
             ' Fifth, show an asterisk mark if the ions corresponding to the aglycone are found
             candidate.Ms2Anno = New Ms2IonAnnotations With {
@@ -188,7 +188,7 @@ Namespace Algorithm
         Public Shared Function IonMatching(eIonList As Ms2Peaks,
                                            pIonList As MzAnnotation(),
                                            ByRef aIonList As List(Of IonAnnotation),
-                                           mzPPM As Double,
+                                           tolerance As Tolerance,
                                            noiseFilter As Double) As Boolean
 
             ' Initialize the annotated ion list aIonList() to none
@@ -207,7 +207,7 @@ Namespace Algorithm
                     Dim pIonMZ As Double = t.productMz
                     Dim pIonNM As String = t.annotation
 
-                    If PPMmethod.PPM(eIonMZ, pIonMZ) <= mzPPM Then
+                    If tolerance(eIonMZ, pIonMZ) Then
                         Dim aIonAbu = eIonInt / TotalIonInt
 
                         If aIonAbu * 100 >= noiseFilter Then
