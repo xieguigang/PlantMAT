@@ -93,6 +93,12 @@ Namespace Algorithm
             End Get
         End Property
 
+        Public ReadOnly Property nH2O As Integer
+            Get
+                Return (Sugar_n + Acid_n)
+            End Get
+        End Property
+
         Public ReadOnly Property nH2O_w As Double
             Get
                 Return (Sugar_n + Acid_n) * H2O_w
