@@ -275,13 +275,54 @@ Namespace Algorithm
             Next
         End Function
 
+        ''' <summary>
+        ''' Hexose
+        ''' 
+        ''' Canonical SMILES: C(C1C(C(C(C(O1)O)O)O)O)O
+        ''' </summary>
         Const Hex = "C?C(C(C(C(CO)O?)O)O)O"
+        ''' <summary>
+        ''' Hexenuronic acid
+        ''' 
+        ''' 
+        ''' </summary>
         Const HexA = "C?C(C(C(C(C(=O)O)O?)O)O)O"
+        ''' <summary>
+        ''' 6-Deoxy-Hexose
+        ''' 
+        ''' Canonical SMILES: CC1C(C(C(C(O1)O)O)O)O
+        ''' </summary>
         Const dHex = "C?C(C(C(C(C)O?)O)O)O"
+
+        ''' <summary>
+        ''' pentose
+        ''' 
+        ''' Canonical SMILES: C1C(C(C(C(O1)O)O)O)O
+        ''' </summary>
         Const Pen = "C?C(C(C(CO?)O)O)O"
+        ''' <summary>
+        ''' Malonic acid
+        ''' 
+        ''' Canonical SMILES: C(C(=O)O)C(=O)O
+        ''' </summary>
         Const Mal = "C(=O)CC(=O)O"
+        ''' <summary>
+        ''' Coumarinic acid
+        ''' 
+        ''' Canonical SMILES: C1=CC=C(C(=C1)C=CC(=O)O)O
+        ''' </summary>
         Const Cou = "c?ccc(cc?)C=CC(=O)O"
+        ''' <summary>
+        ''' Ferulic acid
+        ''' 
+        ''' Canonical SMILES: COC1=C(C=CC(=C1)C=CC(=O)O)O
+        ''' </summary>
         Const Fer = "COc?cc(ccc?O)C=CC(=O)O"
+        ''' <summary>
+        ''' Sinapinic acid
+        ''' 
+        ''' Canonical SMILES: COC1=CC(=CC(=C1O)OC)C=CC(=O)O
+        ''' </summary>
         Const Sin = "COc?cc(C=CC(=O)O)cc(c?O)OC"
         Const DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
