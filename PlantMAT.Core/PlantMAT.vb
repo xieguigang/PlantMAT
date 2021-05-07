@@ -518,12 +518,12 @@ Module PlantMAT
     ''' query KNApSAcK database
     ''' </summary>
     ''' <param name="keywords"></param>
-    ''' <param name="cache$"></param>
     ''' <returns></returns>
     <ExportAPI("requestKNApSAcK")>
-    Public Function RequestKNApSAcK(<RRawVectorArgument> keywords As Object, Optional cache$ = "./") As Information()
+    Public Function RequestKNApSAcK(<RRawVectorArgument> keywords As Object, Optional env As Environment = Nothing) As Information()
         Dim words As String() = REnv.asVector(Of String)(keywords)
         Dim result As New List(Of Information)
+        Dim cache As String = env.globalEnvironment.options.getOption("KNApSAcK.cache", App.CurrentDirectory)
 
         For Each query As String In words
             For Each entry As ResultEntry In Search.Search(word:=query, cache:=cache)
