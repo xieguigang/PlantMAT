@@ -22,8 +22,9 @@ let predictIons as function(ions, library, ionMode = 1, settings = configDefault
 #' apply the default configuration
 #'
 #' @param mzPPM ppm value for MS2 annotation
+#' @param aglyconeSet a list of user defined aglycone candidate set.
 #' 
-let configDefault as function(mzPPM = 30, precursors = ["[M]+", "[M]-", "[M+H]+", "[M-H]-"]) {
+let configDefault as function(mzPPM = 30, precursors = ["[M]+", "[M]-", "[M+H]+", "[M-H]-"], aglyconeSet = NULL) {
 	config(AglyconeMWRange = [250, 1200], SearchPPM = 5, mzPPM = mzPPM, NoiseFilter = 0.01,
 		NumofSugarAll    = [0,9999],
 		NumofAcidAll     = [0,9999],
@@ -36,6 +37,7 @@ let configDefault as function(mzPPM = 30, precursors = ["[M]+", "[M]-", "[M+H]+"
 		NumofAcidFer     = [0,12],
 		NumofAcidSin     = [0,12],
 		NumofAcidDDMP    = [0,12],
-		PrecursorIonType = precursors
+		PrecursorIonType = precursors,
+		aglyconeSet      = aglyconeSet 
 	);
 } 
