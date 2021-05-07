@@ -170,6 +170,31 @@ Namespace Algorithm
                 .annotation = $"[M]{Rsyb.Last}"
             }
 
+            If Mal_max > 0 Then
+                pIonList("[Mal]-") = New MzAnnotation With {.productMz = Mal_w, .annotation = "[Mal]-"}
+            End If
+            If Cou_max > 0 Then
+                pIonList("[Cou]-") = New MzAnnotation With {.productMz = Cou_w, .annotation = "[Cou]-"}
+            End If
+            If Fer_max > 0 Then
+                pIonList("[Fer]-") = New MzAnnotation With {.productMz = Fer_w, .annotation = "[Fer]-"}
+            End If
+            If Sin_max > 0 Then
+                pIonList("[Sin]-") = New MzAnnotation With {.productMz = Sin_w, .annotation = "[Sin]-"}
+            End If
+            If DDMP_max > 0 Then
+                pIonList("[DDMP]-") = New MzAnnotation With {.productMz = DDMP_w, .annotation = "[DDMP]-"}
+            End If
+
+            For Each acid In externals.Where(Function(x) x.type = NeutralTypes.acid)
+                If acid.max > 0 Then
+                    pIonList($"[{acid.aglycone}]-") = New MzAnnotation With {
+                        .productMz = FormulaScanner.EvaluateExactMass(acid.formula),
+                        .annotation = $"[{acid.aglycone}]-"
+                    }
+                End If
+            Next
+
             ' Do brute force iteration to generate all hypothetical neutral losses
             ' as a combination of different glycosyl and acyl groups, and
             ' for each predicted neutral loss, calcualte the ion mz
