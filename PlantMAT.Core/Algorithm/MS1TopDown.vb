@@ -75,12 +75,23 @@ Namespace Algorithm
         Dim AglyconeSource As db_AglyconeSource = db_AglyconeSource.All
         Dim SearchPPM As Double
         Dim Precursors As PrecursorInfo()
+        Dim aglyconeSet As NamedValue(Of Double)()
 
         Public Sub New(library As Library(), settings As Settings)
             MyBase.New(settings)
 
             ' load metabolite reference library
             Me.library = library
+
+            If settings.AglyconeSet.IsNullOrEmpty Then
+                Me.aglyconeSet = Nothing
+            Else
+                Me.aglyconeSet = settings.AglyconeSet _
+                    .Select(Function(a)
+                                Return New NamedValue(Of Double)(a.name, Val(a.text))
+                            End Function) _
+                    .ToArray
+            End If
         End Sub
 
         Protected Friend Overrides Sub applySettings()
@@ -183,16 +194,23 @@ Namespace Algorithm
             Dim neutralLossSearch As New NeutralLossSearch(settings, {})
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
-            Dim M_w = (precursorIon - PrecursorIonMZ) / PrecursorIonN
+            Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
+            Dim search As IEnumerable(Of NeutralLoss)
 
             Call neutralLossSearch.applySettings()
 
-            For Each neutralLoss As NeutralLoss In neutralLossSearch.NeutralLosses(precursorIon, precursor)
+            If aglyconeSet.IsNullOrEmpty Then
+                search = neutralLossSearch.NeutralLosses(precursorIon, precursor)
+            Else
+                search = neutralLossSearch.SearchAny(aglyconeSet, precursorIon, precursor)
+            End If
+
+            For Each neutralLoss As NeutralLoss In search
                 Dim Sugar_n As Integer = neutralLoss.Sugar_n
                 Dim Acid_n As Integer = neutralLoss.Acid_n
                 Dim Attn_w As Double = neutralLoss.Attn_w
-                Dim nH2O_w = (Sugar_n + Acid_n) * H2O_w
-                Dim Bal = neutralLoss.AglyconeExactMass(M_w)
+                Dim nH2O_w As Double = (Sugar_n + Acid_n) * H2O_w
+                Dim Bal As Double = neutralLoss.AglyconeExactMass(M_w)
 
                 For Each candidate In RunDatabaseSearch(RT_E:=rt_e, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss)
                     candidate.Theoretical_ExactMass = M_w

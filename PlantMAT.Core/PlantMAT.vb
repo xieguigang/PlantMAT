@@ -60,6 +60,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
+Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports PlantMAT.Core.Algorithm
 Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
@@ -68,6 +69,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports any = Microsoft.VisualBasic.Scripting
 Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
 Imports REnv = SMRUCC.Rsharp.Runtime
@@ -185,7 +187,21 @@ Module PlantMAT
                               <RRawVectorArgument(GetType(String))> Optional PrecursorIonType As Object = "[M]+|[M]-|[M+H]+|[M-H]-",
                               Optional SearchPPM As Double = 10,
                               Optional NoiseFilter As Double = 0.05,
-                              Optional mzPPM As Double = 30) As Settings
+                              Optional mzPPM As Double = 30,
+                              Optional aglyconeSet As list = Nothing) As Settings
+
+        Dim aglyconeList As NamedValue() = Nothing
+
+        If Not aglyconeSet Is Nothing Then
+            aglyconeList = aglyconeSet.slots _
+                .Select(Function(a)
+                            Return New NamedValue With {
+                                .name = a.Key,
+                                .text = any.ToString(a.Value)
+                            }
+                        End Function) _
+                .ToArray
+        End If
 
         Return New Settings With {
             .AglyconeMWRange = DirectCast(AglyconeMWRange, Double()),
@@ -205,7 +221,8 @@ Module PlantMAT
             .NumofSugarHexA = DirectCast(NumofSugarHexA, Integer()),
             .NumofSugarPen = DirectCast(NumofSugarPen, Integer()),
             .PrecursorIonType = PrecursorIonType,
-            .SearchPPM = SearchPPM
+            .SearchPPM = SearchPPM,
+            .AglyconeSet = aglyconeList
         }
     End Function
 
