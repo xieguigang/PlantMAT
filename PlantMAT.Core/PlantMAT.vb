@@ -245,6 +245,14 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
+    ''' <summary>
+    ''' Run ms1 search
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <param name="library"></param>
+    ''' <param name="settings"></param>
+    ''' <param name="ionMode"></param>
+    ''' <returns></returns>
     <ExportAPI("MS1CP")>
     Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
         Return ParallelPipeline.MS1CP(query, library, settings, ionMode)
