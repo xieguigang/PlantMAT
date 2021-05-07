@@ -201,14 +201,58 @@ Namespace Algorithm
 
             ' 暴力枚举的方法来搜索代谢物信息
             For Hex_n As Integer = NumHexMin To NumHexMax
+
+                If Not combination.CheckUpBound(M_w, Hex_n, 0, 0, 0, 0, 0, 0, 0, 0) Then
+                    Exit For
+                End If
+
                 For HexA_n As Integer = NumHexAMin To NumHexAMax
+
+                    If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, 0, 0, 0, 0, 0, 0, 0) Then
+                        Exit For
+                    End If
+
                     For dHex_n As Integer = NumdHexMin To NumdHexMax
+
+                        If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, 0, 0, 0, 0, 0, 0) Then
+                            Exit For
+                        End If
+
                         For Pen_n As Integer = NumPenMin To NumPenMax
+
+                            If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, 0, 0, 0, 0, 0) Then
+                                Exit For
+                            End If
+
                             For Mal_n As Integer = NumMalMin To NumMalMax
+
+                                If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, 0, 0, 0, 0) Then
+                                    Exit For
+                                End If
+
                                 For Cou_n As Integer = NumCouMin To NumCouMax
+
+                                    If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, 0, 0, 0) Then
+                                        Exit For
+                                    End If
+
                                     For Fer_n As Integer = NumFerMin To NumFerMax
+
+                                        If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, 0, 0) Then
+                                            Exit For
+                                        End If
+
                                         For Sin_n As Integer = NumSinMin To NumSinMax
+
+                                            If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, 0) Then
+                                                Exit For
+                                            End If
+
                                             For DDMP_n As Integer = NumDDMPMin To NumDDMPMax
+
+                                                If Not combination.CheckUpBound(M_w, Hex_n, HexA_n, dHex_n, Pen_n, Mal_n, Cou_n, Fer_n, Sin_n, DDMP_n) Then
+                                                    Exit For
+                                                End If
 
                                                 For Each check As NamedValue(Of NeutralLoss) In combination.BruteForceIterations(
                                                     Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,

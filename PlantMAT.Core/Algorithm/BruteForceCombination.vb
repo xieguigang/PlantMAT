@@ -60,6 +60,21 @@ Namespace Algorithm
             End If
         End Function
 
+        Public Function CheckUpBound(M_w#, Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%) As Boolean
+            Dim sugar_n As Integer = Hex + HexA + dHex + Pen
+            Dim acid_n As Integer = Mal + Cou + Fer + Sin + DDMP
+            Dim nH2O_w = (sugar_n + acid_n) * H2O_w
+            Dim Attn_w = Hex * Hex_w + HexA * HexA_w + dHex * dHex_w + Pen * Pen_w + Mal * Mal_w + Cou * Cou_w + Fer * Fer_w + Sin * Sin_w + DDMP * DDMP_w
+
+            If sugar_n > NumSugarMax OrElse acid_n > NumAcidMax Then
+                Return False
+            ElseIf (M_w + nH2O_w - Attn_w) < MinAglyconeExactMass Then ' MinAglyconeExactMass
+                Return False
+            Else
+                Return True
+            End If
+        End Function
+
         Private Iterator Function BruteForceIterations(Of T)(defines As NeutralGroup(), loss As NeutralLoss, M_w#, iteration As Iteration(Of T)) As IEnumerable(Of T)
             Dim external As NeutralGroup = defines(Scan0)
             Dim pop As NeutralGroup() = defines.Skip(1).ToArray

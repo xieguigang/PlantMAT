@@ -159,6 +159,7 @@ Namespace Models.AnnotationResult
             Me.Err = clone.Err
             Me.ExactMass = clone.ExactMass
             Me.Fer = clone.Fer
+            Me.AglyconeFamily = clone.AglyconeFamily
 
             If Not clone.Glycosyl Is Nothing Then
                 Me.Glycosyl = New Glycosyl With {

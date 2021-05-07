@@ -46,6 +46,7 @@
 
 Imports System.IO
 Imports System.Text
+Imports System.Xml.Serialization
 Imports Microsoft.VisualBasic.Text.Xml.Models
 Imports PlantMAT.Core.Models
 
@@ -53,22 +54,23 @@ Public Class Settings
 
     Public Property AglyconeType As db_AglyconeType
     Public Property AglyconeSource As db_AglyconeSource
-    Public Property AglyconeMWRange As Double()
-    Public Property NumofSugarAll As Integer()
-    Public Property NumofAcidAll As Integer()
 
-    Public Property NumofSugarHex As Integer()
-    Public Property NumofSugarHexA As Integer()
-    Public Property NumofSugardHex As Integer()
-    Public Property NumofSugarPen As Integer()
+    <XmlAttribute> Public Property AglyconeMWRange As Double()
+    <XmlElement> Public Property NumofSugarAll As Integer()
+    <XmlElement> Public Property NumofAcidAll As Integer()
 
-    Public Property NumofAcidMal As Integer()
-    Public Property NumofAcidCou As Integer()
-    Public Property NumofAcidFer As Integer()
-    Public Property NumofAcidSin As Integer()
-    Public Property NumofAcidDDMP As Integer()
+    <XmlElement> Public Property NumofSugarHex As Integer()
+    <XmlElement> Public Property NumofSugarHexA As Integer()
+    <XmlElement> Public Property NumofSugardHex As Integer()
+    <XmlElement> Public Property NumofSugarPen As Integer()
 
-    Public Property PrecursorIonType As String()
+    <XmlElement> Public Property NumofAcidMal As Integer()
+    <XmlElement> Public Property NumofAcidCou As Integer()
+    <XmlElement> Public Property NumofAcidFer As Integer()
+    <XmlElement> Public Property NumofAcidSin As Integer()
+    <XmlElement> Public Property NumofAcidDDMP As Integer()
+
+    <XmlAttribute> Public Property PrecursorIonType As String()
 
     ''' <summary>
     ''' 一级母离子搜索的ppm阈值
@@ -88,6 +90,7 @@ Public Class Settings
     ''' <returns></returns>
     Public Property mzPPM As Double
 
+    <XmlElement>
     Public Property AglyconeSet As NamedValue()
 
     ''' <summary>

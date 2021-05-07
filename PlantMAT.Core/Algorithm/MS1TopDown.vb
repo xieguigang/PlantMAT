@@ -109,6 +109,9 @@ Namespace Algorithm
             Dim output As New List(Of Query)
             Dim mzList = GroupQueryByMz(query)
 
+            Call Console.WriteLine("Run Annotation with parameters:")
+            Call Console.WriteLine(settings.GetXml)
+
             For Each block As NamedCollection(Of Query) In mzList
                 Call New MS1TopDown(library, settings) _
                     .CombinatorialPrediction(block, ionMode) _

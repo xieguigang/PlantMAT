@@ -69,11 +69,23 @@ Public Module ParallelPipeline
         Return result
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <param name="library"></param>
+    ''' <param name="settings"></param>
+    ''' <param name="ionMode"></param>
+    ''' <param name="verbose"></param>
+    ''' <param name="debugPort">debug of parallel library</param>
+    ''' <param name="sequenceMode">debug of algorithm</param>
+    ''' <returns></returns>
     <Extension>
     Public Function MS1CP(query As Query(), library As Library(), settings As Settings,
                           Optional ionMode As Integer = 1,
                           Optional verbose As Boolean = False,
-                          Optional debugPort As Integer? = Nothing) As Query()
+                          Optional debugPort As Integer? = Nothing,
+                          Optional sequenceMode As Boolean = False) As Query()
 
         Dim result As New List(Of Query)(query.Length)
         Dim start = App.NanoTime
@@ -87,7 +99,10 @@ Public Module ParallelPipeline
         Console.WriteLine("Peform combinatorial enumeration and show the calculation progress (MS1CP)")
         Console.WriteLine($" --> {query.Length} queries...")
 
-        If App.IsMicrosoftPlatform Then
+        If sequenceMode Then
+            ' debug of the algorithm
+            runParallel = Algorithm.MS1TopDown.MS1CP(query, library, settings, ionMode)
+        ElseIf App.IsMicrosoftPlatform Then
             runParallel = (Iterator Function() As IEnumerable(Of Query)
                                For Each block As IEnumerable(Of Query) In From group As NamedCollection(Of Query)
                                                                           In Algorithm.MS1TopDown.GroupQueryByMz(query) _

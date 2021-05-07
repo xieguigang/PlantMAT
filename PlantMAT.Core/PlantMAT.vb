@@ -269,6 +269,9 @@ Module PlantMAT
     ''' <param name="library"></param>
     ''' <param name="settings"></param>
     ''' <param name="ionMode"></param>
+    ''' <param name="sequenceMode">
+    ''' run in algorithm debug mode, do not set this option to TRUE in production mode.
+    ''' </param>
     ''' <returns></returns>
     ''' <remarks>
     ''' ``options(verbose = TRUE)`` for display debug information.
@@ -276,6 +279,7 @@ Module PlantMAT
     <ExportAPI("MS1CP")>
     Public Function MS1CP(query As Query(), library As Library(), settings As Settings,
                           Optional ionMode As Integer = 1,
+                          Optional sequenceMode As Boolean = False,
                           Optional env As Environment = Nothing) As Query()
 
         Dim verbose As Boolean = env.globalEnvironment.options.verbose
@@ -291,7 +295,8 @@ Module PlantMAT
             settings:=settings,
             ionMode:=ionMode,
             verbose:=verbose,
-            debugPort:=debugPort
+            debugPort:=debugPort,
+            sequenceMode:=sequenceMode
         )
 
         Return result
