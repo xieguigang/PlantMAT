@@ -50,9 +50,12 @@ Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK
+Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK.Data
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -475,4 +478,60 @@ Module PlantMAT
             Return result
         End Using
     End Function
+
+    ''' <summary>
+    ''' Create PlantMAT reference meta library from KNApSAcK database
+    ''' </summary>
+    ''' <param name="KNApSAcK"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("fromKNApSAcK")>
+    <RApiReturn(GetType(Library))>
+    Public Function LibraryFromKNApSAcK(<RRawVectorArgument> KNApSAcK As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of Information)(KNApSAcK, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim ref As Library() = data.populates(Of Information)(env) _
+            .Select(Function(i)
+                        Return New Library With {
+                            .[Class] = "NA",
+                            .CommonName = i.name(Scan0),
+                            .[Date] = Now,
+                            .Editor = "KNApSAcK",
+                            .ExactMass = i.mw,
+                            .Formula = i.formula,
+                            .Genus = "NA",
+                            .Type = "NA",
+                            .Universal_SMILES = i.SMILES,
+                            .Xref = i.CID
+                        }
+                    End Function) _
+            .ToArray
+
+        Return ref
+    End Function
+
+    ''' <summary>
+    ''' query KNApSAcK database
+    ''' </summary>
+    ''' <param name="keywords"></param>
+    ''' <param name="cache$"></param>
+    ''' <returns></returns>
+    <ExportAPI("requestKNApSAcK")>
+    Public Function RequestKNApSAcK(<RRawVectorArgument> keywords As Object, Optional cache$ = "./") As Information()
+        Dim words As String() = REnv.asVector(Of String)(keywords)
+        Dim result As New List(Of Information)
+
+        For Each query As String In words
+            For Each entry As ResultEntry In Search.Search(word:=query, cache:=cache)
+                result += Search.GetData(entry.C_ID, cache)
+            Next
+        Next
+
+        Return result.ToArray
+    End Function
+
 End Module

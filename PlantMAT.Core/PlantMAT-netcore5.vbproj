@@ -94,6 +94,7 @@
     <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\www\Microsoft.VisualBasic.NETProtocol\network-netcore5.vbproj" />
     <ProjectReference Include="..\..\mzkit\src\assembly\assembly\assembly-netcore5.vbproj" />
     <ProjectReference Include="..\..\mzkit\src\metadb\Chemoinformatics\chemoinformatics-netcore5.vbproj" />
+    <ProjectReference Include="..\..\mzkit\src\metadb\KNApSAcK\KNApSAcK.NET5.vbproj" />
     <ProjectReference Include="..\..\mzkit\src\mzmath\ms2_math-core\mzmath-netcore5.vbproj" />
   </ItemGroup>
 
