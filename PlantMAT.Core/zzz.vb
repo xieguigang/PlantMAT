@@ -58,4 +58,11 @@ Public Class zzz
         Call Console.WriteLine("    --parallel <n_threads>")
         Call Console.WriteLine("")
     End Sub
+
+    ' Cyanidin 3-glucoside: C1=CC(=C(C=C1C2=[O+]C3=CC(=CC(=C3C=C2OC4C(C(C(C(O4)CO)O)O)O)O)O)O)O.[Cl-]
+    '                       C1=CC(=C(C=C1C2=[O+]C3=CC(=CC(=C3C=C2O ->   C4C(C(C(C(O4)CO)O)O)O    <- )O)O)O)O.[Cl-]
+    ' Cyanidin:             C1=CC(=C(C=C1C2=[O+]C3=CC(=CC(=C3C=C2O                                  )O)O)O)O
+    ' Glucoside:                                                     C(C1C(C(C(C(O1)O)O)O)O)O
+    ' D-Glucose:                                                     C(C1C(C(C(C(O1)O)O)O)O)O
+
 End Class

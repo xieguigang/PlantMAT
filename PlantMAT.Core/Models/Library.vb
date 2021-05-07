@@ -68,6 +68,10 @@ Namespace Models
         <MessagePackMember(5)> Public Property ExactMass As Double
         <MessagePackMember(6)> Public Property Genus As String
 
+        ''' <summary>
+        ''' Universal SMILES
+        ''' </summary>
+        ''' <returns></returns>
         <Column("Universal SMILES")>
         <MessagePackMember(7)> Public Property Universal_SMILES As String
         <MessagePackMember(8)> Public Property Editor As String

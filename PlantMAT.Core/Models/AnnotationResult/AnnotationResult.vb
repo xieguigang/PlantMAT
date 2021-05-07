@@ -66,12 +66,12 @@ Namespace Models.AnnotationResult
         Public Property Theoretical_PrecursorMz As Double
 
         ''' <summary>
-        ''' 1
+        ''' 1 Universal SMILES from the library information
         ''' </summary>
         ''' <returns></returns>
         Public Property SubstructureAgly As String
         ''' <summary>
-        ''' 2
+        ''' 2 metabolite common name
         ''' </summary>
         ''' <returns></returns>
         Public Property Name As String

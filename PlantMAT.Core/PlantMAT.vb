@@ -50,9 +50,12 @@ Imports BioNovoGene.Analytical.MassSpectrometry.Assembly.ASCII.MGF
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
+Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK
+Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK.Data
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
@@ -242,9 +245,39 @@ Module PlantMAT
         Return New MS1TopDown(library, settings)
     End Function
 
+    ''' <summary>
+    ''' Run ms1 search
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <param name="library"></param>
+    ''' <param name="settings"></param>
+    ''' <param name="ionMode"></param>
+    ''' <returns></returns>
+    ''' <remarks>
+    ''' ``options(verbose = TRUE)`` for display debug information.
+    ''' </remarks>
     <ExportAPI("MS1CP")>
-    Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
-        Return ParallelPipeline.MS1CP(query, library, settings, ionMode)
+    Public Function MS1CP(query As Query(), library As Library(), settings As Settings,
+                          Optional ionMode As Integer = 1,
+                          Optional env As Environment = Nothing) As Query()
+
+        Dim verbose As Boolean = env.globalEnvironment.options.verbose
+        Dim debugPort As Integer? = Val(env.globalEnvironment.options.getOption("snowfall.debugPort", Nothing))
+
+        If debugPort = 0 Then
+            debugPort = Nothing
+        End If
+
+        Dim result As Query() = ParallelPipeline.MS1CP(
+            query:=query,
+            library:=library,
+            settings:=settings,
+            ionMode:=ionMode,
+            verbose:=verbose,
+            debugPort:=debugPort
+        )
+
+        Return result
     End Function
 
     ''' <summary>
@@ -475,4 +508,60 @@ Module PlantMAT
             Return result
         End Using
     End Function
+
+    ''' <summary>
+    ''' Create PlantMAT reference meta library from KNApSAcK database
+    ''' </summary>
+    ''' <param name="KNApSAcK"></param>
+    ''' <param name="env"></param>
+    ''' <returns></returns>
+    <ExportAPI("fromKNApSAcK")>
+    <RApiReturn(GetType(Library))>
+    Public Function LibraryFromKNApSAcK(<RRawVectorArgument> KNApSAcK As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of Information)(KNApSAcK, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim ref As Library() = data.populates(Of Information)(env) _
+            .Select(Function(i)
+                        Return New Library With {
+                            .[Class] = "NA",
+                            .CommonName = i.name(Scan0),
+                            .[Date] = Now,
+                            .Editor = "KNApSAcK",
+                            .ExactMass = i.mw,
+                            .Formula = i.formula,
+                            .Genus = "NA",
+                            .Type = "NA",
+                            .Universal_SMILES = i.SMILES,
+                            .Xref = i.CID
+                        }
+                    End Function) _
+            .ToArray
+
+        Return ref
+    End Function
+
+    ''' <summary>
+    ''' query KNApSAcK database
+    ''' </summary>
+    ''' <param name="keywords"></param>
+    ''' <returns></returns>
+    <ExportAPI("requestKNApSAcK")>
+    Public Function RequestKNApSAcK(<RRawVectorArgument> keywords As Object, Optional env As Environment = Nothing) As Information()
+        Dim words As String() = REnv.asVector(Of String)(keywords)
+        Dim result As New List(Of Information)
+        Dim cache As String = env.globalEnvironment.options.getOption("KNApSAcK.cache", App.CurrentDirectory)
+
+        For Each query As String In words
+            For Each entry As ResultEntry In Search.Search(word:=query, cache:=cache)
+                result += Search.GetData(entry.C_ID, cache)
+            Next
+        Next
+
+        Return result.ToArray
+    End Function
+
 End Module
