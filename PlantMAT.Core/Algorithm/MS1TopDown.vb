@@ -225,6 +225,23 @@ Namespace Algorithm
             Next
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="xref$"></param>
+        ''' <param name="RT_E#"></param>
+        ''' <param name="AglyN$"></param>
+        ''' <param name="AglyT$"></param>
+        ''' <param name="AglyO$"></param>
+        ''' <param name="AglyW#"></param>
+        ''' <param name="AglyS">Universal SMILES</param>
+        ''' <param name="M_w#"></param>
+        ''' <param name="Attn_w#"></param>
+        ''' <param name="nH2O_w#"></param>
+        ''' <param name="neutralLoss"></param>
+        ''' <param name="Sugar_n%"></param>
+        ''' <param name="Acid_n%"></param>
+        ''' <returns></returns>
         Private Iterator Function DatabaseSearch(xref$, RT_E#, AglyN$, AglyT$, AglyO$, AglyW#, AglyS$, M_w#, Attn_w#, nH2O_w#, neutralLoss As NeutralLoss, Sugar_n%, Acid_n%) As IEnumerable(Of CandidateResult)
             If AglyT = AglyconeType.ToString OrElse AglyconeType = db_AglyconeType.All Then
                 If AglyO = AglyconeSource.ToString OrElse AglyconeSource = db_AglyconeSource.All Then
@@ -300,12 +317,14 @@ Namespace Algorithm
         ''' Canonical SMILES: C1C(C(C(C(O1)O)O)O)O
         ''' </summary>
         Const Pen = "C?C(C(C(CO?)O)O)O"
+
         ''' <summary>
         ''' Malonic acid
         ''' 
         ''' Canonical SMILES: C(C(=O)O)C(=O)O
         ''' </summary>
         Const Mal = "C(=O)CC(=O)O"
+
         ''' <summary>
         ''' Coumarinic acid
         ''' 
@@ -327,7 +346,7 @@ Namespace Algorithm
         Const DDMP = "CC?=C(C(=O)CC(O)O?)O"
 
         ''' <summary>
-        ''' 
+        ''' work on the SMILES information from the library
         ''' </summary>
         ''' <param name="peakNO">apply for ``candidate.smiles``: ["*placeholder*"]</param>
         ''' <param name="candidate"></param>
@@ -338,8 +357,11 @@ Namespace Algorithm
             Dim n1 As Long, n2 As Long
             Dim AglyN As String
 
+            ' this is the metabolite common name
             AglyN = candidate.Name
+            ' Universal SMILES
             AglyS1 = candidate.SubstructureAgly
+            ' AglyS2 is apply for static of the -OH group
             AglyS2 = Strings.Replace(AglyS1, "O)", ".)")
             AglyS2 = Strings.Replace(AglyS2, "=.", "=O")
 
@@ -350,7 +372,9 @@ Namespace Algorithm
             OH_n = 0
 
             For e As Integer = 1 To Len(AglyS2)
-                If Mid(AglyS2, e, 1) = "." Then OH_n = OH_n + 1
+                If Mid(AglyS2, e, 1) = "." Then
+                    OH_n = OH_n + 1
+                End If
             Next e
 
             If OH_n = 0 Then Return
@@ -377,6 +401,7 @@ Namespace Algorithm
             Dim Sug_p(,) As String
             Dim l As Integer
 
+            ' get totoal all predicted result count of suger
             Sug_n = candidate.GetSug_nStatic.Sum
 
             If Sug_n = 0 Then
@@ -387,6 +412,7 @@ Namespace Algorithm
 
             l = 1
 
+            ' a count vector of [Hex, HexA, dHex, Pen, Mal, Cou, Fer, Sin, DDMP]
             Dim candidateSug_nStatic = candidate.GetSug_nStatic
 
             For e As Integer = 3 To 11
