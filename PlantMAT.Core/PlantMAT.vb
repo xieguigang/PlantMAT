@@ -253,9 +253,31 @@ Module PlantMAT
     ''' <param name="settings"></param>
     ''' <param name="ionMode"></param>
     ''' <returns></returns>
+    ''' <remarks>
+    ''' ``options(verbose = TRUE)`` for display debug information.
+    ''' </remarks>
     <ExportAPI("MS1CP")>
-    Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
-        Return ParallelPipeline.MS1CP(query, library, settings, ionMode)
+    Public Function MS1CP(query As Query(), library As Library(), settings As Settings,
+                          Optional ionMode As Integer = 1,
+                          Optional env As Environment = Nothing) As Query()
+
+        Dim verbose As Boolean = env.globalEnvironment.options.verbose
+        Dim debugPort As Integer? = Val(env.globalEnvironment.options.getOption("snowfall.debugPort", Nothing))
+
+        If debugPort = 0 Then
+            debugPort = Nothing
+        End If
+
+        Dim result As Query() = ParallelPipeline.MS1CP(
+            query:=query,
+            library:=library,
+            settings:=settings,
+            ionMode:=ionMode,
+            verbose:=verbose,
+            debugPort:=debugPort
+        )
+
+        Return result
     End Function
 
     ''' <summary>

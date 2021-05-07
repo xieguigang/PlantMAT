@@ -51,8 +51,14 @@ Imports stdNum = System.Math
 
 Public Module ParallelPipeline
 
-    Private Function MS1CPTask(query As IEnumerable(Of NamedCollection(Of Query)), libfile As SocketRef, settings As Settings, ionMode As Integer) As Query()
-        Dim snowFall As SlaveTask = Host.CreateSlave
+    Private Function MS1CPTask(query As IEnumerable(Of NamedCollection(Of Query)),
+                               libfile As SocketRef,
+                               settings As Settings,
+                               ionMode As Integer,
+                               verbose As Boolean,
+                               debugPort As Integer?) As Query()
+
+        Dim snowFall As SlaveTask = Host.CreateSlave(verbose:=verbose, debugPort:=debugPort)
         Dim api As New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP)
         Dim allPip As Query() = query _
             .Select(Function(p) p.AsEnumerable) _
@@ -64,7 +70,11 @@ Public Module ParallelPipeline
     End Function
 
     <Extension>
-    Public Function MS1CP(query As Query(), library As Library(), settings As Settings, Optional ionMode As Integer = 1) As Query()
+    Public Function MS1CP(query As Query(), library As Library(), settings As Settings,
+                          Optional ionMode As Integer = 1,
+                          Optional verbose As Boolean = False,
+                          Optional debugPort As Integer? = Nothing) As Query()
+
         Dim result As New List(Of Query)(query.Length)
         Dim start = App.NanoTime
         Dim elapse As Double
@@ -95,13 +105,13 @@ Public Module ParallelPipeline
             Dim size As Integer = stdNum.Max(mzList.Length / (PublicVSCode.Parallelism + 1), 1)
             Dim taskList As Func(Of Query())() = mzList _
                 .Split(size) _
-                .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode))) _
+                .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode, verbose, debugPort:=debugPort))) _
                 .ToArray
 
             Call Console.WriteLine($"Run parallel with {size} task elements in {taskList.Length} task queue!")
 
             runParallel = (Iterator Function() As IEnumerable(Of Query)
-                               For Each block As Query() In New ThreadTask(Of Query())(taskList) _
+                               For Each block As Query() In New ThreadTask(Of Query())(taskList, debugMode:=Not debugPort Is Nothing) _
                                    .WithDegreeOfParallelism(PublicVSCode.Parallelism) _
                                    .RunParallel
 
