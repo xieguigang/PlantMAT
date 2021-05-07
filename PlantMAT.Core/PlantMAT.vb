@@ -586,4 +586,21 @@ Module PlantMAT
         Return result.ToArray
     End Function
 
+    <ExportAPI("KNApSAcK.as.table")>
+    <RApiReturn(GetType(InformationTable))>
+    Public Function KNApSAcKTable(<RRawVectorArgument> KNApSAcK As Object, Optional env As Environment = Nothing) As Object
+        Dim data As pipeline = pipeline.TryCreatePipeline(Of Information)(KNApSAcK, env)
+
+        If data.isError Then
+            Return data.getError
+        End If
+
+        Dim table As InformationTable() = data _
+            .populates(Of Information)(env) _
+            .Select(AddressOf InformationTable.FromDetails) _
+            .ToArray
+
+        Return table
+    End Function
+
 End Module
