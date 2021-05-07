@@ -57,8 +57,17 @@ Namespace Algorithm
     Public Class NeutralLossSearch : Inherits PlantMATAlgorithm
 
 #Region "Search Space"
-        Dim NumHexMin, NumHexMax, NumHexAMin, NumHexAMax, NumdHexMin, NumdHexMax, NumPenMin, NumPenMax, NumMalMin, NumMalMax, NumCouMin, NumCouMax, NumFerMin, NumFerMax, NumSinMin, NumSinMax, NumDDMPMin, NumDDMPMax As Integer
-        Dim NumSugarMin, NumSugarMax, NumAcidMin, NumAcidMax As Integer
+        Dim NumHexMin, NumHexMax As Integer
+        Dim NumHexAMin, NumHexAMax As Integer
+        Dim NumdHexMin, NumdHexMax As Integer
+        Dim NumPenMin, NumPenMax As Integer
+        Dim NumMalMin, NumMalMax As Integer
+        Dim NumCouMin, NumCouMax As Integer
+        Dim NumFerMin, NumFerMax As Integer
+        Dim NumSinMin, NumSinMax As Integer
+        Dim NumDDMPMin, NumDDMPMax As Integer
+        Dim NumSugarMin, NumSugarMax As Integer
+        Dim NumAcidMin, NumAcidMax As Integer
 #End Region
 
         ReadOnly externalDefines As NeutralGroup()
@@ -165,6 +174,13 @@ Namespace Algorithm
             Return New BruteForceCombination(externalDefines, NumSugarMax:=NumSugarMax, NumAcidMax:=NumAcidMax, settings.AglyconeMWRange(0))
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="aglycones">custom aglycone candidates</param>
+        ''' <param name="precursorIon"></param>
+        ''' <param name="precursor"></param>
+        ''' <returns></returns>
         Public Iterator Function SearchAny(aglycones As IEnumerable(Of NamedValue(Of Double)), precursorIon As Double, precursor As PrecursorInfo) As IEnumerable(Of NamedValue(Of NeutralLoss))
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M

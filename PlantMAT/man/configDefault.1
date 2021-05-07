@@ -1,15 +1,18 @@
 ﻿.TH CONFIGDEFAULT 1 2021-05-07 "" "apply the default configuration"
 .SH NAME
-configDefault \- configDefault(mzPPM = 30)
+configDefault \- configDefault(mzPPM = 30, precursors = [[M]+, [M]-, [M+H]+, [M-H]-])
 .SH SYNOPSIS
-\fIconfigDefault(mzPPM = 30)\fR
+\fIconfigDefault(mzPPM = 30, precursors = [[M]+, [M]-, [M+H]+, [M-H]-])\fR
 .SH OPTIONS
 .PP
 \fBmzPPM\fB \fR\- 30
 .PP
+.PP
+\fBprecursors\fB \fR\- [[M]+, [M]-, [M+H]+, [M-H]-]
+.PP
 .SH FILES
 .PP
-SMRUCC/R#.declare_function.configDefault at Run.R:line 24
+SMRUCC/R#.declare_function.configDefault at Run.R:line 26
 .PP
 .SH COPYRIGHT
 Copyright © Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/),  Licensed 2021
