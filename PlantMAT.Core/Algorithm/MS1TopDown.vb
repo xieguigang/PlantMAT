@@ -109,7 +109,7 @@ Namespace Algorithm
             Dim output As New List(Of Query)
             Dim mzList = GroupQueryByMz(query)
 
-            For Each block In mzList
+            For Each block As NamedCollection(Of Query) In mzList
                 Call New MS1TopDown(library, settings) _
                     .CombinatorialPrediction(block, ionMode) _
                     .DoCall(AddressOf output.AddRange)
@@ -195,17 +195,22 @@ Namespace Algorithm
             Dim PrecursorIonMZ As Double = precursor.adduct
             Dim PrecursorIonN As Double = precursor.M
             Dim M_w As Double = (precursorIon - PrecursorIonMZ) / PrecursorIonN
-            Dim search As IEnumerable(Of NeutralLoss)
+            Dim search As IEnumerable(Of NamedValue(Of NeutralLoss))
 
             Call neutralLossSearch.applySettings()
 
             If aglyconeSet.IsNullOrEmpty Then
-                search = neutralLossSearch.NeutralLosses(precursorIon, precursor)
+                search = neutralLossSearch _
+                    .NeutralLosses(precursorIon, precursor) _
+                    .Select(Function(loss)
+                                Return New NamedValue(Of NeutralLoss)("NA", loss)
+                            End Function)
             Else
                 search = neutralLossSearch.SearchAny(aglyconeSet, precursorIon, precursor)
             End If
 
-            For Each neutralLoss As NeutralLoss In search
+            For Each lossResult As NamedValue(Of NeutralLoss) In search
+                Dim neutralLoss As NeutralLoss = lossResult.Value
                 Dim Sugar_n As Integer = neutralLoss.Sugar_n
                 Dim Acid_n As Integer = neutralLoss.Acid_n
                 Dim Attn_w As Double = neutralLoss.Attn_w
@@ -215,6 +220,7 @@ Namespace Algorithm
                 For Each candidate In RunDatabaseSearch(RT_E:=rt_e, M_w#, Attn_w#, nH2O_w#, Sugar_n%, Acid_n%, neutralLoss)
                     candidate.Theoretical_ExactMass = M_w
                     candidate.Theoretical_PrecursorMz = Bal * PrecursorIonN + PrecursorIonMZ
+                    candidate.AglyconeFamily = lossResult.Name
 
                     Yield candidate
                 Next

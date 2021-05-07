@@ -145,6 +145,7 @@ Namespace Models.AnnotationResult
         Public Property SMILES As String()
         Public Property Ms2Anno As Ms2IonAnnotations
         Public Property Glycosyl As Glycosyl
+        Public Property AglyconeFamily As String
 
         Sub New()
         End Sub
