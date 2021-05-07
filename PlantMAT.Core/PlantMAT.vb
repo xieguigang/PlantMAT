@@ -580,6 +580,7 @@ Module PlantMAT
         For Each query As String In words
             For Each entry As ResultEntry In Search.Search(word:=query, cache:=cache)
                 result += Search.GetData(entry.C_ID, cache)
+                result.Last.query = query
             Next
         Next
 
