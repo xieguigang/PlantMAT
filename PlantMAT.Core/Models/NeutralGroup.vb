@@ -11,30 +11,30 @@ Namespace Models
         ' methylate
     End Enum
 
-    Public Structure NeutralGroup : Implements INeutralGroupHit
+    Public Class NeutralGroup : Implements INeutralGroupHit
 
         Public Property name As String
         Public Property formula As String
-        Public Property aglycone As String Implements INeutralGroupHit.aglycone
+        Public Property ionName As String Implements INeutralGroupHit.ionName
         Public Property type As NeutralTypes Implements INeutralGroupHit.type
         Public Property min As Integer
         Public Property max As Integer Implements INeutralGroupHit.nHit
 
         Public Overrides Function ToString() As String
-            Return aglycone
+            Return ionName
         End Function
 
-    End Structure
+    End Class
 
     Friend Interface INeutralGroupHit
-        Property aglycone As String
+        Property ionName As String
         Property nHit As Integer
         Property type As NeutralTypes
     End Interface
 
     Public Class NeutralGroupHit : Implements INeutralGroupHit
 
-        <MessagePackMember(0)> Public Property aglycone As String Implements INeutralGroupHit.aglycone
+        <MessagePackMember(0)> Public Property ionName As String Implements INeutralGroupHit.ionName
         <MessagePackMember(1)> Public Property formula As String
         <MessagePackMember(2)> Public Property exact_mass As Double
         <MessagePackMember(3)> Public Property type As NeutralTypes Implements INeutralGroupHit.type
@@ -48,7 +48,7 @@ Namespace Models
 
         Public Function Clone() As NeutralGroupHit
             Return New NeutralGroupHit With {
-                .aglycone = aglycone,
+                .ionName = ionName,
                 .exact_mass = exact_mass,
                 .formula = formula,
                 .type = type,
@@ -57,7 +57,7 @@ Namespace Models
         End Function
 
         Public Overrides Function ToString() As String
-            Return $"{aglycone} [{nHit}] {MassTotal}"
+            Return $"{ionName} [{nHit}] {MassTotal}"
         End Function
 
         Public Shared Function CopyVector(vec As IEnumerable(Of NeutralGroupHit)) As NeutralGroupHit()
@@ -66,7 +66,7 @@ Namespace Models
 
         Public Shared Function FromDefine(define As NeutralGroup) As NeutralGroupHit
             Return New NeutralGroupHit With {
-                .aglycone = define.aglycone,
+                .ionName = define.ionName,
                 .formula = define.formula,
                 .type = define.type,
                 .nHit = 0,

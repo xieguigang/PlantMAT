@@ -101,8 +101,8 @@ Namespace Algorithm
             Me.Agly_w = Agly_w
             Me.AglyN = AglyN
             Me.externals = externals.Where(Function(ng) ng.max > 0).ToArray
-            Me.externalLoss = externals.ToDictionary(Function(a) a.aglycone, Function(any) New StringBuilder)
-            Me.maxnExternals = externals.ToDictionary(Function(a) a.aglycone, Function(a) a.max)
+            Me.externalLoss = externals.ToDictionary(Function(a) a.ionName, Function(any) New StringBuilder)
+            Me.maxnExternals = externals.ToDictionary(Function(a) a.ionName, Function(a) a.max)
             Me.precursorMz = precursorMz
             Me.M_w = (precursorMz - precursor.adduct) / precursor.M
         End Sub
@@ -161,7 +161,7 @@ Namespace Algorithm
                  Total_max * H2O_w + IonMZ_crc +
                  TotalExternalMass
 
-            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Double.MinValue, Sub(last As NeutralGroupHit) Call externalLoss(last.aglycone).Clear())
+            Dim combination As New BruteForceCombination(externals, NumSugarMax, NumAcidMax, Double.MinValue, Sub(last As NeutralGroupHit) Call externalLoss(last.ionName).Clear())
 
             ' 0 -> 0 for循环会执行一次
 
@@ -188,9 +188,9 @@ Namespace Algorithm
 
             For Each acid In externals.Where(Function(x) x.type = NeutralTypes.acid)
                 If acid.max > 0 Then
-                    pIonList($"[{acid.aglycone}]+") = New MzAnnotation With {
+                    pIonList($"[{acid.ionName}]+") = New MzAnnotation With {
                         .productMz = FormulaScanner.EvaluateExactMass(acid.formula),
-                        .annotation = $"[{acid.aglycone}]+"
+                        .annotation = $"[{acid.ionName}]+"
                     }
                 End If
             Next
@@ -226,9 +226,9 @@ Namespace Algorithm
                                                                                   .Last
 
                                                                                If lastAglycone.nHit > 0 Then
-                                                                                   Call externalLoss(lastAglycone.aglycone) _
+                                                                                   Call externalLoss(lastAglycone.ionName) _
                                                                                        .Append("-") _
-                                                                                       .Append(lastAglycone.aglycone)
+                                                                                       .Append(lastAglycone.ionName)
                                                                                End If
                                                                            End If
 
@@ -306,7 +306,7 @@ Namespace Algorithm
                 neutralLoess.Fer = Fer_max AndAlso
                 neutralLoess.Sin = Sin_max AndAlso
                 neutralLoess.DDMP = DDMP_max AndAlso
-                ((Not neutralLoess.externals.IsNullOrEmpty) AndAlso neutralLoess.externals.All(Function(a) maxnExternals(a.aglycone) = a.nHit)) Then
+                ((Not neutralLoess.externals.IsNullOrEmpty) AndAlso neutralLoess.externals.All(Function(a) maxnExternals(a.ionName) = a.nHit)) Then
 
                 Dim part As String = $"{H2OLoss}{CO2Loss}"
 

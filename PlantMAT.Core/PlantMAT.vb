@@ -604,4 +604,8 @@ Module PlantMAT
         Return table
     End Function
 
+    <ExportAPI("read.neutrals")>
+    Public Function ReadNeutralElements(file As String) As NeutralGroup()
+        Return file.LoadCsv(Of NeutralGroup).ToArray
+    End Function
 End Module
