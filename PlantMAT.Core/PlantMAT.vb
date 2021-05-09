@@ -52,6 +52,7 @@ Imports BioNovoGene.Analytical.MassSpectrometry.Math.Ms1.PrecursorType
 Imports BioNovoGene.Analytical.MassSpectrometry.Math.Spectra
 Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK
 Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK.Data
+Imports BioNovoGene.BioDeep.Chemoinformatics.NaturalProduct
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.csv
@@ -589,16 +590,22 @@ Module PlantMAT
 
     <ExportAPI("KNApSAcK.as.table")>
     <RApiReturn(GetType(InformationTable))>
-    Public Function KNApSAcKTable(<RRawVectorArgument> KNApSAcK As Object, Optional env As Environment = Nothing) As Object
+    Public Function KNApSAcKTable(<RRawVectorArgument>
+                                  KNApSAcK As Object,
+                                  Optional solver As GlycosylNameSolver = Nothing,
+                                  Optional env As Environment = Nothing) As Object
+
         Dim data As pipeline = pipeline.TryCreatePipeline(Of Information)(KNApSAcK, env)
 
         If data.isError Then
             Return data.getError
+        ElseIf solver Is Nothing Then
+            solver = New GlycosylNameSolver()
         End If
 
         Dim table As InformationTable() = data _
             .populates(Of Information)(env) _
-            .Select(AddressOf InformationTable.FromDetails) _
+            .Select(Function(r) InformationTable.FromDetails(r, solver)) _
             .ToArray
 
         Return table
