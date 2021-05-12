@@ -1,36 +1,4 @@
-﻿Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
-Imports Microsoft.VisualBasic.Data.IO.MessagePack.Serialization
-Imports Microsoft.VisualBasic.Linq
-
-Namespace Models
-
-    Public Enum NeutralTypes
-        NA
-        sugar
-        acid
-        methylate
-    End Enum
-
-    Public Class NeutralGroup : Implements INeutralGroupHit
-
-        Public Property name As String
-        Public Property formula As String
-        Public Property ionName As String Implements INeutralGroupHit.ionName
-        Public Property type As NeutralTypes Implements INeutralGroupHit.type
-        Public Property min As Integer
-        Public Property max As Integer Implements INeutralGroupHit.nHit
-
-        Public Overrides Function ToString() As String
-            Return ionName
-        End Function
-
-    End Class
-
-    Friend Interface INeutralGroupHit
-        Property ionName As String
-        Property nHit As Integer
-        Property type As NeutralTypes
-    End Interface
+﻿Namespace Models
 
     Public Class NeutralGroupHit : Implements INeutralGroupHit
 
@@ -74,5 +42,4 @@ Namespace Models
             }
         End Function
     End Class
-
 End Namespace

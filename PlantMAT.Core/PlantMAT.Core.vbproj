@@ -164,7 +164,9 @@
     <Compile Include="Algorithm\NeutralLoss.vb" />
     <Compile Include="Algorithm\NeutralLossSearch.vb" />
     <Compile Include="Models\Ms2Peaks.vb" />
-    <Compile Include="Models\NeutralGroup.vb" />
+    <Compile Include="Models\NeutralGroup\NeutralGroupHit.vb" />
+    <Compile Include="Models\NeutralGroup\NeutralGroup.vb" />
+    <Compile Include="Models\NeutralGroup\INeutralGroupHit.vb" />
     <Compile Include="ParallelPipeline.vb" />
     <Compile Include="PlantMATAlgorithm.vb" />
     <Compile Include="Algorithm\NeutralLossIonPrediction.vb" />
@@ -274,5 +276,6 @@
       <Name>MassSpectrum.math-core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
