@@ -163,6 +163,7 @@
     <Compile Include="Algorithm\IonMZ_crc.vb" />
     <Compile Include="Algorithm\NeutralLoss.vb" />
     <Compile Include="Algorithm\NeutralLossSearch.vb" />
+    <Compile Include="Algorithm\NeutralLossBuilder.vb" />
     <Compile Include="Models\Ms2Peaks.vb" />
     <Compile Include="Models\NeutralGroup\NeutralGroupHit.vb" />
     <Compile Include="Models\NeutralGroup\NeutralGroup.vb" />
@@ -270,6 +271,14 @@
     <ProjectReference Include="..\..\mzkit\src\assembly\assembly\assembly.vbproj">
       <Project>{95f7d65e-9db1-4605-9fd3-25433277af88}</Project>
       <Name>assembly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\mzkit\src\metadb\Chemoinformatics\Chemoinformatics.vbproj">
+      <Project>{c3faf972-2d6d-4fcb-8e1f-a66fe130d485}</Project>
+      <Name>Chemoinformatics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\mzkit\src\metadb\KNApSAcK\KNApSAcK.vbproj">
+      <Project>{984fc66a-319e-4281-9cb8-c2bad82e7d4e}</Project>
+      <Name>KNApSAcK</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\mzkit\src\mzmath\ms2_math-core\MassSpectrum.math-core.vbproj">
       <Project>{a2130297-2b4a-4b02-80b2-5cfa860f6dae}</Project>

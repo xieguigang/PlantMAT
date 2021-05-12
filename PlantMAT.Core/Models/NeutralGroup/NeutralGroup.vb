@@ -4,6 +4,7 @@
 
         Public Property name As String
         Public Property formula As String
+        Public Property exact_mass As Double
         Public Property ionName As String Implements INeutralGroupHit.ionName
         Public Property type As NeutralTypes Implements INeutralGroupHit.type
         Public Property min As Integer
