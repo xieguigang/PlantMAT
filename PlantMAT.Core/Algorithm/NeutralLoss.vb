@@ -61,6 +61,7 @@ Namespace Algorithm
         <MessagePackMember(6)> <XmlAttribute> Public Property Fer As Integer
         <MessagePackMember(7)> <XmlAttribute> Public Property Sin As Integer
         <MessagePackMember(8)> <XmlAttribute> Public Property DDMP As Integer
+
         <MessagePackMember(9)>
         Public Property externals As NeutralGroupHit()
 
@@ -104,6 +105,13 @@ Namespace Algorithm
                 Return (Sugar_n + Acid_n) * H2O_w
             End Get
         End Property
+
+        Sub New()
+        End Sub
+
+        Sub New(loss As IEnumerable(Of NeutralGroupHit))
+            externals = loss.ToArray
+        End Sub
 
         Private Function weightPlus() As Double
             Return Aggregate item In externals.SafeQuery Into Sum(item.MassTotal)
