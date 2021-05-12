@@ -1,4 +1,7 @@
-﻿Namespace Models
+﻿Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
+Imports Microsoft.VisualBasic.Data.IO.MessagePack.Serialization
+
+Namespace Models
 
     Public Class NeutralGroupHit : Implements INeutralGroupHit
 
