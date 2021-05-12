@@ -66,7 +66,7 @@ Namespace Algorithm
 
         Public ReadOnly Property Sugar_n As Integer
             Get
-                Return Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.suger)
+                Return Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.sugar)
             End Get
         End Property
 
@@ -77,7 +77,7 @@ Namespace Algorithm
         End Property
 
         Public Shared Function nMax(Hex%, HexA%, dHex%, Pen%, Mal%, Cou%, Fer%, Sin%, DDMP%, externals As NeutralGroup()) As (sugarMax%, acidMax%)
-            Dim sugarMax = Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.suger)
+            Dim sugarMax = Hex + HexA + dHex + Pen + nCount(externals, type:=NeutralTypes.sugar)
             Dim acidMax = Mal + Cou + Fer + Sin + DDMP + nCount(externals, type:=NeutralTypes.acid)
 
             Return (sugarMax, acidMax)

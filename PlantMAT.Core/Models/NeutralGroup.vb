@@ -6,9 +6,9 @@ Namespace Models
 
     Public Enum NeutralTypes
         NA
-        suger
+        sugar
         acid
-        ' methylate
+        methylate
     End Enum
 
     Public Class NeutralGroup : Implements INeutralGroupHit
