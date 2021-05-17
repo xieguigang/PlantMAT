@@ -60,6 +60,12 @@ Namespace Models
             End Get
         End Property
 
+        Public ReadOnly Property MaxIonInt As Double
+            Get
+                Return into.Max
+            End Get
+        End Property
+
         Public ReadOnly Property fragments As Integer
             Get
                 Return mz.Length

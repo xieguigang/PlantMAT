@@ -183,7 +183,7 @@ Namespace Algorithm
         ''' 
         ''' </summary>
         ''' <param name="eIonList">the ms2 matrix data from the raw sample</param>
-        ''' <param name="pIonList">product mz ion predicts</param>
+        ''' <param name="pIonList">product mz ion predicts, normalized to [0, 100]</param>
         ''' <returns>a logical result value of AglyCheck</returns>
         Public Shared Function IonMatching(eIonList As Ms2Peaks,
                                            pIonList As MzAnnotation(),
@@ -194,7 +194,7 @@ Namespace Algorithm
             ' Initialize the annotated ion list aIonList() to none
             Dim AglyCheck = False
             Dim eIon_n As Integer = eIonList.fragments
-            Dim TotalIonInt As Double = eIonList.TotalIonInt
+            Dim TotalIonInt As Double = eIonList.MaxIonInt ' .TotalIonInt
 
             ' Compare the measured ions eIonList() with the predicted pIonList()
             ' If the mz error is less than the defined ppm and intensity is above the noise filter, then
