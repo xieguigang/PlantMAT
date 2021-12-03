@@ -419,7 +419,7 @@ Module PlantMAT
 
         If Not mwRange Is Nothing Then
             If env.globalEnvironment.options.verbose Then
-                Call base.print($"filter query with precursor m/z range: {mwRange.ToString}", env)
+                Call base.print($"filter query with precursor m/z range: {mwRange.ToString}",, env)
             End If
 
             query = query _
