@@ -249,8 +249,12 @@ Module PlantMAT
     ''' <param name="file"></param>
     ''' <returns></returns>
     <ExportAPI("read.library")>
-    Public Function readLibrary(file As String) As PlantMATlib()
-        Return file.LoadCsv(Of PlantMATlib)(mute:=True).ToArray
+    Public Function readLibrary(file As String, Optional libtype As Integer = 1) As PlantMATlib()
+        If file.ExtensionSuffix("rda") Then
+            Return ParseRData.LoadLibrary(file, symbol:=If(libtype = 1, "lib.pos", "lib.neg"))
+        Else
+            Return file.LoadCsv(Of PlantMATlib)(mute:=True).ToArray
+        End If
     End Function
 
     ''' <summary>

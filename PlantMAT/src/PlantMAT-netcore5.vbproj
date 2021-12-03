@@ -27,6 +27,7 @@
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
+    <OutputPath>../\assembly\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -83,6 +84,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\GCModeller\src\R-sharp\R#\Rsharp-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\R-sharp\snowFall\snowFall-netcore5.vbproj" />
+    <ProjectReference Include="..\..\..\GCModeller\src\R-sharp\studio\RData\RData.NET5.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\Darwinism\Parallel\parallel-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\Data\BinaryData\BinaryData\binarydata-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\GCModeller\src\runtime\sciBASIC#\Data\BinaryData\msgpack\msgpack-netcore5.vbproj" />
