@@ -54,6 +54,9 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "R-cmd.NET5", "..\..\GCModeller\src\R-sharp\studio\R-terminal\R-cmd.NET5.vbproj", "{B88BA483-1988-4956-B08D-EB0965FC9E30}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\GCModeller\src\R-sharp\studio\Rstudio.common\Rstudio.common.projitems*{b88ba483-1988-4956-b08d-eb0965fc9e30}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Biodeep_UNIX_x64|Any CPU = Biodeep_UNIX_x64|Any CPU
 		Biodeep_UNIX_x64|ARM32 = Biodeep_UNIX_x64|ARM32
