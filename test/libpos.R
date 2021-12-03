@@ -2,7 +2,7 @@ require(PlantMAT);
 
 options(strict = FALSE);
 
-path = "F:\rdata-develop\rdata\tests\data\test_vector.rda";
+path = "D:\GCModeller\src\R-sharp\studio\RData\test\test_list.rda";
 # path = "D:\biodeep\flavonoid\Rscript\bundle\Flavonoid.rda";
 libpos = PlantMAT::read.library(path, libtype = 1);
 
