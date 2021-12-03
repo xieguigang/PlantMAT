@@ -2,6 +2,8 @@ require(PlantMAT);
 
 options(strict = FALSE);
 
-libpos = PlantMAT::read.library("D:\biodeep\flavonoid\Rscript\bundle\Flavonoid.rda", libtype = 1);
+path = "F:\rdata-develop\rdata\tests\data\test_vector.rda";
+# path = "D:\biodeep\flavonoid\Rscript\bundle\Flavonoid.rda";
+libpos = PlantMAT::read.library(path, libtype = 1);
 
 print(as.data.frame(libpos));
