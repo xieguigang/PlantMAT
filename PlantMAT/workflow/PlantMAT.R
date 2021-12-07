@@ -1,3 +1,5 @@
+imports "package_utils" from "devkit";
+
 require(PlantMAT);
 
 print("Run PlantMAT search, please wait for a while...");
@@ -18,7 +20,10 @@ const stream as string = ?"--stream" || stop("A configuration data file location
 # library
 # peaks
 #
-[args, library, peaks] = base::readRData(base64_decode(stream));
+[args, library, peaks] = base64_decode(stream) 
+|> package_utils::parseRData.raw() 
+|> package_utils::unpackRData
+;
 
 print("View of the PlantMAT analysis arguments:");
 str(args);
