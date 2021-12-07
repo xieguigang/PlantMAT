@@ -51,3 +51,16 @@ if (ionMode == 0) {
 
 print("view of the configuration values that we used for the analysis:");
 print(settings);
+
+data_query = peaks
+|> read.mgf
+|> ions.unique(eq = 0.85, gt = 0.75, trim = 0.05) 
+|> as.query(mol_range = [0, 3000])
+;
+
+library
+|> parseLibrary
+|> MS1TopDown(settings)
+|> as.object
+|> do.call("MS1CP", query = data_query, ionMode = ionMode)
+;
