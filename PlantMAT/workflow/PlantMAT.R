@@ -20,7 +20,11 @@ const stream as string = ?"--stream" || stop("A configuration data file location
 # library
 # peaks
 #
-[args, library, peaks] = ifelse(file.exists(stream), stream, base64_decode(stream))
+[args, library, peaks] = (if (file.exists(stream)) {
+    stream;
+} else {
+    base64_decode(stream);
+})
 |> package_utils::parseRData.raw() 
 |> package_utils::unpackRData()
 ;
