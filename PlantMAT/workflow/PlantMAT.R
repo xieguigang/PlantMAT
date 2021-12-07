@@ -20,15 +20,21 @@ const stream as string = ?"--stream" || stop("A configuration data file location
 # library
 # peaks
 #
-[args, library, peaks] = base64_decode(stream) 
+[args, library, peaks] = ifelse(file.exists(stream), stream, base64_decode(stream))
 |> package_utils::parseRData.raw() 
-|> package_utils::unpackRData
+|> package_utils::unpackRData()
+;
+
+args    = deserialize(args);
+library = library
+|> deserialize()
+|> parseLibrary()
 ;
 
 print("View of the PlantMAT analysis arguments:");
 str(args);
 
-print(`we have ${length(library)} reference data to run PlantMAT search:`);
+print(`we have ${nrow(library)} reference data to run PlantMAT search:`);
 print(library, max.print = 10);
 
 outputdir       = args$outputdir;
