@@ -215,7 +215,7 @@ Namespace Algorithm
 
                                                         For Each check In combination.BruteForceIterations(
                                                             Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%, _
- _
+                                                                                                                                       _
                                                             M_w:=M_w,
                                                             iteration:=Function(neutralLoss)
                                                                            Call LossCombination(neutralLoss, nH2O, nCO2, MIonMZ)
@@ -270,6 +270,16 @@ Namespace Algorithm
                 HexALoss.Clear()
                 HexLoss.Append("-Hex")
             Next Hex_n
+
+            If pIonList.ContainsKey("[Agly-CO2]+") Then
+                pIonList("[Agly-CO2]+") = New MzAnnotation With {.annotation = "[Agly-CO2]+", .productMz = pIonList("[Agly-CO2]+").productMz - 2 * Element.H}
+            End If
+            If pIonList.ContainsKey("[Agly-H2O]+") Then
+                pIonList("[Agly-H2O]+") = New MzAnnotation With {.annotation = "[Agly-H2O]+", .productMz = pIonList("[Agly-H2O]+").productMz + 2 * Element.H}
+            End If
+            If pIonList.ContainsKey("[Agly-H2O-CO2]+") Then
+                pIonList("[Agly-H2O-CO2]+") = New MzAnnotation With {.annotation = "[Agly-H2O-CO2]+", .productMz = pIonList("[Agly-H2O-CO2]+").productMz + Element.H}
+            End If
         End Sub
 
         ''' <summary>
