@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>PlantMAT.Core</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+	  <TargetFrameworks>net6.0</TargetFrameworks>
     <AssemblyName>PlantMAT.Core</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <Product>PlantMAT</Product>
