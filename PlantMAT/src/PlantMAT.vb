@@ -441,7 +441,7 @@ Module PlantMAT
         Return file _
             .SolveStream _
             .ParseJson _
-            .CreateObject(GetType(Query()))
+            .CreateObject(GetType(Query()), decodeMetachar:=True)
     End Function
 
     <ExportAPI("result.json")>
