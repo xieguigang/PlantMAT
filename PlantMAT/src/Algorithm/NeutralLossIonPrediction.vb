@@ -280,7 +280,26 @@ Namespace Algorithm
             If pIonList.ContainsKey("[Agly-H2O-CO2]+") Then
                 pIonList("[Agly-H2O-CO2]+") = New MzAnnotation With {.annotation = "[Agly-H2O-CO2]+", .productMz = pIonList("[Agly-H2O-CO2]+").productMz + Element.H}
             End If
+            If pIonList.ContainsKey("*[Agly]+") Then
+                pIonList("[Agly-oxalyl group]+") = New MzAnnotation With {.annotation = "[Agly-oxalyl group]+", .productMz = pIonList("*[Agly]+").productMz - oxalyl}
+                pIonList("[Agly-Glyoxylate]+") = New MzAnnotation With {.annotation = "[Agly-Glyoxylate]+", .productMz = pIonList("*[Agly]+").productMz - Glyoxylate}
+                pIonList("[Agly-gamma-lactone ring]+") = New MzAnnotation With {.annotation = "[Agly-gamma-lactone ring]+", .productMz = pIonList("*[Agly]+").productMz - gammaLactoneRing}
+                pIonList("[Agly-Acetoacetate]+") = New MzAnnotation With {.annotation = "[Agly-Acetoacetate]+", .productMz = pIonList("*[Agly]+").productMz - Acetoacetate}
+                pIonList("[Agly-Hydroxymalonate]+") = New MzAnnotation With {.annotation = "[Agly-Hydroxymalonate]+", .productMz = pIonList("*[Agly]+").productMz - Hydroxymalonate}
+                pIonList("[Agly-Glutaconate]+") = New MzAnnotation With {.annotation = "[Agly-Glutaconate]+", .productMz = pIonList("*[Agly]+").productMz - Glutaconate}
+                pIonList("[Agly-benzoylformic]+") = New MzAnnotation With {.annotation = "[Agly-benzoylformic]+", .productMz = pIonList("*[Agly]+").productMz - benzoylformic}
+                pIonList("[Agly-Orsellinic]+") = New MzAnnotation With {.annotation = "[Agly-Orsellinic]+", .productMz = pIonList("*[Agly]+").productMz - Orsellinic}
+            End If
         End Sub
+
+        Shared ReadOnly oxalyl As Double = FormulaScanner.ScanFormula("C2O2").ExactMass
+        Shared ReadOnly Glyoxylate As Double = FormulaScanner.ScanFormula("C2H2O3").ExactMass
+        Shared ReadOnly gammaLactoneRing As Double = FormulaScanner.ScanFormula("C4O2").ExactMass
+        Shared ReadOnly Acetoacetate As Double = FormulaScanner.ScanFormula("C4H6O3").ExactMass
+        Shared ReadOnly Hydroxymalonate As Double = FormulaScanner.ScanFormula("C3H4O5").ExactMass
+        Shared ReadOnly Glutaconate As Double = FormulaScanner.ScanFormula("C5H6O4").ExactMass
+        Shared ReadOnly benzoylformic As Double = FormulaScanner.ScanFormula("C8H6O3").ExactMass
+        Shared ReadOnly Orsellinic As Double = FormulaScanner.ScanFormula("C8H8O4").ExactMass
 
         ''' <summary>
         ''' productMz = exactMass - neutral_loss
