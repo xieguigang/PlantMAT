@@ -70,6 +70,7 @@ Imports SMRUCC.Rsharp.Runtime
 Imports SMRUCC.Rsharp.Runtime.Internal.Invokes
 Imports SMRUCC.Rsharp.Runtime.Internal.Object
 Imports SMRUCC.Rsharp.Runtime.Interop
+Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
@@ -389,7 +390,7 @@ Module PlantMAT
         Dim mwRange As DoubleRange = Nothing
 
         If Not mol_range Is Nothing Then
-            mwRange = DirectCast(REnv.asVector(Of Double)(mol_range), Double())
+            mwRange = CLRVector.asNumeric(mol_range)
         End If
 
         Dim query As Query()
@@ -573,7 +574,7 @@ Module PlantMAT
     ''' <returns></returns>
     <ExportAPI("requestKNApSAcK")>
     Public Function RequestKNApSAcK(<RRawVectorArgument> keywords As Object, Optional env As Environment = Nothing) As Information()
-        Dim words As String() = REnv.asVector(Of String)(keywords)
+        Dim words As String() = CLRVector.asCharacter(keywords)
         Dim result As New List(Of Information)
         Dim cache As String = env.globalEnvironment.options.getOption("KNApSAcK.cache", App.CurrentDirectory)
 

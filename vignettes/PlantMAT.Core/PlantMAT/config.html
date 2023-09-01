@@ -29,8 +29,13 @@
         code {
             color: rgb(194, 42, 42);
             background: inherit;
-            font-style:italic;
+            font-style: italic;
             font-weight: bold;
+        }
+
+        pre code {
+            color: rgb(54, 54, 54);
+            font-style: normal;
         }
 
         body {
@@ -173,10 +178,10 @@
     <i>NumofAcidSin</i> = [0,1],
     <i>NumofAcidDDMP</i> = [0,1],
     <i>PrecursorIonType</i> = ["[M]+","[M]-","[M+H]+","[M-H]-"],
-    <i>SearchPPM</i> = 10,
-    <i>NoiseFilter</i> = 0.05,
-    <i>mzPPM</i> = 30,
-    <i>aglyconeSet</i> = <span style='color: blue;'>NULL</span>);</code></pre>
+    <i>SearchPPM</i> = <span style='color: green;'>10</span>,
+    <i>NoiseFilter</i> = <span style='color: green;'>0.05</span>,
+    <i>mzPPM</i> = <span style='color: green;'>30</span>,
+    <i>aglyconeSet</i> = <span style='color: blue !important;'>NULL</span>);</code></pre>
         </div>
 
         <h3>Arguments</h3>
@@ -265,7 +270,11 @@
 
         <h3>Value</h3>
 
-        This function has no value returns.
+        this function returns data object of type <a href="/clr/PlantMAT/Core/Settings.html">Settings</a>.
+
+        <h3 style="display: none;">Examples</h3>
+
+        
 
         <hr />
         <div style="text-align: center;">[Package <em>PlantMAT</em> version 1.0.0.0 <a

@@ -42,6 +42,8 @@
 
 Imports Microsoft.VisualBasic.Scripting.SymbolBuilder
 Imports PlantMAT.Core.Models
+Imports SMRUCC.Rsharp.Runtime
+Imports SMRUCC.Rsharp.Runtime.Internal.[Object]
 
 Namespace Report
 
@@ -72,7 +74,7 @@ Namespace Report
                 </html>)
         End Function
 
-        Public Function GetReportHtml(result As Query()) As String
+        Public Function GetReportHtml(result As Query(), args As list, env As Environment) As String
             Dim html As ScriptBuilder = getBlankHtml()
 
             Return html.ToString
