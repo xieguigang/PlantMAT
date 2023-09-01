@@ -7,7 +7,7 @@
     <Platforms>AnyCPU;x64</Platforms>
     <Product>PlantMAT</Product>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Copyright>Copyright © PlantMAT 2020</Copyright>
     <Description>PlantMAT: A Metabolomics Tool for Predicting the Specialized Metabolic Potential of a System and for Large-Scale Metabolite Identifications</Description>
@@ -19,6 +19,10 @@
     <Authors>Feng Qiu (fengqiu1982); xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)</Authors>
     <PackageIcon>logo.png</PackageIcon>
     <Configurations>Debug;Release;PlantMAT;NPSearch;Rsharp_app_release</Configurations>
+    <Title>PlantMAT</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -114,21 +118,26 @@
     <ProjectReference Include="..\..\..\mzkit\src\metadb\Chemoinformatics\chemoinformatics-netcore5.vbproj" />
     <ProjectReference Include="..\..\..\mzkit\src\metadb\KNApSAcK\KNApSAcK.NET5.vbproj" />
     <ProjectReference Include="..\..\..\mzkit\src\mzmath\ms2_math-core\mzmath-netcore5.vbproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\docs\logo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <ProjectReference Include="..\..\GCModeller\src\runtime\Darwinism\src\Parallel\parallel-netcore5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Models\NeutralGroup\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\docs\logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
