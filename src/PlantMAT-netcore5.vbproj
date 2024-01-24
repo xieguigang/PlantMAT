@@ -118,6 +118,8 @@
     <ProjectReference Include="..\..\..\mzkit\src\metadb\KNApSAcK\KNApSAcK.NET5.vbproj" />
     <ProjectReference Include="..\..\..\mzkit\src\mzmath\ms2_math-core\mzmath-netcore5.vbproj" />
     <ProjectReference Include="..\..\GCModeller\src\runtime\Darwinism\src\Parallel\parallel-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data_science\Mathematica\Math\DataFittings\linear-netcore5.vbproj" />
+    <ProjectReference Include="..\..\GCModeller\src\runtime\sciBASIC#\Data_science\Mathematica\Math\Math.Statistics\stats-netcore5.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
