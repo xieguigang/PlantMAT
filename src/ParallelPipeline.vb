@@ -43,11 +43,11 @@ Imports System.Runtime.CompilerServices
 Imports Darwinism.HPC.Parallel
 Imports Darwinism.HPC.Parallel.IpcStream
 Imports Darwinism.HPC.Parallel.ThreadTask
+Imports batch
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models
-Imports snowFall.Protocol
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Public Module ParallelPipeline
 
@@ -117,7 +117,7 @@ Public Module ParallelPipeline
         Else
             Dim socket As SocketRef = SocketRef.WriteBuffer(library)
             Dim mzList = Algorithm.MS1TopDown.GroupQueryByMz(query)
-            Dim size As Integer = stdNum.Max(mzList.Length / (PublicVSCode.Parallelism + 1), 1)
+            Dim size As Integer = std.Max(mzList.Length / (PublicVSCode.Parallelism + 1), 1)
             Dim taskList As Func(Of Query())() = mzList _
                 .Split(size) _
                 .Select(Function(p) New Func(Of Query())(Function() MS1CPTask(p, socket, settings, ionMode, verbose, debugPort:=debugPort))) _
@@ -148,7 +148,7 @@ Public Module ParallelPipeline
             speed = result.Count / elapse
             ETA = TimeSpan.FromSeconds((query.Length - result.Count) / speed)
 
-            Console.WriteLine($"[{result.Count}/{query.Length}] [{speed.ToString("F3").PadRight(3, "0")} query/sec, ETA {ETA.FormatTime}] {item.ToString} [{stdNum.Round(result.Count / query.Length * 100)}% done!]")
+            Console.WriteLine($"[{result.Count}/{query.Length}] [{speed.ToString("F3").PadRight(3, "0")} query/sec, ETA {ETA.FormatTime}] {item.ToString} [{std.Round(result.Count / query.Length * 100)}% done!]")
         Next
 
         ' Show the message box after the calculation is finished
