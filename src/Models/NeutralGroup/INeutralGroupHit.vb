@@ -1,8 +1,4 @@
-﻿Imports BioNovoGene.BioDeep.Chemoinformatics.Formula
-Imports Microsoft.VisualBasic.Data.IO.MessagePack.Serialization
-Imports Microsoft.VisualBasic.Linq
-
-Namespace Models
+﻿Namespace Models
 
     Public Enum NeutralTypes
         NA

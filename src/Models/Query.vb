@@ -45,15 +45,11 @@
 #End Region
 
 Imports System.Runtime.Serialization
-#If netcore5 = 0 Then
-Imports System.Web.Script.Serialization
-#Else
-Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
-#End If
 Imports System.Xml.Serialization
+Imports BioNovoGene.Analytical.MassSpectrometry.Math
+Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
 Imports PlantMAT.Core.Models.AnnotationResult
-Imports BioNovoGene.Analytical.MassSpectrometry.Math
 
 Namespace Models
 

@@ -50,7 +50,7 @@ Imports Microsoft.VisualBasic.ComponentModel.Collection
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Language
 Imports PlantMAT.Core.Models
-Imports stdNum = System.Math
+Imports std = System.Math
 
 Namespace Algorithm
 
@@ -131,7 +131,7 @@ Namespace Algorithm
 
                                                 For Each check As NeutralLoss In combination.BruteForceIterations(
                                                     Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
- _
+                                                                                                                              _
                                                     M_w:=M_w,
                                                     iteration:=Function(loss)
                                                                    If RestrictionCheck(neutralLoss:=loss, M_w:=M_w) Then
@@ -256,7 +256,7 @@ Namespace Algorithm
 
                                                 For Each check As NamedValue(Of NeutralLoss) In combination.BruteForceIterations(
                                                     Hex_n%, HexA_n%, dHex_n%, Pen_n%, Mal_n%, Cou_n%, Fer_n%, Sin_n%, DDMP_n%,
- _
+                                                                                                                              _
                                                     M_w:=M_w,
                                                     iteration:=Function(loss)
                                                                    For Each type As NamedValue(Of Double) In allAglycones
@@ -311,7 +311,7 @@ Namespace Algorithm
             ' 20210414
             ' 0.1 da is good
             ' too small will loss too much true result
-            Return stdNum.Abs(totalMass - (neutralLoss.nH2O_w - neutralLoss.Attn_w)) <= 0.1
+            Return std.Abs(totalMass - (neutralLoss.nH2O_w - neutralLoss.Attn_w)) <= 0.1
         End Function
 
         ''' <summary>
