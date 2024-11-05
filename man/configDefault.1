@@ -1,20 +1,20 @@
-﻿.TH CONFIGDEFAULT 1 2023-Sep "" "apply the default configuration"
+﻿.TH CONFIGDEFAULT 1 2024-Nov "" "apply the default configuration"
 .SH NAME
 configDefault \- configDefault(
     <i>mzPPM</i> = <span style='color: green;'>30</span>,
-    <i>precursors</i> = [[M]+, [M]-, [M+H]+, [M-H]-],
+    <i>precursors</i> = [<span style='color: brown;'><strong>'[M]-'</strong></span>,<span style='color: brown;'><strong>'[M+H]+'</strong></span>,<span style='color: brown;'><strong>'[M-H]-'</strong></span>],
     <i>aglyconeSet</i> = <span style='color: blue !important;'>NULL</span>)
 .SH SYNOPSIS
 \fIconfigDefault(
     <i>mzPPM</i> = <span style='color: green;'>30</span>,
-    <i>precursors</i> = [[M]+, [M]-, [M+H]+, [M-H]-],
+    <i>precursors</i> = [<span style='color: brown;'><strong>'[M]-'</strong></span>,<span style='color: brown;'><strong>'[M+H]+'</strong></span>,<span style='color: brown;'><strong>'[M-H]-'</strong></span>],
     <i>aglyconeSet</i> = <span style='color: blue !important;'>NULL</span>)\fR
 .SH OPTIONS
 .PP
 \fBmzPPM\fB \fR\- 30. ppm value for MS2 annotation
 .PP
 .PP
-\fBprecursors\fB \fR\- [[M]+, [M]-, [M+H]+, [M-H]-]. 
+\fBprecursors\fB \fR\- ['[M]+', '[M]-', '[M+H]+', '[M-H]-']. 
 .PP
 .PP
 \fBaglyconeSet\fB \fR\- NULL. a list of user defined aglycone candidate set.
@@ -24,4 +24,4 @@ configDefault \- configDefault(
 SMRUCC/R#.declare_function.configDefault at Run.R:line 27
 .PP
 .SH COPYRIGHT
-Copyright © Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/),  Licensed 2023
+Copyright © Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/),  Licensed 2024
