@@ -1,50 +1,50 @@
 ﻿#Region "Microsoft.VisualBasic::711ac2ee952da1c06d0fa34d866f02c2, PlantMAT.Core\ParallelPipeline.vb"
 
-    ' Author:
-    ' 
-    '       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
-    '       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
-    ' 
-    ' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' 
-    ' Apache 2.0 License
-    ' 
-    ' 
-    ' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
-    ' 
-    ' Licensed under the Apache License, Version 2.0 (the "License");
-    ' you may not use this file except in compliance with the License.
-    ' You may obtain a copy of the License at
-    ' 
-    '     http://www.apache.org/licenses/LICENSE-2.0
-    ' 
-    ' Unless required by applicable law or agreed to in writing, software
-    ' distributed under the License is distributed on an "AS IS" BASIS,
-    ' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    ' See the License for the specific language governing permissions and
-    ' limitations under the License.
+' Author:
+' 
+'       xieguigang (gg.xie@bionovogene.com, BioNovoGene Co., LTD.)
+'       Feng Qiu (fengqiu1982 https://sourceforge.net/u/fengqiu1982/)
+' 
+' Copyright (c) 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' 
+' Apache 2.0 License
+' 
+' 
+' Copyright 2020 gg.xie@bionovogene.com, BioNovoGene Co., LTD.
+' 
+' Licensed under the Apache License, Version 2.0 (the "License");
+' you may not use this file except in compliance with the License.
+' You may obtain a copy of the License at
+' 
+'     http://www.apache.org/licenses/LICENSE-2.0
+' 
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
 
 
 
-    ' /********************************************************************************/
+' /********************************************************************************/
 
-    ' Summaries:
+' Summaries:
 
-    ' Module ParallelPipeline
-    ' 
-    '     Function: MS1CP, MS1CPTask
-    ' 
-    ' /********************************************************************************/
+' Module ParallelPipeline
+' 
+'     Function: MS1CP, MS1CPTask
+' 
+' /********************************************************************************/
 
 #End Region
 
 Imports System.Runtime.CompilerServices
+Imports Darwinism.HPC.Parallel
+Imports Darwinism.HPC.Parallel.IpcStream
+Imports Darwinism.HPC.Parallel.ThreadTask
 Imports Microsoft.VisualBasic.ComponentModel.DataSourceModel
 Imports Microsoft.VisualBasic.Linq
-Imports Parallel
-Imports Parallel.IpcStream
-Imports Parallel.ThreadTask
 Imports PlantMAT.Core.Models
 Imports snowFall.Protocol
 Imports stdNum = System.Math
@@ -58,7 +58,7 @@ Public Module ParallelPipeline
                                verbose As Boolean,
                                debugPort As Integer?) As Query()
 
-        Dim snowFall As SlaveTask = Host.CreateSlave(verbose:=verbose, debugPort:=debugPort)
+        Dim snowFall As SlaveTask = Host.CreateSlave(debugPort:=debugPort)
         Dim api As New Algorithm.IMS1TopDown(AddressOf Algorithm.MS1TopDown.MS1CP)
         Dim allPip As Query() = query _
             .Select(Function(p) p.AsEnumerable) _

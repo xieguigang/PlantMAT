@@ -74,7 +74,7 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
-Imports REnv = SMRUCC.Rsharp.Runtime
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -121,10 +121,10 @@ novel metabolites.
 Module PlantMAT
 
     Sub New()
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
-        Internal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
-        Internal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
-        Internal.Object.Converts.makeDataframe.addHandler(GetType(MzAnnotation()), AddressOf ProductAnnotationResultTable)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
+        RInternal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
+        RInternal.Object.Converts.makeDataframe.addHandler(GetType(MzAnnotation()), AddressOf ProductAnnotationResultTable)
     End Sub
 
     Private Function ProductAnnotationResultTable(data As MzAnnotation(), args As list, env As Environment) As dataframe

@@ -141,7 +141,7 @@ Public Module PublicVSCode
             .ToArray
 
         If App.CommandLine.ContainsParameter("--parallel") Then
-            Parallelism = App.CommandLine.GetInt32("--parallel")
+            Parallelism = App.CommandLine("--parallel")
 
             If Parallelism <= 0 Then
                 Call $"incorrect parallel configuration value: --parallel ""{App.CommandLine("--parallel")}"", a positive integer value should be specific!".Warning
