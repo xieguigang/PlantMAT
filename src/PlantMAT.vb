@@ -55,7 +55,7 @@ Imports BioNovoGene.BioDeep.Chemistry.Massbank.KNApSAcK.Data
 Imports BioNovoGene.BioDeep.Chemoinformatics.NaturalProduct
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
-Imports Microsoft.VisualBasic.Data.csv
+Imports Microsoft.VisualBasic.Data.Framework
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application.json
@@ -75,6 +75,7 @@ Imports any = Microsoft.VisualBasic.Scripting
 Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
 Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
+Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -127,8 +128,8 @@ Module PlantMAT
         RInternal.Object.Converts.makeDataframe.addHandler(GetType(MzAnnotation()), AddressOf ProductAnnotationResultTable)
     End Sub
 
-    Private Function ProductAnnotationResultTable(data As MzAnnotation(), args As list, env As Environment) As dataframe
-        Dim table As New dataframe With {
+    Private Function ProductAnnotationResultTable(data As MzAnnotation(), args As list, env As Environment) As Rdataframe
+        Dim table As New Rdataframe With {
             .columns = New Dictionary(Of String, Array)
         }
 
