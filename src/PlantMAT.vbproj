@@ -96,8 +96,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <OutputPath>D:\biodeep\biodeepdb_v3\metaCluster\NPSearch\assembly\</OutputPath>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>   
     <DefineConstants>netcore5=1</DefineConstants>
   </PropertyGroup>
 
