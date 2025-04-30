@@ -1,9 +1,51 @@
 ﻿{
   "生物碱类": {
     "name": "Alkaloids",
-    "note": "含氮有机化合物，具有显著的药理活性。"
+    "note": "含氮有机化合物，具有显著的药理活性。",
+    "subclass": {
+      "有机胺类": {
+        "name": "Organic amines",
+        "note": "包括简单的脂肪胺和芳香胺，如麻黄碱、咖啡碱等。"
+      },
+      "异喹啉类": {
+        "name": "Isoquinoline alkaloids",
+        "note": "包括吗啡类、罂粟碱等，具有镇痛、镇咳等作用。"
+      },
+      "喹啉类": {
+        "name": "Quinoline alkaloids",
+        "note": "包括小檗碱、黄连素等，具有抗菌、抗炎等作用。"
+      },
+      "吲哚类": {
+        "name": "Indole alkaloids",
+        "note": "包括长春碱、秋水仙碱等，具有抗肿瘤、抗炎等作用。"
+      },
+      "莨菪烷类": {
+        "name": "Tropane alkaloids",
+        "note": "包括阿托品、东莨菪碱等，具有抗胆碱、镇静等作用。"
+      },
+      "哌啶类": {
+        "name": "Piperidine alkaloids",
+        "note": "包括四氢异喹啉类、吗啡类等，具有镇痛、镇咳等作用。"
+      },
+      "嘧啶类": {
+        "name": "Pyridine alkaloids",
+        "note": "包括烟碱、槟榔碱等，具有兴奋、抗虫等作用。"
+      },
+      "甾体生物碱类": {
+        "name": "Steroidal alkaloids",
+        "note": "包括乌头碱、贝母碱等，具有镇痛、抗炎等作用。"
+      },
+      "萜类生物碱类": {
+        "name": "Terpenoid alkaloids",
+        "note": "包括紫杉碱、三尖杉碱等，具有抗肿瘤、抗炎等作用。"
+      }
+    }
   },
-  "黄酮类": { "name": "Flavonoids", "note": "具有抗氧化、抗炎等生物活性。" },
+  "黄酮类": { "name": "Flavonoids", "note": "具有抗氧化、抗炎等生物活性。","subclass":{
+
+
+    
+  } },
   "萜类": {
     "name": "Terpenoids",
     "note": "包括单萜、倍半萜、二萜、三萜及甾体类等。"
