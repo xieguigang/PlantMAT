@@ -41,11 +41,36 @@
       }
     }
   },
-  "黄酮类": { "name": "Flavonoids", "note": "具有抗氧化、抗炎等生物活性。","subclass":{
-
-
-    
-  } },
+  "黄酮类": {
+    "name": "Flavonoids",
+    "note": "具有抗氧化、抗炎等生物活性。",
+    "subclass": {
+      "黄酮": { "name": "Flavones", "note": "基本结构特征是C环为非还原性酮" },
+      "黄酮醇": { "name": "Flavonols", "note": "C-3位具有羟基取代" },
+      "黄烷酮": { "name": "Flavanones", "note": "又称二氢黄酮" },
+      "黄烷酮醇": {
+        "name": "Flavanonols",
+        "note": "又称二氢黄酮醇，C-3位具有羟基取代"
+      },
+      "异黄酮": { "name": "Isoflavones", "note": "B环连接在C环的3位碳上" },
+      "异黄烷酮": { "name": "Isoflavanones", "note": "又称二氢异黄酮" },
+      "查尔酮": { "name": "Chalcones", "note": "1,3-二苯基-2-丙烯-1-酮结构" },
+      "二氢查尔酮": { "name": "Dihydrochalcones", "note": "查尔酮的氢化产物" },
+      "橙酮": {
+        "name": "Aurones",
+        "note": "2–苄基苯并二氢呋喃–3–酮，含有苯并呋喃酮结构的一类化合物。"
+      },
+      "黄烷醇": { "name": "Flavanols", "note": "又称儿茶素" },
+      "黄烷-3,4-二醇": { "name": "Leucocyanidins", "note": "又称白花青素" },
+      "花青素": { "name": "Anthocyanins", "note": "又称花色素" },
+      "花青素聚集体": { "name": "Proanthocyanidins", "note": "缩合单宁" },
+      "新黄烷": { "name": "Neoflavanes", "note": "4-苯基色原烷的衍生物" },
+      "黄烷": {
+        "name": "Flavans",
+        "note": "黄烷 是苯环B环联结在C-2位、中央C环部分为二氢吡喃环、4位无酮基的黄酮类化合物。"
+      }
+    }
+  },
   "萜类": {
     "name": "Terpenoids",
     "note": "包括单萜、倍半萜、二萜、三萜及甾体类等。"
