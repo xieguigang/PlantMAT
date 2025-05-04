@@ -1,3 +1,3 @@
-﻿Public Class FeatureFragment
+﻿Public MustInherit Class FeatureFragment
 
 End Class
