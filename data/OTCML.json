@@ -3,26 +3,16 @@
     "name": "Alkaloids",
     "note": "含氮有机化合物，具有显著的药理活性。",
     "subclass": {
-      ​吡啶类​	Pyridine Alkaloids	含吡啶或哌啶衍生物，分为简单吡啶类（槟榔碱、烟碱等）和双稠哌啶类（苦参碱、氧化苦参碱等）
-。
-​莨菪烷类​	Tropane Alkaloids	以莨菪烷环为母核，C3位羟基与有机酸缩合，代表成分如莨菪碱、古柯碱
-。
-​异喹啉类​	Isoquinoline Alkaloids	含异喹啉或四氢异喹啉结构，包括简单异喹啉（萨苏林）、苄基异喹啉（罂粟碱）等
-。
-​吲哚类​	Indole Alkaloids	含吲哚环，分为简单吲哚（大青素B）、色胺吲哚（吴茱萸碱）及单萜吲哚（利血平、士的宁）等
-。
-​有机胺类​	Organic Amine Alkaloids	氮原子不结合在环内，代表成分如麻黄碱、秋水仙碱、益母草碱
-。
-​喹啉类​	Quinoline Alkaloids	含喹啉环衍生物，如喜树碱、常山碱
-。
-​嘌呤类​	Purine Alkaloids	含嘌呤结构，如咖啡碱、茶碱
-。
-​萜类生物碱​	Terpenoid Alkaloids	与萜类化合物结合，如乌头碱、飞燕草碱等
-。
-​甾体类生物碱​	Steroidal Alkaloids	含甾体骨架，如贝母碱、茄碱等
-。
-​喹唑酮类​	Quinazoline Alkaloids	含喹唑酮环，如常山碱
-。
+      "​吡啶类":{"name":"Pyridine Alkaloids","note":	"含吡啶或哌啶衍生物，分为简单吡啶类（槟榔碱、烟碱等）和双稠哌啶类（苦参碱、氧化苦参碱等）"},
+"​莨菪烷类​":{"name":"Tropane Alkaloids","note":	"以莨菪烷环为母核，C3位羟基与有机酸缩合，代表成分如莨菪碱、古柯碱"},
+"异喹啉类":{"name":"Isoquinoline Alkaloids","note":	"含异喹啉或四氢异喹啉结构，包括简单异喹啉（萨苏林）、苄基异喹啉（罂粟碱）等"},
+"​吲哚类":{"name":"Indole Alkaloids","note":	"含吲哚环，分为简单吲哚（大青素B）、色胺吲哚（吴茱萸碱）及单萜吲哚（利血平、士的宁）等"},
+"有机胺类":{"name":"Organic Amine Alkaloids","note":	"氮原子不结合在环内，代表成分如麻黄碱、秋水仙碱、益母草碱"},
+"​喹啉类":{"name":"Quinoline Alkaloids","note":	"含喹啉环衍生物，如喜树碱、常山碱"},
+"嘌呤类":{"name":"Purine Alkaloids","note":	"含嘌呤结构，如咖啡碱、茶碱"},
+"​萜类生物碱":{"name":"Terpenoid Alkaloids","note":	"与萜类化合物结合，如乌头碱、飞燕草碱等"},
+"​甾体类生物碱​":{"name":"Steroidal Alkaloids","note":	"含甾体骨架，如贝母碱、茄碱等"},
+"​喹唑酮类":{"name":"Quinazoline Alkaloids","note":	"含喹唑酮环，如常山碱"}
     }
   },
   "黄酮类": {
