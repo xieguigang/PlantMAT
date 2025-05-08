@@ -126,7 +126,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\docs\logo.png">
+    <None Include="..\..\docs\logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
@@ -134,7 +134,7 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <None Include="..\README.md">
+    <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
