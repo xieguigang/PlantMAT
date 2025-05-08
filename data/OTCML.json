@@ -99,33 +99,35 @@
     "name": "Saponins",
     "note": "具有表面活性剂性质。",
     "subclass": {
-      ​甾体皂苷​Steroidal Saponins苷元为27碳甾体化合物，结构含螺旋甾烷或异螺旋甾烷骨架，常见于薯蓣科、百合科等植物。螺旋甾烷类Spirostanol Saponins甾体皂苷的一种，C25甲基位于F环竖键（25S构型），如剑麻皂苷元。异螺旋甾烷类Isospirostanol SaponinsC25甲基位于F环横键（25R构型），如薯蓣皂苷元，是合成激素的重要原料。呋甾烷类Furostanol Saponins甾体皂苷的未闭环形式，如原蜘蛛抱蛋皂苷，需酶解生成活性螺旋甾烷结构。变形螺旋甾烷类Modified Spirostanol甾体皂苷的特殊变体，如燕麦皂苷B，具有抗真菌活性。​三萜皂苷​Triterpenoid Saponins苷元为30碳三萜化合物，分为四环/五环两类，具酸性，广泛分布于五加科、豆科等植物。四环三萜皂苷Tetracyclic Triterpene含四环骨架，包括达玛烷型（如人参皂苷）和羊毛脂烷型（如灵芝酸）。达玛烷型Dammarane Type四环三萜，C8位有β-CH3，如人参皂苷Rh2，具抗癌活性。羊毛脂烷型Lanostane Type四环三萜，含环氧鲨烯环合结构，如酸枣仁皂苷A/B，具镇静作用。五环三萜皂苷Pentacyclic Triterpene含五环骨架，包括齐墩果烷型、乌苏烷型、羽扇豆烷型。齐墩果烷型Oleanane Type五环三萜，C28常为羧基，如甘草酸，具抗炎和抗溃疡活性。乌苏烷型Ursane Type五环三萜，C19和C20甲基构型不同，如熊果酸，存在于地榆和积雪草中。羽扇豆烷型Lupane Type五环三萜，E环为五元环，如白桦醇和白桦酸，存在于白头翁等植物。
+      "​甾体皂苷":{"name":"Steroidal Saponins","note":"苷元为27碳甾体化合物，结构含螺旋甾烷或异螺旋甾烷骨架，常见于薯蓣科、百合科等植物。"},
+      "螺旋甾烷类":{"name":​"Spirostanol Saponins","note":"甾体皂苷的一种，C25甲基位于F环竖键（25S构型），如剑麻皂苷元。"},
+      "异螺旋甾烷类":{"name":​"Isospirostanol Saponins","note":"C25甲基位于F环横键（25R构型），如薯蓣皂苷元，是合成激素的重要原料。"},
+      "呋甾烷类":{"name":​"Furostanol Saponins","note":"甾体皂苷的未闭环形式，如原蜘蛛抱蛋皂苷，需酶解生成活性螺旋甾烷结构。"},
+      "变形螺旋甾烷类":{"name":​"Modified Spirostanol","note":"甾体皂苷的特殊变体，如燕麦皂苷B，具有抗真菌活性。"},
+      "​三萜皂苷":{"name":​"​Triterpenoid Saponins","note":"苷元为30碳三萜化合物，分为四环/五环两类，具酸性，广泛分布于五加科、豆科等植物。"},
+      "四环三萜皂苷":{"name":​"Tetracyclic Triterpene","note":"含四环骨架，包括达玛烷型（如人参皂苷）和羊毛脂烷型（如灵芝酸）。"},
+      "达玛烷型":{"name":​"Dammarane Type","note":"四环三萜，C8位有β-CH3，如人参皂苷Rh2，具抗癌活性。"},
+      "羊毛脂烷型":{"name":​"Lanostane Type","note":"四环三萜，含环氧鲨烯环合结构，如酸枣仁皂苷A/B，具镇静作用。"},
+      "五环三萜皂苷":{"name":​"Pentacyclic Triterpene","note":"含五环骨架，包括齐墩果烷型、乌苏烷型、羽扇豆烷型。"},
+      "齐墩果烷型":{"name":​"Oleanane Type","note":"五环三萜，C28常为羧基，如甘草酸，具抗炎和抗溃疡活性。"},
+      "乌苏烷型":{"name":​"Ursane Type","note":"五环三萜，C19和C20甲基构型不同，如熊果酸，存在于地榆和积雪草中。"},
+      "羽扇豆烷型":{"name":​"Lupane Type","note":"五环三萜，E环为五元环，如白桦醇和白桦酸，存在于白头翁等植物。"}
     }
   },
   "酚类": {
     "name": "Phenolics",
     "note": "包括酚酸、木质素等，具有抗氧化和抗菌作用。",
     "subclass": {
-      简单苯丙酸类	Simple Phenylpropanoids	含苯环-C₃结构，如咖啡酸、阿魏酸，常见于植物代谢物
-。
-苯丙酸内酯类	Phenylpropanoiclactones	苯丙酸衍生的环酯结构，如香豆素，具有光敏性和生物活性
-。
-苯甲酸衍生物类	Benzoic Acid Derivatives	含苯甲酸骨架的酚类，如水杨酸（消炎）、没食子酸（抗氧化）
-。
-木质素	Lignins	复杂多聚体，构成植物细胞壁，由苯丙烷单元聚合形成
-。
-类黄酮类	Flavonoids	含C₆-C₃-C₆结构，包括花青素（色素）、黄酮醇（抗氧化）等
-。
-鞣质类	Tannins	分缩合型（多酚聚合）和可水解型（糖苷键连接），用于鞣制与抗氧化
-。
-一元酚	Monohydric Phenols	芳环含单个羟基，如苯酚（消毒剂）、对甲酚（防腐剂）
-。
-二元酚	Dihydroxy Phenols	芳环含两个羟基，如邻苯二酚（抗氧化）、对苯二酚（显影剂）
-。
-多元酚	Polyhydric Phenols	含三个及以上羟基，如均苯三酚（染料中间体）
-。
-萘酚类	Naphthols	羟基连于萘环，分α-萘酚（紫色显色）和β-萘酚（绿色显色）
-。
+      "简单苯丙酸类":{"name":"Simple Phenylpropanoids","note":	"含苯环-C₃结构，如咖啡酸、阿魏酸，常见于植物代谢物"},
+"苯丙酸内酯类":{"name":"Phenylpropanoiclactones","note":	"苯丙酸衍生的环酯结构，如香豆素，具有光敏性和生物活性"},
+"苯甲酸衍生物类":{"name":"Benzoic Acid Derivatives","note":	"含苯甲酸骨架的酚类，如水杨酸（消炎）、没食子酸（抗氧化）"},
+"木质素":{"name":"Lignins","note":	"复杂多聚体，构成植物细胞壁，由苯丙烷单元聚合形成"},
+"类黄酮类":{"name":"Flavonoids","note":	"含C₆-C₃-C₆结构，包括花青素（色素）、黄酮醇（抗氧化）等"},
+"鞣质类":{"name":"Tannins","note":	"分缩合型（多酚聚合）和可水解型（糖苷键连接），用于鞣制与抗氧化"},
+"一元酚":{"name":"Monohydric Phenols","note":	"芳环含单个羟基，如苯酚（消毒剂）、对甲酚（防腐剂）"},
+"二元酚":{"name":"Dihydroxy Phenols","note":	"芳环含两个羟基，如邻苯二酚（抗氧化）、对苯二酚（显影剂）"},
+"多元酚":{"name":"Polyhydric Phenols","note":	"含三个及以上羟基，如均苯三酚（染料中间体）"},
+"萘酚类":{"name":"Naphthols","note":	"羟基连于萘环，分α-萘酚（紫色显色）和β-萘酚（绿色显色）"}
     }
   },
   "鞣质类": {
