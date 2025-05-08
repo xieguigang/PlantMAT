@@ -135,7 +135,33 @@
   },
   "皂苷类": {
     "name": "Saponins",
-    "note": "具有表面活性剂性质。"
+    "note": "具有表面活性剂性质。",
+    "subclass": {
+      "三萜皂苷": {
+        "name": "Triterpene saponins",
+        "note": "这些皂苷的苷元是三萜类化合物，通常由30个碳原子组成。"
+      },
+      "甾体皂苷": {
+        "name": "Steroidal saponins",
+        "note": "这些皂苷的苷元是甾体类化合物，通常由27个碳原子组成。"
+      },
+      "齐墩果烷型皂苷": {
+        "name": "Oleanane-type saponins",
+        "note": "这些皂苷的苷元是齐墩果烷型三萜类化合物，具有五环结构。"
+      },
+      "乌苏烷型皂苷": {
+        "name": "Ursane-type saponins",
+        "note": "这些皂苷的苷元是乌苏烷型三萜类化合物，具有六环结构。"
+      },
+      "螺旋甾烷型皂苷": {
+        "name": "Spirane-type saponins",
+        "note": "这些皂苷的苷元是螺旋甾烷型甾体类化合物。"
+      },
+      "异螺旋甾烷型皂苷": {
+        "name": "Homo-spirane-type saponins",
+        "note": "这些皂苷的苷元是异螺旋甾烷型甾体类化合物。"
+      }
+    }
   },
   "酚类": {
     "name": "Phenolics",
