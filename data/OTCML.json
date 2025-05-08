@@ -233,44 +233,28 @@
     "name": "Nucleotides",
     "note": "与核酸相关，具有调节代谢和抗病毒作用。",
     "subclass": {
-      ​核糖核苷酸​	Ribonucleotides	由核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、尿嘧啶）组成，如AMP（腺苷酸）、GMP（鸟苷酸）等
-      。
-      ​脱氧核糖核苷酸​	Deoxyribonucleotides	由脱氧核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、胸腺嘧啶）组成，如dAMP（脱氧腺苷酸）、dCMP（脱氧胞苷酸）等
-      。
-      ​环化核苷酸​	Cyclic Nucleotides	核苷酸的磷酸基与核糖3'和5'羟基形成环状结构，如cAMP（环腺苷酸）、cGMP（环鸟苷酸），参与细胞信号传导
-      。
-      ​核苷酸衍生物​	Nucleotide Derivatives	包括核苷酸的高能磷酸化形式（如ADP、ATP）及修饰产物，在能量代谢中起核心作用
-      。
-      ​N-苷类核苷酸​	N-Glycosidic Nucleotides	碱基通过氮原子与核糖连接形成的核苷类化合物，如腺苷（Adenosine）、巴豆苷（Crotonoside）等，常见于中药成分
-      。
-
+      "​核糖核苷酸​":{"name":"Ribonucleotides","note":	"由核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、尿嘧啶）组成，如AMP（腺苷酸）、GMP（鸟苷酸）等"},
+    "​脱氧核糖核苷酸​":{"name":"Deoxyribonucleotides","note":	"由脱氧核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、胸腺嘧啶）组成，如dAMP（脱氧腺苷酸）、dCMP（脱氧胞苷酸）等"},
+      "​环化核苷酸​":{"name":"Cyclic Nucleotides","note":	"核苷酸的磷酸基与核糖3'和5'羟基形成环状结构，如cAMP（环腺苷酸）、cGMP（环鸟苷酸），参与细胞信号传导"},
+      "​核苷酸衍生物​":{"name":"Nucleotide Derivatives","note":	"包括核苷酸的高能磷酸化形式（如ADP、ATP）及修饰产物，在能量代谢中起核心作用"},
+      "​N-苷类核苷酸​":{"name":"N-Glycosidic Nucleotides","note":	"碱基通过氮原子与核糖连接形成的核苷类化合物，如腺苷（Adenosine）、巴豆苷（Crotonoside）等，常见于中药成分"}
     }
   },
   "脂类": {
     "name": "Lipids",
     "note": "包括脂肪酸及其衍生物，具有调节代谢和抗炎作用。",
     "subclass": {
-      ​复合脂类​​​":{"name":"​Complex Lipids​	含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等
-。
-- 甘油酯（三酰甘油）​​":{"name":"Triacylglycerols (TAG)	甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分
-。
-- 磷脂​​":{"name":"Phospholipids (PC, PE, PI等)	含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分
-。
-- 糖脂​​":{"name":"Glycolipids (MGDG, DGDG等)	含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统
-。
-- 硫脂​​":{"name":"Sulfolipids	糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜
-。
-​简单脂类​​​":{"name":"​Simple Lipids​	不含脂肪酸的脂类，不可皂化，包括萜类和甾类
-。
-- 萜类​​":{"name":"Terpenoids	以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性
-。
-- 甾类（类固醇）​​":{"name":"Steroids	含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用
-。
-​其他功能性脂类​​​":{"name":"Functional Lipids​	具有特殊生物活性的脂类成分
-。
-- 游离脂肪酸​​":{"name":"Free Fatty Acids (FFA)	如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用
-。
-- 植物鞘脂​​":{"name":"Phytosphingolipids	如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定
+      "​复合脂类​​​":{"name":"​Complex Lipids​","note":	"含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等"},
+"甘油酯（三酰甘油）​​":{"name":"Triacylglycerols (TAG)","note":	"甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分"},
+"磷脂​​":{"name":"Phospholipids","note":	" (PC, PE, PI等)	含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分"},
+"糖脂​​":{"name":"Glycolipids","note":	" (MGDG, DGDG等)	含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统"},
+"硫脂​​":{"name":"Sulfolipids","note":	"糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜"},
+"简单脂类​​​":{"name":"​Simple Lipids​","note":	"不含脂肪酸的脂类，不可皂化，包括萜类和甾类"},
+"萜类​​":{"name":"Terpenoids","note":	"以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性"},
+"甾类（类固醇）​​":{"name":"Steroids","note":	"含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用"},
+"其他功能性脂类​​​":{"name":"Functional Lipids​","note":	"具有特殊生物活性的脂类成分"},
+"游离脂肪酸​​":{"name":"Free Fatty Acids (FFA)","note":	"如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用"},
+"植物鞘脂​​":{"name":"Phytosphingolipids","note":	"如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定"}
     }
   }
 }
