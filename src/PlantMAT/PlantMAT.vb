@@ -62,6 +62,7 @@ Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.MetaData
 Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.Text.Xml.Models
+Imports PlantMAT.Core
 Imports PlantMAT.Core.Algorithm
 Imports PlantMAT.Core.Algorithm.InternalCache
 Imports PlantMAT.Core.Models
@@ -74,8 +75,8 @@ Imports SMRUCC.Rsharp.Runtime.Vectorization
 Imports any = Microsoft.VisualBasic.Scripting
 Imports Library = PlantMAT.Core.Models.Library
 Imports PlantMATlib = PlantMAT.Core.Models.Library
-Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 Imports Rdataframe = SMRUCC.Rsharp.Runtime.Internal.Object.dataframe
+Imports RInternal = SMRUCC.Rsharp.Runtime.Internal
 
 ''' <summary>
 ''' PlantMAT: A Metabolomics Tool for Predicting the Specialized 
@@ -123,7 +124,7 @@ Module PlantMAT
 
     Sub New()
         RInternal.ConsolePrinter.AttachConsoleFormatter(Of Settings)(Function(o) DirectCast(o, Settings).ToString)
-        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Report.Table)(Function(o) o.ToString)
+        RInternal.ConsolePrinter.AttachConsoleFormatter(Of Table)(Function(o) o.ToString)
         RInternal.htmlPrinter.AttachHtmlFormatter(Of Query())(AddressOf Html.GetReportHtml)
         RInternal.Object.Converts.makeDataframe.addHandler(GetType(MzAnnotation()), AddressOf ProductAnnotationResultTable)
     End Sub
@@ -484,7 +485,7 @@ Module PlantMAT
     ''' <param name="env"></param>
     ''' <returns></returns>
     <ExportAPI("report.table")>
-    <RApiReturn(GetType(Report.Table))>
+    <RApiReturn(GetType(Table))>
     Public Function reportTable(<RRawVectorArgument> result As Object, Optional env As Environment = Nothing) As Object
         Dim data As pipeline = pipeline.TryCreatePipeline(Of Query)(result, env)
 
@@ -493,14 +494,14 @@ Module PlantMAT
         End If
 
         Return data.populates(Of Query)(env) _
-            .Select(AddressOf Report.Table.PopulateRows) _
+            .Select(AddressOf Table.PopulateRows) _
             .IteratesALL _
             .ToArray
     End Function
 
     <ExportAPI("read.PlantMAT.report_table")>
-    Public Function readPlantMATReportTable(file As String) As Report.Table()
-        Return file.LoadCsv(Of Report.Table).ToArray
+    Public Function readPlantMATReportTable(file As String) As Table()
+        Return file.LoadCsv(Of Table).ToArray
     End Function
 
     <ExportAPI("neutral_loss")>
@@ -553,7 +554,7 @@ Module PlantMAT
                         Return New Library With {
                             .[Class] = "NA",
                             .CommonName = i.name(Scan0),
-                            .[Date] = Now,
+                            .[Date] = now(),
                             .Editor = "KNApSAcK",
                             .ExactMass = i.mw,
                             .Formula = i.formula,

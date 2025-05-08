@@ -114,7 +114,7 @@ Namespace Report
             Return $"Dim {accession} As {candidate}.{precursor_type}"
         End Function
 
-        Friend Shared Iterator Function PopulateRows(query As Query) As IEnumerable(Of Table)
+        Public Shared Iterator Function PopulateRows(query As Query) As IEnumerable(Of Table)
             If query.Candidates.IsNullOrEmpty Then
                 Yield New Table With {
                     .stats = "no hits...",
