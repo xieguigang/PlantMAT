@@ -179,20 +179,19 @@
     "name": "Lactones",
     "note": "具有多种生物活性，如抗菌、抗病毒等。",
     "subclass": {
-      ​倍半萜内酯​	Sesquiterpene lactones	由15个碳原子构成的萜类内酯，主要存在于菊科植物中，具有抗肿瘤、抗炎等活性。例如银杏中的白果内酯（bilobalide）
-。
-​二萜内酯​	Diterpene lactones	由20个碳原子组成的萜类内酯，如银杏内酯A/B（ginkgolide A/B），具有抗血小板活化因子作用
-。
-​苯酞类内酯​	Phthalide lactones	含苯环结构的芳香族内酯，常见于当归、川芎等中药，如洋川芎内酯I（senkyunolide I）和藁本内酯（ligustilide）
-。
-​吉马内酯型​	Germacranolides	倍半萜内酯的一种亚型，具有十元环骨架，如青蒿素（artemisinin）及其衍生物，用于抗疟和抗肿瘤
-。
-​愈创木内酯型​	Guaianolides	含七元环的倍半萜内酯，如土木香内酯（alantolactone）和地胆草内酯（elephantopin），具有抗肿瘤活性
-。
-​γ/δ内酯​	γ/δ-Lactones	根据酯环大小命名，γ为五元环（如γ-丁内酯），δ为六元环（如δ-己内酯），广泛存在于植物挥发油中
-。
-​白术内酯类​	Atractylenolides	白术中特有的倍半萜内酯，如白术内酯Ⅰ/Ⅱ（atractylenolide I/II），具有抗炎和调节免疫作用
-。
+      "​倍半萜内酯​​​":{"name":"Sesquiterpene lactones","note":	"由15个碳原子构成的萜类内酯，主要存在于菊科植物中，具有抗肿瘤、抗炎等活性。例如银杏中的白果内酯（bilobalide）"},
+
+"​二萜内酯​​​":{"name":"Diterpene lactones","note":	"由20个碳原子组成的萜类内酯，如银杏内酯A/B（ginkgolide A/B），具有抗血小板活化因子作用"},
+
+"​苯酞类内酯​​​":{"name":"Phthalide lactones","note":	"含苯环结构的芳香族内酯，常见于当归、川芎等中药，如洋川芎内酯I（senkyunolide I）和藁本内酯（ligustilide）"},
+
+"​吉马内酯型​​​":{"name":"Germacranolides","note":	"倍半萜内酯的一种亚型，具有十元环骨架，如青蒿素（artemisinin）及其衍生物，用于抗疟和抗肿瘤"},
+
+"​愈创木内酯型​​​":{"name":"Guaianolides","note":	"含七元环的倍半萜内酯，如土木香内酯（alantolactone）和地胆草内酯（elephantopin），具有抗肿瘤活性"},
+
+"​γ/δ内酯​​​":{"name":"γ/δ-Lactones","note":	"根据酯环大小命名，γ为五元环（如γ-丁内酯），δ为六元环（如δ-己内酯），广泛存在于植物挥发油中"},
+
+"​白术内酯类​​​":{"name":"Atractylenolides","note":	"白术中特有的倍半萜内酯，如白术内酯Ⅰ/Ⅱ（atractylenolide I/II），具有抗炎和调节免疫作用"}
     }
   },
   "蛋白质和肽类": {
