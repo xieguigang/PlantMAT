@@ -250,27 +250,27 @@
     "name": "Lipids",
     "note": "包括脂肪酸及其衍生物，具有调节代谢和抗炎作用。",
     "subclass": {
-      ​复合脂类​	​Complex Lipids​	含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等
+      ​复合脂类​​​":{"name":"​Complex Lipids​	含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等
 。
-- 甘油酯（三酰甘油）	Triacylglycerols (TAG)	甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分
+- 甘油酯（三酰甘油）​​":{"name":"Triacylglycerols (TAG)	甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分
 。
-- 磷脂	Phospholipids (PC, PE, PI等)	含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分
+- 磷脂​​":{"name":"Phospholipids (PC, PE, PI等)	含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分
 。
-- 糖脂	Glycolipids (MGDG, DGDG等)	含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统
+- 糖脂​​":{"name":"Glycolipids (MGDG, DGDG等)	含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统
 。
-- 硫脂	Sulfolipids	糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜
+- 硫脂​​":{"name":"Sulfolipids	糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜
 。
-​简单脂类​	​Simple Lipids​	不含脂肪酸的脂类，不可皂化，包括萜类和甾类
+​简单脂类​​​":{"name":"​Simple Lipids​	不含脂肪酸的脂类，不可皂化，包括萜类和甾类
 。
-- 萜类	Terpenoids	以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性
+- 萜类​​":{"name":"Terpenoids	以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性
 。
-- 甾类（类固醇）	Steroids	含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用
+- 甾类（类固醇）​​":{"name":"Steroids	含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用
 。
-​其他功能性脂类​	​Functional Lipids​	具有特殊生物活性的脂类成分
+​其他功能性脂类​​​":{"name":"Functional Lipids​	具有特殊生物活性的脂类成分
 。
-- 游离脂肪酸	Free Fatty Acids (FFA)	如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用
+- 游离脂肪酸​​":{"name":"Free Fatty Acids (FFA)	如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用
 。
-- 植物鞘脂	Phytosphingolipids	如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定
+- 植物鞘脂​​":{"name":"Phytosphingolipids	如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定
     }
   }
 }
