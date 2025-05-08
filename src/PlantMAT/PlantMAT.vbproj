@@ -4,6 +4,7 @@
     <RootNamespace>PlantMAT</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
     <OutputPath>../..\assembly\</OutputPath>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
