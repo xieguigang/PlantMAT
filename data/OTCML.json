@@ -3,16 +3,46 @@
     "name": "Alkaloids",
     "note": "含氮有机化合物，具有显著的药理活性。",
     "subclass": {
-      "吡啶类":{"name":"Pyridine Alkaloids","note":	"含吡啶或哌啶衍生物，分为简单吡啶类（槟榔碱、烟碱等）和双稠哌啶类（苦参碱、氧化苦参碱等）"},
-"莨菪烷类":{"name":"Tropane Alkaloids","note":	"以莨菪烷环为母核，C3位羟基与有机酸缩合，代表成分如莨菪碱、古柯碱"},
-"异喹啉类":{"name":"Isoquinoline Alkaloids","note":	"含异喹啉或四氢异喹啉结构，包括简单异喹啉（萨苏林）、苄基异喹啉（罂粟碱）等"},
-"吲哚类":{"name":"Indole Alkaloids","note":	"含吲哚环，分为简单吲哚（大青素B）、色胺吲哚（吴茱萸碱）及单萜吲哚（利血平、士的宁）等"},
-"有机胺类":{"name":"Organic Amine Alkaloids","note":	"氮原子不结合在环内，代表成分如麻黄碱、秋水仙碱、益母草碱"},
-"喹啉类":{"name":"Quinoline Alkaloids","note":	"含喹啉环衍生物，如喜树碱、常山碱"},
-"嘌呤类":{"name":"Purine Alkaloids","note":	"含嘌呤结构，如咖啡碱、茶碱"},
-"萜类生物碱":{"name":"Terpenoid Alkaloids","note":	"与萜类化合物结合，如乌头碱、飞燕草碱等"},
-"甾体类生物碱":{"name":"Steroidal Alkaloids","note":	"含甾体骨架，如贝母碱、茄碱等"},
-"喹唑酮类":{"name":"Quinazoline Alkaloids","note":	"含喹唑酮环，如常山碱"}
+      "吡啶类": {
+        "name": "Pyridine Alkaloids",
+        "note": "含吡啶或哌啶衍生物，分为简单吡啶类（槟榔碱、烟碱等）和双稠哌啶类（苦参碱、氧化苦参碱等）"
+      },
+      "莨菪烷类": {
+        "name": "Tropane Alkaloids",
+        "note": "以莨菪烷环为母核，C3位羟基与有机酸缩合，代表成分如莨菪碱、古柯碱"
+      },
+      "异喹啉类": {
+        "name": "Isoquinoline Alkaloids",
+        "note": "含异喹啉或四氢异喹啉结构，包括简单异喹啉（萨苏林）、苄基异喹啉（罂粟碱）等"
+      },
+      "吲哚类": {
+        "name": "Indole Alkaloids",
+        "note": "含吲哚环，分为简单吲哚（大青素B）、色胺吲哚（吴茱萸碱）及单萜吲哚（利血平、士的宁）等"
+      },
+      "有机胺类": {
+        "name": "Organic Amine Alkaloids",
+        "note": "氮原子不结合在环内，代表成分如麻黄碱、秋水仙碱、益母草碱"
+      },
+      "喹啉类": {
+        "name": "Quinoline Alkaloids",
+        "note": "含喹啉环衍生物，如喜树碱、常山碱"
+      },
+      "嘌呤类": {
+        "name": "Purine Alkaloids",
+        "note": "含嘌呤结构，如咖啡碱、茶碱"
+      },
+      "萜类生物碱": {
+        "name": "Terpenoid Alkaloids",
+        "note": "与萜类化合物结合，如乌头碱、飞燕草碱等"
+      },
+      "甾体类生物碱": {
+        "name": "Steroidal Alkaloids",
+        "note": "含甾体骨架，如贝母碱、茄碱等"
+      },
+      "喹唑酮类": {
+        "name": "Quinazoline Alkaloids",
+        "note": "含喹唑酮环，如常山碱"
+      }
     }
   },
   "黄酮类": {
@@ -85,171 +115,437 @@
     "name": "Terpenoids",
     "note": "包括单萜、倍半萜、二萜、三萜及甾体类等。",
     "subclass": {
-      "半萜":{"name":	"Hemiterpenoids","note":	"含1个异戊二烯单元（C5H8），如间异戊二烯，存在于植物挥发油及叶中"},
-"单萜":{"name":	"Monoterpenoids","note":	"含2个异戊二烯单元（C10H16），是挥发油的主要成分，分为无环、单环、双环等类型，如薄荷醇、樟脑"},
-"倍半萜":{"name":	"Sesquiterpenoids","note":	"含3个异戊二烯单元（C15H24），多存在于挥发油高沸点部分，如青蒿素、金合欢醇"},
-"二萜":{"name":	"Diterpenoids","note":	"含4个异戊二烯单元（C20H32），构成树脂和苦味素，如穿心莲内酯、紫杉醇"},
-"二倍半萜":{"name":	"Sesterterpenoids","note":	"含5个异戊二烯单元（C25H40），较少见，存在于海绵及昆虫代谢物中"},
-"三萜":{"name":	"Triterpenoids","note":	"含6个异戊二烯单元（C30H48），常以皂苷形式存在，如甘草酸、人参皂苷"},
-"四萜":{"name":	"Tetraterpenoids","note":	"含8个异戊二烯单元（C40H64），如胡萝卜素类植物色素，参与光合作用"},
-"多聚萜":{"name":	"Polyterpenoids","note":	"含8个以上异戊二烯单元（如C5H8）n（n≥8），如橡胶、硬橡胶等高分子化合物"}
+      "半萜": {
+        "name": "Hemiterpenoids",
+        "note": "含1个异戊二烯单元（C5H8），如间异戊二烯，存在于植物挥发油及叶中"
+      },
+      "单萜": {
+        "name": "Monoterpenoids",
+        "note": "含2个异戊二烯单元（C10H16），是挥发油的主要成分，分为无环、单环、双环等类型，如薄荷醇、樟脑"
+      },
+      "倍半萜": {
+        "name": "Sesquiterpenoids",
+        "note": "含3个异戊二烯单元（C15H24），多存在于挥发油高沸点部分，如青蒿素、金合欢醇"
+      },
+      "二萜": {
+        "name": "Diterpenoids",
+        "note": "含4个异戊二烯单元（C20H32），构成树脂和苦味素，如穿心莲内酯、紫杉醇"
+      },
+      "二倍半萜": {
+        "name": "Sesterterpenoids",
+        "note": "含5个异戊二烯单元（C25H40），较少见，存在于海绵及昆虫代谢物中"
+      },
+      "三萜": {
+        "name": "Triterpenoids",
+        "note": "含6个异戊二烯单元（C30H48），常以皂苷形式存在，如甘草酸、人参皂苷"
+      },
+      "四萜": {
+        "name": "Tetraterpenoids",
+        "note": "含8个异戊二烯单元（C40H64），如胡萝卜素类植物色素，参与光合作用"
+      },
+      "多聚萜": {
+        "name": "Polyterpenoids",
+        "note": "含8个以上异戊二烯单元（如C5H8）n（n≥8），如橡胶、硬橡胶等高分子化合物"
+      }
     }
   },
   "皂苷类": {
     "name": "Saponins",
     "note": "具有表面活性剂性质。",
     "subclass": {
-      "甾体皂苷":{"name":"Steroidal Saponins","note":"苷元为27碳甾体化合物，结构含螺旋甾烷或异螺旋甾烷骨架，常见于薯蓣科、百合科等植物。"},
-      "螺旋甾烷类":{"name":"Spirostanol Saponins","note":"甾体皂苷的一种，C25甲基位于F环竖键（25S构型），如剑麻皂苷元。"},
-      "异螺旋甾烷类":{"name":"Isospirostanol Saponins","note":"C25甲基位于F环横键（25R构型），如薯蓣皂苷元，是合成激素的重要原料。"},
-      "呋甾烷类":{"name":"Furostanol Saponins","note":"甾体皂苷的未闭环形式，如原蜘蛛抱蛋皂苷，需酶解生成活性螺旋甾烷结构。"},
-      "变形螺旋甾烷类":{"name":"Modified Spirostanol","note":"甾体皂苷的特殊变体，如燕麦皂苷B，具有抗真菌活性。"},
-      "三萜皂苷":{"name":"Triterpenoid Saponins","note":"苷元为30碳三萜化合物，分为四环/五环两类，具酸性，广泛分布于五加科、豆科等植物。"},
-      "四环三萜皂苷":{"name":"Tetracyclic Triterpene","note":"含四环骨架，包括达玛烷型（如人参皂苷）和羊毛脂烷型（如灵芝酸）。"},
-      "达玛烷型":{"name":"Dammarane Type","note":"四环三萜，C8位有β-CH3，如人参皂苷Rh2，具抗癌活性。"},
-      "羊毛脂烷型":{"name":"Lanostane Type","note":"四环三萜，含环氧鲨烯环合结构，如酸枣仁皂苷A/B，具镇静作用。"},
-      "五环三萜皂苷":{"name":"Pentacyclic Triterpene","note":"含五环骨架，包括齐墩果烷型、乌苏烷型、羽扇豆烷型。"},
-      "齐墩果烷型":{"name":"Oleanane Type","note":"五环三萜，C28常为羧基，如甘草酸，具抗炎和抗溃疡活性。"},
-      "乌苏烷型":{"name":"Ursane Type","note":"五环三萜，C19和C20甲基构型不同，如熊果酸，存在于地榆和积雪草中。"},
-      "羽扇豆烷型":{"name":"Lupane Type","note":"五环三萜，E环为五元环，如白桦醇和白桦酸，存在于白头翁等植物。"}
+      "甾体皂苷": {
+        "name": "Steroidal Saponins",
+        "note": "苷元为27碳甾体化合物，结构含螺旋甾烷或异螺旋甾烷骨架，常见于薯蓣科、百合科等植物。"
+      },
+      "螺旋甾烷类": {
+        "name": "Spirostanol Saponins",
+        "note": "甾体皂苷的一种，C25甲基位于F环竖键（25S构型），如剑麻皂苷元。"
+      },
+      "异螺旋甾烷类": {
+        "name": "Isospirostanol Saponins",
+        "note": "C25甲基位于F环横键（25R构型），如薯蓣皂苷元，是合成激素的重要原料。"
+      },
+      "呋甾烷类": {
+        "name": "Furostanol Saponins",
+        "note": "甾体皂苷的未闭环形式，如原蜘蛛抱蛋皂苷，需酶解生成活性螺旋甾烷结构。"
+      },
+      "变形螺旋甾烷类": {
+        "name": "Modified Spirostanol",
+        "note": "甾体皂苷的特殊变体，如燕麦皂苷B，具有抗真菌活性。"
+      },
+      "三萜皂苷": {
+        "name": "Triterpenoid Saponins",
+        "note": "苷元为30碳三萜化合物，分为四环/五环两类，具酸性，广泛分布于五加科、豆科等植物。"
+      },
+      "四环三萜皂苷": {
+        "name": "Tetracyclic Triterpene",
+        "note": "含四环骨架，包括达玛烷型（如人参皂苷）和羊毛脂烷型（如灵芝酸）。"
+      },
+      "达玛烷型": {
+        "name": "Dammarane Type",
+        "note": "四环三萜，C8位有β-CH3，如人参皂苷Rh2，具抗癌活性。"
+      },
+      "羊毛脂烷型": {
+        "name": "Lanostane Type",
+        "note": "四环三萜，含环氧鲨烯环合结构，如酸枣仁皂苷A/B，具镇静作用。"
+      },
+      "五环三萜皂苷": {
+        "name": "Pentacyclic Triterpene",
+        "note": "含五环骨架，包括齐墩果烷型、乌苏烷型、羽扇豆烷型。"
+      },
+      "齐墩果烷型": {
+        "name": "Oleanane Type",
+        "note": "五环三萜，C28常为羧基，如甘草酸，具抗炎和抗溃疡活性。"
+      },
+      "乌苏烷型": {
+        "name": "Ursane Type",
+        "note": "五环三萜，C19和C20甲基构型不同，如熊果酸，存在于地榆和积雪草中。"
+      },
+      "羽扇豆烷型": {
+        "name": "Lupane Type",
+        "note": "五环三萜，E环为五元环，如白桦醇和白桦酸，存在于白头翁等植物。"
+      }
     }
   },
   "酚类": {
     "name": "Phenolics",
     "note": "包括酚酸、木质素等，具有抗氧化和抗菌作用。",
     "subclass": {
-      "简单苯丙酸类":{"name":"Simple Phenylpropanoids","note":	"含苯环-C₃结构，如咖啡酸、阿魏酸，常见于植物代谢物"},
-"苯丙酸内酯类":{"name":"Phenylpropanoiclactones","note":	"苯丙酸衍生的环酯结构，如香豆素，具有光敏性和生物活性"},
-"苯甲酸衍生物类":{"name":"Benzoic Acid Derivatives","note":	"含苯甲酸骨架的酚类，如水杨酸（消炎）、没食子酸（抗氧化）"},
-"木质素":{"name":"Lignins","note":	"复杂多聚体，构成植物细胞壁，由苯丙烷单元聚合形成"},
-"类黄酮类":{"name":"Flavonoids","note":	"含C₆-C₃-C₆结构，包括花青素（色素）、黄酮醇（抗氧化）等"},
-"鞣质类":{"name":"Tannins","note":	"分缩合型（多酚聚合）和可水解型（糖苷键连接），用于鞣制与抗氧化"},
-"一元酚":{"name":"Monohydric Phenols","note":	"芳环含单个羟基，如苯酚（消毒剂）、对甲酚（防腐剂）"},
-"二元酚":{"name":"Dihydroxy Phenols","note":	"芳环含两个羟基，如邻苯二酚（抗氧化）、对苯二酚（显影剂）"},
-"多元酚":{"name":"Polyhydric Phenols","note":	"含三个及以上羟基，如均苯三酚（染料中间体）"},
-"萘酚类":{"name":"Naphthols","note":	"羟基连于萘环，分α-萘酚（紫色显色）和β-萘酚（绿色显色）"}
+      "简单苯丙酸类": {
+        "name": "Simple Phenylpropanoids",
+        "note": "含苯环-C₃结构，如咖啡酸、阿魏酸，常见于植物代谢物"
+      },
+      "苯丙酸内酯类": {
+        "name": "Phenylpropanoiclactones",
+        "note": "苯丙酸衍生的环酯结构，如香豆素，具有光敏性和生物活性"
+      },
+      "苯甲酸衍生物类": {
+        "name": "Benzoic Acid Derivatives",
+        "note": "含苯甲酸骨架的酚类，如水杨酸（消炎）、没食子酸（抗氧化）"
+      },
+      "木质素": {
+        "name": "Lignins",
+        "note": "复杂多聚体，构成植物细胞壁，由苯丙烷单元聚合形成"
+      },
+      "类黄酮类": {
+        "name": "Flavonoids",
+        "note": "含C₆-C₃-C₆结构，包括花青素（色素）、黄酮醇（抗氧化）等"
+      },
+      "鞣质类": {
+        "name": "Tannins",
+        "note": "分缩合型（多酚聚合）和可水解型（糖苷键连接），用于鞣制与抗氧化"
+      },
+      "一元酚": {
+        "name": "Monohydric Phenols",
+        "note": "芳环含单个羟基，如苯酚（消毒剂）、对甲酚（防腐剂）"
+      },
+      "二元酚": {
+        "name": "Dihydroxy Phenols",
+        "note": "芳环含两个羟基，如邻苯二酚（抗氧化）、对苯二酚（显影剂）"
+      },
+      "多元酚": {
+        "name": "Polyhydric Phenols",
+        "note": "含三个及以上羟基，如均苯三酚（染料中间体）"
+      },
+      "萘酚类": {
+        "name": "Naphthols",
+        "note": "羟基连于萘环，分α-萘酚（紫色显色）和β-萘酚（绿色显色）"
+      }
     }
   },
   "鞣质类": {
     "name": "Tannins",
     "note": "分子量大，水溶性好，在某些中药中为有效成分。",
     "subclass": {
-      "可水解鞣质":{"name":"Hydrolysable Tannins","note":	"分子中含有酯键或苷键，可被酸、碱、酶水解为小分子酚酸和糖/多元醇"},
-"没食子鞣质":{"name":"Gallotannins","note":	"水解后生成没食子酸和糖或多元醇，常见于五倍子等植物"},
-"逆没食子鞣质（鞣花鞣质）":{"name":"Ellagitannins","note":	"水解产生鞣花酸（逆没食子酸），结构含六羟基联苯二酸基团，广泛分布于植物界"},
-"可水解鞣质低聚体":{"name":"Hydrolysable Tannin Oligomers","note":	"由2分子以上逆没食子鞣质缩合形成，按葡萄糖核数目分为二聚体、三聚体等"},
-"C-苷鞣质":{"name":"C-glycosidic Tannins","note":	"糖开环后端基碳与酚酸苯环以C-C键直接连接，化学性质稳定，如木麻黄宁"},
-"咖啡鞣质":{"name":"Caffeetannins","note":	"含二咖啡酰奎宁酸类化合物，具鞣质活性，见于咖啡豆及菊科植物"},
-"缩合鞣质":{"name":"Condensed Tannins","note":	"由黄烷-3-醇或其衍生物通过C-C键缩合而成，久置或酸处理生成不溶性鞣红"},
-"复合鞣质":{"name":"Complex Tannins","note":	"由可水解鞣质与黄烷醇类缩合而成，兼具两者的结构特征"}
+      "可水解鞣质": {
+        "name": "Hydrolysable Tannins",
+        "note": "分子中含有酯键或苷键，可被酸、碱、酶水解为小分子酚酸和糖/多元醇"
+      },
+      "没食子鞣质": {
+        "name": "Gallotannins",
+        "note": "水解后生成没食子酸和糖或多元醇，常见于五倍子等植物"
+      },
+      "逆没食子鞣质（鞣花鞣质）": {
+        "name": "Ellagitannins",
+        "note": "水解产生鞣花酸（逆没食子酸），结构含六羟基联苯二酸基团，广泛分布于植物界"
+      },
+      "可水解鞣质低聚体": {
+        "name": "Hydrolysable Tannin Oligomers",
+        "note": "由2分子以上逆没食子鞣质缩合形成，按葡萄糖核数目分为二聚体、三聚体等"
+      },
+      "C-苷鞣质": {
+        "name": "C-glycosidic Tannins",
+        "note": "糖开环后端基碳与酚酸苯环以C-C键直接连接，化学性质稳定，如木麻黄宁"
+      },
+      "咖啡鞣质": {
+        "name": "Caffeetannins",
+        "note": "含二咖啡酰奎宁酸类化合物，具鞣质活性，见于咖啡豆及菊科植物"
+      },
+      "缩合鞣质": {
+        "name": "Condensed Tannins",
+        "note": "由黄烷-3-醇或其衍生物通过C-C键缩合而成，久置或酸处理生成不溶性鞣红"
+      },
+      "复合鞣质": {
+        "name": "Complex Tannins",
+        "note": "由可水解鞣质与黄烷醇类缩合而成，兼具两者的结构特征"
+      }
     }
   },
   "蒽醌类": {
     "name": "Anthraquinones",
     "note": "具有显著的抗氧化和抗肿瘤活性。",
     "subclass": {
-      "单蒽核类":{"name":"Monoanthracene nucleus","note":	"仅含一个蒽核的化合物，包括蒽醌及其不同还原程度的产物（如蒽酚、蒽酮等）及甙类，天然以9,10-蒽醌为主"},
-"双蒽核类":{"name":"Bianthracene nucleus","note":	"含两个蒽核的化合物，包括二蒽酮（如番泻苷）、二蒽醌（如山扁豆双醌）等，常通过碳碳键连接"},
-"氧化蒽酚":{"name":"Oxanthranol","note":	"蒽醌在碱性条件下被锌粉还原生成的产物，不稳定，易进一步氧化为蒽酮或蒽酚"},
-"蒽酮":{"name":"Anthrone","note":	"蒽醌在酸性条件下还原的产物，可游离存在或与糖结合成苷，如新鲜大黄中的蒽酚苷类"},
-"蒽酚":{"name":"Anthranol","note":	"蒽醌的还原产物，通常需结合糖苷形式稳定存在，否则易氧化为蒽酮或蒽醌"},
-"游离蒽醌":{"name":"Free anthraquinones","note":	"未与糖结合的蒽醌类化合物，易溶于有机溶剂（如乙醚、氯仿）及碱性水溶液，难溶于水"},
-"结合蒽醌（蒽醌苷）":{"name":"Conjugated anthraquinones","note":	"蒽醌羟基与糖缩合形成的苷类，分子量较小（<500），溶于水及极性溶剂，如芦荟苷"},
-"去氢二蒽酮类":{"name":"Dehydrodianthrones","note":	"二蒽酮进一步脱氢氧化的产物，两环间以双键相连，颜色呈暗紫红色，存在于金丝桃属植物中"},
-"日照蒽酮类":{"name":"Dianthrones with photoactivity","note":	"去氢二蒽酮进一步氧化形成的新六元环结构，具有光敏活性"},
-"中位萘骈二蒽酮类":{"name":"Meso-naphthodianthrones","note":	"高度氧化的多元环系统（含8个环），如金丝桃素，具有抗病毒和中枢神经抑制作用"}
+      "单蒽核类": {
+        "name": "Monoanthracene nucleus",
+        "note": "仅含一个蒽核的化合物，包括蒽醌及其不同还原程度的产物（如蒽酚、蒽酮等）及甙类，天然以9,10-蒽醌为主"
+      },
+      "双蒽核类": {
+        "name": "Bianthracene nucleus",
+        "note": "含两个蒽核的化合物，包括二蒽酮（如番泻苷）、二蒽醌（如山扁豆双醌）等，常通过碳碳键连接"
+      },
+      "氧化蒽酚": {
+        "name": "Oxanthranol",
+        "note": "蒽醌在碱性条件下被锌粉还原生成的产物，不稳定，易进一步氧化为蒽酮或蒽酚"
+      },
+      "蒽酮": {
+        "name": "Anthrone",
+        "note": "蒽醌在酸性条件下还原的产物，可游离存在或与糖结合成苷，如新鲜大黄中的蒽酚苷类"
+      },
+      "蒽酚": {
+        "name": "Anthranol",
+        "note": "蒽醌的还原产物，通常需结合糖苷形式稳定存在，否则易氧化为蒽酮或蒽醌"
+      },
+      "游离蒽醌": {
+        "name": "Free anthraquinones",
+        "note": "未与糖结合的蒽醌类化合物，易溶于有机溶剂（如乙醚、氯仿）及碱性水溶液，难溶于水"
+      },
+      "结合蒽醌（蒽醌苷）": {
+        "name": "Conjugated anthraquinones",
+        "note": "蒽醌羟基与糖缩合形成的苷类，分子量较小（<500），溶于水及极性溶剂，如芦荟苷"
+      },
+      "去氢二蒽酮类": {
+        "name": "Dehydrodianthrones",
+        "note": "二蒽酮进一步脱氢氧化的产物，两环间以双键相连，颜色呈暗紫红色，存在于金丝桃属植物中"
+      },
+      "日照蒽酮类": {
+        "name": "Dianthrones with photoactivity",
+        "note": "去氢二蒽酮进一步氧化形成的新六元环结构，具有光敏活性"
+      },
+      "中位萘骈二蒽酮类": {
+        "name": "Meso-naphthodianthrones",
+        "note": "高度氧化的多元环系统（含8个环），如金丝桃素，具有抗病毒和中枢神经抑制作用"
+      }
     }
   },
   "苯丙素类": {
     "name": "Phenylpropanoids",
     "note": "苯丙素类化合物是一类天然存在的芳香族化合物，其基本母核具有一个或多个C6-C3结构单元（苯环连接三个直链碳），广泛分布于植物界。这类化合物在生物合成上多通过莽草酸途径生成，由苯丙氨酸或酪氨酸经脱氨、羟基化等反应形成",
     "subclass": {
-      "简单苯丙素类":{"name":"Simple phenylpropanoids","note":	"苯环直接连接C3侧链的衍生物，包括苯丙烯、苯丙醇、苯丙醛、苯丙酸等单体形式"},
-      
-      "香豆素类":{"name":"Coumarins","note":	"具有苯并α-吡喃酮结构的内酯类化合物，分为简单香豆素、呋喃香豆素、吡喃香豆素等亚类"},
-      
-      "木脂素类":{"name":"Lignans","note":	"由两分子C6-C3单元通过β位缩合形成的二聚体，部分具有抗氧化和抗肿瘤活性"},
-      
-      "木质素类":{"name":"Lignins","note":	"多分子C6-C3单元聚合形成的高分子化合物，构成植物细胞壁的主要成分"}
+      "简单苯丙素类": {
+        "name": "Simple phenylpropanoids",
+        "note": "苯环直接连接C3侧链的衍生物，包括苯丙烯、苯丙醇、苯丙醛、苯丙酸等单体形式"
+      },
+
+      "香豆素类": {
+        "name": "Coumarins",
+        "note": "具有苯并α-吡喃酮结构的内酯类化合物，分为简单香豆素、呋喃香豆素、吡喃香豆素等亚类"
+      },
+
+      "木脂素类": {
+        "name": "Lignans",
+        "note": "由两分子C6-C3单元通过β位缩合形成的二聚体，部分具有抗氧化和抗肿瘤活性"
+      },
+
+      "木质素类": {
+        "name": "Lignins",
+        "note": "多分子C6-C3单元聚合形成的高分子化合物，构成植物细胞壁的主要成分"
+      }
     }
   },
   "内酯类": {
     "name": "Lactones",
     "note": "具有多种生物活性，如抗菌、抗病毒等。",
     "subclass": {
-      "倍半萜内酯":{"name":"Sesquiterpene lactones","note":	"由15个碳原子构成的萜类内酯，主要存在于菊科植物中，具有抗肿瘤、抗炎等活性。例如银杏中的白果内酯（bilobalide）"},
+      "倍半萜内酯": {
+        "name": "Sesquiterpene lactones",
+        "note": "由15个碳原子构成的萜类内酯，主要存在于菊科植物中，具有抗肿瘤、抗炎等活性。例如银杏中的白果内酯（bilobalide）"
+      },
 
-"二萜内酯":{"name":"Diterpene lactones","note":	"由20个碳原子组成的萜类内酯，如银杏内酯A/B（ginkgolide A/B），具有抗血小板活化因子作用"},
+      "二萜内酯": {
+        "name": "Diterpene lactones",
+        "note": "由20个碳原子组成的萜类内酯，如银杏内酯A/B（ginkgolide A/B），具有抗血小板活化因子作用"
+      },
 
-"苯酞类内酯":{"name":"Phthalide lactones","note":	"含苯环结构的芳香族内酯，常见于当归、川芎等中药，如洋川芎内酯I（senkyunolide I）和藁本内酯（ligustilide）"},
+      "苯酞类内酯": {
+        "name": "Phthalide lactones",
+        "note": "含苯环结构的芳香族内酯，常见于当归、川芎等中药，如洋川芎内酯I（senkyunolide I）和藁本内酯（ligustilide）"
+      },
 
-"吉马内酯型":{"name":"Germacranolides","note":	"倍半萜内酯的一种亚型，具有十元环骨架，如青蒿素（artemisinin）及其衍生物，用于抗疟和抗肿瘤"},
+      "吉马内酯型": {
+        "name": "Germacranolides",
+        "note": "倍半萜内酯的一种亚型，具有十元环骨架，如青蒿素（artemisinin）及其衍生物，用于抗疟和抗肿瘤"
+      },
 
-"愈创木内酯型":{"name":"Guaianolides","note":	"含七元环的倍半萜内酯，如土木香内酯（alantolactone）和地胆草内酯（elephantopin），具有抗肿瘤活性"},
+      "愈创木内酯型": {
+        "name": "Guaianolides",
+        "note": "含七元环的倍半萜内酯，如土木香内酯（alantolactone）和地胆草内酯（elephantopin），具有抗肿瘤活性"
+      },
 
-"γ/δ内酯":{"name":"γ/δ-Lactones","note":	"根据酯环大小命名，γ为五元环（如γ-丁内酯），δ为六元环（如δ-己内酯），广泛存在于植物挥发油中"},
+      "γ/δ内酯": {
+        "name": "γ/δ-Lactones",
+        "note": "根据酯环大小命名，γ为五元环（如γ-丁内酯），δ为六元环（如δ-己内酯），广泛存在于植物挥发油中"
+      },
 
-"白术内酯类":{"name":"Atractylenolides","note":	"白术中特有的倍半萜内酯，如白术内酯Ⅰ/Ⅱ（atractylenolide I/II），具有抗炎和调节免疫作用"}
+      "白术内酯类": {
+        "name": "Atractylenolides",
+        "note": "白术中特有的倍半萜内酯，如白术内酯Ⅰ/Ⅱ（atractylenolide I/II），具有抗炎和调节免疫作用"
+      }
     }
   },
   "蛋白质和肽类": {
     "name": "Proteins and Peptides",
     "note": "具有调节免疫和促进组织修复的功能。",
     "subclass": {
-      "真菌免疫调节蛋白":{"name":"Fungal Immunomodulatory Protein (FIP)","note":	"具有免疫调节功能，如灵芝中的LZ-8蛋白，可诱导免疫细胞活性并抑制炎症反应"},
-      	
-      "核糖体失活蛋白":{"name":"Ribosome Inactivating Protein (RIP)","note":	"通过抑制核糖体功能发挥抗病毒或抗肿瘤作用，如天花粉蛋白的抗HIV活性"},
-      	
-      "凝集素":{"name":"Lectin","note":	"糖结合蛋白，具有细胞凝集功能，如灵芝凝集素可抑制真菌生长并增强免疫"},
-      	
-      "糖蛋白":{"name":"Glycoprotein","note":	"蛋白质与糖链共价结合，兼具免疫调节和抗肿瘤活性，如人参糖蛋白"},
-      	
-      "酶类蛋白":{"name":"Enzymatic Proteins","note":	"具有催化功能的蛋白质，如木瓜蛋白酶和地龙中的纤溶酶"},
-      	
+      "真菌免疫调节蛋白": {
+        "name": "Fungal Immunomodulatory Protein (FIP)",
+        "note": "具有免疫调节功能，如灵芝中的LZ-8蛋白，可诱导免疫细胞活性并抑制炎症反应"
+      },
 
-      "直链寡肽":{"name":"Linear Oligopeptides","note":	"由2-10个氨基酸组成，如人参中的三肽（Gln-Thr-Ser）和紫菀中的五肽"},
-	
-"环状肽":{"name":"Cyclic Peptides","note":	"氨基酸环状排列，单环、双环或多环结构，如茜草中的双环六肽（Rubiaceaetype cyclopeptides）"},
-	
-"糖肽":{"name":"Glycopeptides","note":	"肽链与糖基结合，如灵芝糖肽兼具抗氧化和免疫调节功能"},
-	
-"抗菌肽":{"name":"Antimicrobial Peptides","note":	"具有抗菌活性，如蜂毒肽和乳酸链球菌素"},
-	
-"血管活性肽":{"name":"Vasoactive Peptides","note":	"调节血压和血管功能，如血管活性肠肽（VIP）和水蛭多肽"},
-	
-"小肽":{"name":"Small Peptides","note":	"2-4个氨基酸，如二肽（Aurantiamide）"},
+      "核糖体失活蛋白": {
+        "name": "Ribosome Inactivating Protein (RIP)",
+        "note": "通过抑制核糖体功能发挥抗病毒或抗肿瘤作用，如天花粉蛋白的抗HIV活性"
+      },
 
-"寡肽":{"name":"Oligopeptides","note":	"2-10个氨基酸，如环二肽（Cyclo(Leu-Pro)）"},
+      "凝集素": {
+        "name": "Lectin",
+        "note": "糖结合蛋白，具有细胞凝集功能，如灵芝凝集素可抑制真菌生长并增强免疫"
+      },
 
-"多肽":{"name":"Polypeptides","note":	"10-50个氨基酸，如人参中的十四肽"}
+      "糖蛋白": {
+        "name": "Glycoprotein",
+        "note": "蛋白质与糖链共价结合，兼具免疫调节和抗肿瘤活性，如人参糖蛋白"
+      },
+
+      "酶类蛋白": {
+        "name": "Enzymatic Proteins",
+        "note": "具有催化功能的蛋白质，如木瓜蛋白酶和地龙中的纤溶酶"
+      },
+
+      "直链寡肽": {
+        "name": "Linear Oligopeptides",
+        "note": "由2-10个氨基酸组成，如人参中的三肽（Gln-Thr-Ser）和紫菀中的五肽"
+      },
+
+      "环状肽": {
+        "name": "Cyclic Peptides",
+        "note": "氨基酸环状排列，单环、双环或多环结构，如茜草中的双环六肽（Rubiaceaetype cyclopeptides）"
+      },
+
+      "糖肽": {
+        "name": "Glycopeptides",
+        "note": "肽链与糖基结合，如灵芝糖肽兼具抗氧化和免疫调节功能"
+      },
+
+      "抗菌肽": {
+        "name": "Antimicrobial Peptides",
+        "note": "具有抗菌活性，如蜂毒肽和乳酸链球菌素"
+      },
+
+      "血管活性肽": {
+        "name": "Vasoactive Peptides",
+        "note": "调节血压和血管功能，如血管活性肠肽（VIP）和水蛭多肽"
+      },
+
+      "小肽": {
+        "name": "Small Peptides",
+        "note": "2-4个氨基酸，如二肽（Aurantiamide）"
+      },
+
+      "寡肽": {
+        "name": "Oligopeptides",
+        "note": "2-10个氨基酸，如环二肽（Cyclo(Leu-Pro)）"
+      },
+
+      "多肽": {
+        "name": "Polypeptides",
+        "note": "10-50个氨基酸，如人参中的十四肽"
+      }
     }
   },
   "核苷酸类": {
     "name": "Nucleotides",
     "note": "与核酸相关，具有调节代谢和抗病毒作用。",
     "subclass": {
-      "核糖核苷酸":{"name":"Ribonucleotides","note":	"由核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、尿嘧啶）组成，如AMP（腺苷酸）、GMP（鸟苷酸）等"},
-    "脱氧核糖核苷酸":{"name":"Deoxyribonucleotides","note":	"由脱氧核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、胸腺嘧啶）组成，如dAMP（脱氧腺苷酸）、dCMP（脱氧胞苷酸）等"},
-      "环化核苷酸":{"name":"Cyclic Nucleotides","note":	"核苷酸的磷酸基与核糖3'和5'羟基形成环状结构，如cAMP（环腺苷酸）、cGMP（环鸟苷酸），参与细胞信号传导"},
-      "核苷酸衍生物":{"name":"Nucleotide Derivatives","note":	"包括核苷酸的高能磷酸化形式（如ADP、ATP）及修饰产物，在能量代谢中起核心作用"},
-      "N-苷类核苷酸":{"name":"N-Glycosidic Nucleotides","note":	"碱基通过氮原子与核糖连接形成的核苷类化合物，如腺苷（Adenosine）、巴豆苷（Crotonoside）等，常见于中药成分"}
+      "核糖核苷酸": {
+        "name": "Ribonucleotides",
+        "note": "由核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、尿嘧啶）组成，如AMP（腺苷酸）、GMP（鸟苷酸）等"
+      },
+      "脱氧核糖核苷酸": {
+        "name": "Deoxyribonucleotides",
+        "note": "由脱氧核糖、磷酸和碱基（腺嘌呤、鸟嘌呤、胞嘧啶、胸腺嘧啶）组成，如dAMP（脱氧腺苷酸）、dCMP（脱氧胞苷酸）等"
+      },
+      "环化核苷酸": {
+        "name": "Cyclic Nucleotides",
+        "note": "核苷酸的磷酸基与核糖3'和5'羟基形成环状结构，如cAMP（环腺苷酸）、cGMP（环鸟苷酸），参与细胞信号传导"
+      },
+      "核苷酸衍生物": {
+        "name": "Nucleotide Derivatives",
+        "note": "包括核苷酸的高能磷酸化形式（如ADP、ATP）及修饰产物，在能量代谢中起核心作用"
+      },
+      "N-苷类核苷酸": {
+        "name": "N-Glycosidic Nucleotides",
+        "note": "碱基通过氮原子与核糖连接形成的核苷类化合物，如腺苷（Adenosine）、巴豆苷（Crotonoside）等，常见于中药成分"
+      }
     }
   },
   "脂类": {
     "name": "Lipids",
     "note": "包括脂肪酸及其衍生物，具有调节代谢和抗炎作用。",
     "subclass": {
-      "复合脂类":{"name":"Complex Lipids","note":	"含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等"},
-"甘油酯（三酰甘油）":{"name":"Triacylglycerols (TAG)","note":	"甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分"},
-"磷脂":{"name":"Phospholipids","note":	" 含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分"},
-"糖脂":{"name":"Glycolipids","note":	" 含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统"},
-"硫脂":{"name":"Sulfolipids","note":	"糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜"},
-"简单脂类":{"name":"Simple Lipids","note":	"不含脂肪酸的脂类，不可皂化，包括萜类和甾类"},
-"萜类":{"name":"Terpenoids","note":	"以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性"},
-"甾类（类固醇）":{"name":"Steroids","note":	"含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用"},
-"其他功能性脂类":{"name":"Functional Lipids","note":	"具有特殊生物活性的脂类成分"},
-"游离脂肪酸":{"name":"Free Fatty Acids (FFA)","note":	"如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用"},
-"植物鞘脂":{"name":"Phytosphingolipids","note":	"如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定"}
+      "复合脂类": {
+        "name": "Complex Lipids",
+        "note": "含有脂肪酸，可被皂化的脂类，包括甘油酯、磷脂、糖脂等"
+      },
+      "甘油酯（三酰甘油）": {
+        "name": "Triacylglycerols (TAG)",
+        "note": "甘油的三个羟基被脂肪酸酯化形成的酯，是植物油脂的主要成分"
+      },
+      "磷脂": {
+        "name": "Phospholipids",
+        "note": " 含磷酸的甘油二酯，如磷脂酰胆碱（PC）、磷脂酰乙醇胺（PE）等，是生物膜的主要成分"
+      },
+      "糖脂": {
+        "name": "Glycolipids",
+        "note": " 含碳水化合物的甘油二酯，如单半乳糖二酰甘油（MGDG），常见于植物膜系统"
+      },
+      "硫脂": {
+        "name": "Sulfolipids",
+        "note": "糖脂的糖基被硫酸酯化的复合脂类，多见于叶绿体膜"
+      },
+      "简单脂类": {
+        "name": "Simple Lipids",
+        "note": "不含脂肪酸的脂类，不可皂化，包括萜类和甾类"
+      },
+      "萜类": {
+        "name": "Terpenoids",
+        "note": "以异戊二烯为基本单位的化合物，如单萜（香叶醇）、倍半萜（山道年）、四萜（β-胡萝卜素）等，具有挥发性和药理活性"
+      },
+      "甾类（类固醇）": {
+        "name": "Steroids",
+        "note": "含环戊烷并氢化菲骨架的化合物，如胆固醇、植物甾醇（β-谷甾醇）等，具有抗炎、抗氧化作用"
+      },
+      "其他功能性脂类": {
+        "name": "Functional Lipids",
+        "note": "具有特殊生物活性的脂类成分"
+      },
+      "游离脂肪酸": {
+        "name": "Free Fatty Acids (FFA)",
+        "note": "如亚油酸、亚麻酸等不饱和脂肪酸，具有调节血脂的作用"
+      },
+      "植物鞘脂": {
+        "name": "Phytosphingolipids",
+        "note": "如植物神经酰胺（Phytoceramides），参与细胞信号传导和膜结构稳定"
+      }
     }
   }
 }
